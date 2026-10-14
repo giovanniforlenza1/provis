@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="it" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NutriPlan">
+    <title>NutriPlan - Giovanni</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            padding-top: calc(var(--safe-top) + 12px);
+            padding-bottom: calc(var(--safe-bottom) + 90px);
+        }
+
+        /* Hide scrollbars for horizontal day selector */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: var(--safe-bottom);
+        }
+
+        .meal-done {
+            opacity: 0.55;
+            border-color: #10b981 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- HEADER PRINCIPALE -->
+    <header class="px-4 mb-4 flex justify-between items-center">
+        <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                Piano Definitivo 2.000 Kcal
+            </span>
+            <h1 class="text-2xl font-extrabold tracking-tight mt-1.5 text-white">Ciao Giovanni 👋</h1>
+        </div>
+        <button onclick="resetProgress()" class="w-10 h-10 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 active:scale-95 transition">
+            <i class="fa-solid fa-rotate-right text-sm"></i>
+        </button>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- VISTA 1: PIANO GIORNALIERO                 -->
+    <!-- ========================================== -->
+    <main id="view-plan" class="px-4 space-y-4">
+        
+        <!-- SELETTORE GIORNI -->
+        <div class="flex space-x-2 overflow-x-auto no-scrollbar py-1" id="day-selector">
+            <!-- Generato via JS -->
+        </div>
+
+        <!-- BANNER PALESTRA (Visibile solo Mar, Gio, Sab) -->
+        <div id="workout-banner" class="hidden bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-transparent border border-amber-500/30 rounded-2xl p-3.5 flex items-center space-x-3.5">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0">
+                <i class="fa-solid fa-dumbbell text-lg"></i>
+            </div>
+            <div>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400" id="workout-title">Giorno di Palestra</h3>
+                <p class="text-xs text-slate-300 font-medium mt-0.5 leading-snug" id="workout-desc"></p>
+            </div>
+        </div>
+
+        <!-- DASHBOARD MACRO + ACQUA -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 shadow-lg space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800/80 pb-3">
+                <div>
+                    <span class="text-xs text-slate-400 font-semibold uppercase">Target Giornaliero</span>
+                    <div class="text-2xl font-black text-white" id="macro-kcal">1.960 Kcal</div>
+                </div>
+                <div class="flex space-x-3 text-center">
+                    <div class="bg-slate-800/70 px-3 py-1.5 rounded-xl border border-slate-700/50">
+                        <span class="block text-[10px] font-bold text-blue-400 uppercase">Carbo</span>
+                        <span class="text-sm font-extrabold text-white" id="macro-c">175g</span>
+                    </div>
+                    <div class="bg-slate-800/70 px-3 py-1.5 rounded-xl border border-slate-700/50">
+                        <span class="block text-[10px] font-bold text-emerald-400 uppercase">Prot</span>
+                        <span class="text-sm font-extrabold text-white" id="macro-p">158g</span>
+                    </div>
+                    <div class="bg-slate-800/70 px-3 py-1.5 rounded-xl border border-slate-700/50">
+                        <span class="block text-[10px] font-bold text-amber-400 uppercase">Grassi</span>
+                        <span class="text-sm font-extrabold text-white" id="macro-g">68g</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRACKER ACQUA -->
+            <div class="flex items-center justify-between pt-1">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                        <i class="fa-solid fa-glass-water"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-white">Idratazione <span class="text-sky-400 font-extrabold ml-1" id="water-val">0.0 / 3.5 L</span></div>
+                        <div class="w-36 h-2 bg-slate-800 rounded-full overflow-hidden mt-1">
+                            <div id="water-bar" class="bg-sky-400 h-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex space-x-1.5">
+                    <button onclick="updateWater(-0.25)" class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 font-bold active:scale-90 transition">-</button>
+                    <button onclick="updateWater(0.25)" class="px-3 h-9 rounded-xl bg-sky-500 text-slate-950 font-extrabold text-xs active:scale-95 transition">+250ml</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTA PASTI DEL GIORNO -->
+        <div id="meals-container" class="space-y-3 pb-4">
+            <!-- Generato via JS -->
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- VISTA 2: DISPENSA & LISTA SPESA            -->
+    <!-- ========================================== -->
+    <main id="view-pantry" class="px-4 space-y-4 hidden">
+        
+        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-4">
+            <h2 class="text-lg font-extrabold text-white">Gestione Dispensa 🛒</h2>
+            <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                Tocca un ingrediente per spostarlo tra <strong>"Da Comprare"</strong> e <strong>"In Casa"</strong>. Tutto rimane salvato sul tuo iPhone.
+            </p>
+
+            <!-- FILTRI DISPENSA -->
+            <div class="grid grid-cols-3 gap-2 mt-3 bg-slate-950 p-1 rounded-2xl border border-slate-800">
+                <button onclick="setPantryFilter('all')" id="filter-all" class="py-2 text-xs font-extrabold rounded-xl bg-emerald-500 text-slate-950 transition">Tutti</button>
+                <button onclick="setPantryFilter('missing')" id="filter-missing" class="py-2 text-xs font-bold rounded-xl text-slate-400 transition">Da Comprare</button>
+                <button onclick="setPantryFilter('home')" id="filter-home" class="py-2 text-xs font-bold rounded-xl text-slate-400 transition">In Casa</button>
+            </div>
+
+            <!-- AGGIUNGI ARTICOLO PERSONALIZZATO -->
+            <div class="flex space-x-2 mt-3">
+                <input type="text" id="custom-item-input" placeholder="Aggiungi altro alla lista..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <button onclick="addCustomItem()" class="bg-emerald-500 text-slate-950 font-extrabold px-4 rounded-xl text-xs active:scale-95 transition">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENITORE CATEGORIE DISPENSA -->
+        <div id="pantry-container" class="space-y-4 pb-6">
+            <!-- Generato via JS -->
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- BOTTOM TAB BAR NATIVA iOS                  -->
+    <!-- ========================================== -->
+    <nav class="fixed bottom-0 left-0 right-0 glass-nav z-50 px-6 py-2 flex justify-around items-center">
+        <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-400 py-1 px-4 rounded-2xl transition">
+            <i class="fa-solid fa-calendar-day text-lg"></i>
+            <span class="text-[11px] font-extrabold">Piano & Ricette</span>
+        </button>
+        <button onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-slate-400 py-1 px-4 rounded-2xl transition relative">
+            <i class="fa-solid fa-basket-shopping text-lg"></i>
+            <span class="text-[11px] font-bold">Dispensa</span>
+            <span id="missing-badge" class="absolute top-0.5 right-3 bg-rose-500 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
+        </button>
+    </nav>
+
+    <script>
+        // ==========================================
+        // DATABASE PIANO SETTIMANALE (CON PALESTRA)
+        // ==========================================
+        const weekData = [
+            {
+                id: 'lun',
+                short: 'LUN',
+                name: 'Lunedì',
+                workout: false,
+                kcal: '1.960 Kcal', c: '175g', p: '158g', g: '68g',
+                meals: [
+                    {
+                        id: 'lun-1', time: '07:30', type: 'Colazione', title: 'Pancake Avena, Albume e Arachidi',
+                        macros: '60g Carb • 26g Prot • 14g Grassi',
+                        ingredients: ['60g Farina d\'avena', '120g Albume liquido', '15g Burro d\'arachidi 100%', '15g Marmellata zero zuccheri'],
+                        recipe: 'Mescola farina d\'avena e albume con un goccio d\'acqua e cannella. Cuoci in padella antiaderente 2 min per lato. Spalma marmellata e burro d\'arachidi a caldo.'
+                    },
+                    {
+                        id: 'lun-2', time: '10:30', type: 'Spuntino Scrivania', title: 'Parmigiano e Mandorle',
+                        macros: '2g Carb • 13g Prot • 16g Grassi',
+                        ingredients: ['30g Parmigiano Reggiano', '15g Mandorle tostate'],
+                        recipe: 'Zero picchi glicemici mentre sei al computer. Taglia il Parmigiano a cubetti e accompagnalo con le mandorle.'
+                    },
+                    {
+                        id: 'lun-3', time: '13:00', type: 'Pranzo Veloce (10 min)', title: 'Pasta Salmone, Olive e Datterini',
+                        macros: '62g Carb • 32g Prot • 16g Grassi',
+                        ingredients: ['80g Pasta integrale', '100g Salmone affumicato o al naturale', '150g Pomodorini datterini', '10g Olive taggiasche', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Mentre bolle la pasta, taglia i datterini a metà con olive, salmone a listarelle, scorza di limone e olio. Scola la pasta e salta tutto 30 secondi.'
+                    },
+                    {
+                        id: 'lun-4', time: '16:30', type: 'Spuntino Pomeridiano', title: 'Yogurt Greco e Fondente',
+                        macros: '12g Carb • 18g Prot • 8g Grassi',
+                        ingredients: ['170g Yogurt Greco 0%', '15g Cioccolato fondente 85%'],
+                        recipe: 'Trita il cioccolato fondente a scaglie e mescolalo nello yogurt greco freddo.'
+                    },
+                    {
+                        id: 'lun-5', time: '20:00', type: 'Cena Sfiziosa', title: 'Pollo e Ceci Croccanti alla Paprika',
+                        macros: '39g Carb • 69g Prot • 14g Grassi',
+                        ingredients: ['220g Petto di pollo', '80g Ceci cotti (in vetro)', '250g Zucchine', '1 cucchiaino Olio EVO (5g)', 'Paprika dolce e rosmarino'],
+                        recipe: 'Taglia il pollo a bocconcini e asciuga i ceci. Condisci tutto con paprika, rosmarino, sale e il cucchiaino d\'olio. Inforna (o usa friggitrice ad aria) a 195°C per 16-18 min insieme alle zucchine a bastoncini.'
+                    }
+                ]
+            },
+            {
+                id: 'mar',
+                short: 'MAR',
+                name: 'Martedì',
+                workout: true,
+                workoutNote: 'Palestra ore 07:00! Fai il micro-spuntino alle 06:30 per avere energia subito e il Porridge proteico alle 08:30 appena torni.',
+                kcal: '1.980 Kcal', c: '182g', p: '158g', g: '67g',
+                meals: [
+                    {
+                        id: 'mar-0', time: '06:30', type: 'Pre-Workout (Palestra 07:00)', title: 'Carica Rapida Caffè & Frutta',
+                        macros: '18g Carb • 2g Prot • 5g Grassi',
+                        ingredients: ['1 Caffè espresso amaro', '100g Banana (o 1 frutto piccolo)', '10g Cioccolato fondente 85%'],
+                        recipe: 'Assorbimento immediato senza appesantire lo stomaco prima dei pesi. Bevi 2 bicchieri d\'acqua.'
+                    },
+                    {
+                        id: 'mar-1', time: '08:30', type: 'Colazione Post-Workout', title: 'Porridge Proteico Frutti di Bosco e Noci',
+                        macros: '48g Carb • 24g Prot • 12g Grassi',
+                        ingredients: ['60g Fiocchi d\'avena', '150ml Latte di soia (o scremato)', '100g Albume liquido', '100g Frutti di bosco', '15g Noci'],
+                        recipe: 'Cuoci l\'avena nel latte per 3 minuti. A fine cottura versa l\'albume e mescola energicamente per 60 secondi sul fuoco (diventerà cremosissimo). Guarnisci con frutti di bosco e noci.'
+                    },
+                    {
+                        id: 'mar-3', time: '13:00', type: 'Pranzo Veloce (12 min)', title: 'Carbonara Fit con Crudo e Zucchine',
+                        macros: '60g Carb • 36g Prot • 16g Grassi',
+                        ingredients: ['80g Pasta integrale', '1 Uovo intero + 50g Albume', '50g Prosciutto crudo sgrassato', '200g Zucchine', '10g Parmigiano'],
+                        recipe: 'Grattugia le zucchine a julienne e rosolale in padella 2 minuti col crudo a listarelle. Scola la pasta, uniscila a fuoco spento con uovo, albume, pepe e Parmigiano mescolando veloce.'
+                    },
+                    {
+                        id: 'mar-4', time: '16:30', type: 'Spuntino Pomeridiano', title: 'Mix Saziante Dolce-Salato',
+                        macros: '18g Carb • 18g Prot • 6g Grassi',
+                        ingredients: ['1 Mela media (150g)', '60g Fesa di tacchino arrosto', '10g Cioccolato fondente 85%'],
+                        recipe: 'Perfetto per spezzare la fame del pomeriggio post-allenamento mattutino senza alzare troppo gli zuccheri.'
+                    },
+                    {
+                        id: 'mar-5', time: '20:00', type: 'Cena Sfiziosa', title: 'Orata al Cartoccio su Vellutata di Cannellini',
+                        macros: '38g Carb • 58g Prot • 14g Grassi',
+                        ingredients: ['230g Filetto di orata (o branzino)', '100g Fagioli cannellini cotti', '200g Spinaci freschi', 'Pomodorini, capperi, origano', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Frulla i cannellini con un goccio d\'acqua calda, rosmarino e olio. Cuoci il filetto di orata in padella col coperchio per 8-10 min con pomodorini e capperi. Servi sopra la crema di fagioli con spinaci saltati.'
+                    }
+                ]
+            },
+            {
+                id: 'mer',
+                short: 'MER',
+                name: 'Mercoledì',
+                workout: false,
+                kcal: '1.950 Kcal', c: '176g', p: '160g', g: '65g',
+                meals: [
+                    {
+                        id: 'mer-1', time: '07:30', type: 'Colazione', title: 'Latte, Cereali, Biscotti + Greco',
+                        macros: '52g Carb • 26g Prot • 8g Grassi',
+                        ingredients: ['200ml Latte parz. scremato o soia', '40g Cereali integrali', '30g Biscotti secchi integrali', '150g Yogurt Greco 0%'],
+                        recipe: 'Colazione classica veloce. Lo yogurt greco a parte è fondamentale per alzare la quota proteica ed evitare fame alle 10:00.'
+                    },
+                    {
+                        id: 'mer-2', time: '10:30', type: 'Spuntino Scrivania', title: 'Involtini di Bresaola e Philadelphia',
+                        macros: '14g Carb • 26g Prot • 6g Grassi',
+                        ingredients: ['70g Bresaola della Valtellina', '40g Philadelphia Light/Protein', '2 Gallette di riso (o 25g pane segale)', 'Rucola'],
+                        recipe: 'Spalma il Philadelphia sulle fette di bresaola con rucola, arrotola e accompagna con 2 gallette.'
+                    },
+                    {
+                        id: 'mer-3', time: '13:00', type: 'Pranzo Veloce (10 min)', title: 'Riso Basmati Tonno, Zucchine e Limone',
+                        macros: '64g Carb • 34g Prot • 10g Grassi',
+                        ingredients: ['80g Riso basmati', '110g Tonno al naturale sgocciolato', '150g Zucchine', 'Scorza di limone e basilico', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Bollisci il riso basmati (10 min). Negli ultimi 2 minuti salta le zucchine tagliate finissime in padella con il tonno, unisci il riso, olio e scorza di limone grattugiata.'
+                    },
+                    {
+                        id: 'mer-4', time: '16:30', type: 'Spuntino Pomeridiano', title: 'Coppa Yogurt e Fondente Croccante',
+                        macros: '12g Carb • 18g Prot • 15g Grassi',
+                        ingredients: ['170g Yogurt Greco 0%', '15g Cioccolato fondente 85%', '10g Mandorle'],
+                        recipe: 'Fai sciogliere il fondente 30 secondi al microonde e versalo sullo yogurt freddo: formerà un guscio croccante.'
+                    },
+                    {
+                        id: 'mer-5', time: '20:00', type: 'Cena Sfiziosa', title: 'Straccetti di Vitello al Balsamico e Lenticchie',
+                        macros: '34g Carb • 56g Prot • 16g Grassi',
+                        ingredients: ['200g Fettine di vitello magro', '100g Lenticchie cotte', '1 cespo di Radicchio', 'Aceto balsamico', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Scotta gli straccetti di vitello 3 minuti in padella ben calda e sfuma con aceto balsamico. Servi con radicchio grigliato e lenticchie insaporite al rosmarino.'
+                    }
+                ]
+            },
+            {
+                id: 'gio',
+                short: 'GIO',
+                name: 'Giovedì',
+                workout: true,
+                workoutNote: 'Palestra ore 07:00! Pre-workout leggero alle 06:30 e Pancake Tiramisù alle 08:30 per nutrire i muscoli.',
+                kcal: '1.970 Kcal', c: '180g', p: '157g', g: '68g',
+                meals: [
+                    {
+                        id: 'gio-0', time: '06:30', type: 'Pre-Workout (Palestra 07:00)', title: 'Espresso & Energia Veloce',
+                        macros: '18g Carb • 2g Prot • 5g Grassi',
+                        ingredients: ['1 Caffè espresso amaro', '2 Kiwi (o 1 frutto piccolo)', '10g Cioccolato fondente 85%'],
+                        recipe: 'Mangia 30 minuti prima di iniziare il riscaldamento in palestra.'
+                    },
+                    {
+                        id: 'gio-1', time: '08:30', type: 'Colazione Post-Workout', title: 'Pancake "Tiramisù Fit"',
+                        macros: '46g Carb • 27g Prot • 15g Grassi',
+                        ingredients: ['60g Farina d\'avena', '120g Albume liquido', '1 tazzina Caffè freddo nell\'impasto', '15g Crema proteica spalmabile', '10g Burro d\'arachidi'],
+                        recipe: 'Frulla avena, albume e caffè. Cuoci in padella antiaderente e farcisci a caldo con la crema spalmabile e il burro d\'arachidi.'
+                    },
+                    {
+                        id: 'gio-3', time: '13:00', type: 'Pranzo Veloce (10 min)', title: 'Pasta Crema di Zucca e Cotto Rosolato',
+                        macros: '65g Carb • 31g Prot • 14g Grassi',
+                        ingredients: ['80g Pasta integrale', '150g Zucca a cubetti', '70g Prosciutto cotto magro (o fesa)', '10g Parmigiano', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Cuoci la zucca 4 min al microonde, poi schiacciala con forchetta, acqua di cottura, Parmigiano e olio. Condisci la pasta e aggiungi il cotto rosolato in padella.'
+                    },
+                    {
+                        id: 'gio-4', time: '16:30', type: 'Spuntino Pomeridiano', title: 'Yogurt Greco e Anacardi',
+                        macros: '10g Carb • 20g Prot • 8g Grassi',
+                        ingredients: ['170g Yogurt Greco 0%', '15g Anacardi'],
+                        recipe: 'Spuntino proteico per arrivare a cena senza cali di concentrazione.'
+                    },
+                    {
+                        id: 'gio-5', time: '20:00', type: 'Cena Sfiziosa', title: 'Gamberoni agli Agrumi con Ceci e Segale',
+                        macros: '41g Carb • 57g Prot • 16g Grassi',
+                        ingredients: ['250g Mazzancolle o gamberoni puliti', '100g Ceci cotti', '40g Pane di segale tostato', '200g Zucchine e pomodorini', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Salta le mazzancolle 4 minuti a fiamma viva con aglio, prezzemolo, peperoncino e succo di limone. Servi con insalata tiepida di ceci, pomodorini e il pane di segale.'
+                    }
+                ]
+            },
+            {
+                id: 'ven',
+                short: 'VEN',
+                name: 'Venerdì',
+                workout: false,
+                kcal: '1.960 Kcal', c: '175g', p: '154g', g: '70g',
+                meals: [
+                    {
+                        id: 'ven-1', time: '07:30', type: 'Colazione', title: 'Tè Caldo, Biscotti, Mandorle e Greco',
+                        macros: '38g Carb • 24g Prot • 16g Grassi',
+                        ingredients: ['1 Tazza di tè caldo', '45g Biscotti secchi integrali', '20g Mandorle', '170g Yogurt Greco 0%'],
+                        recipe: 'Inzuppa i biscotti nel tè e abbina yogurt greco e mandorle per bilanciare l\'indice glicemico.'
+                    },
+                    {
+                        id: 'ven-2', time: '10:30', type: 'Spuntino Scrivania', title: 'Fesa di Tacchino e Noci',
+                        macros: '2g Carb • 19g Prot • 10g Grassi',
+                        ingredients: ['70g Fesa di tacchino arrosto', '15g Noci'],
+                        recipe: 'Pratico, veloce e a impatto glicemico zero.'
+                    },
+                    {
+                        id: 'ven-3', time: '13:00', type: 'Pranzo Lampo (5 min)', title: 'Gnocchi di Patate con Legumi e Tonno',
+                        macros: '62g Carb • 32g Prot • 10g Grassi',
+                        ingredients: ['180g Gnocchi di sole patate', '100g Fagioli borlotti cotti', '60g Tonno al naturale', 'Pomodorini e basilico', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Gli gnocchi cuociono in 2 minuti! Saltali direttamente in padella con pomodorini, fagioli borlotti, tonno e basilico fresco.'
+                    },
+                    {
+                        id: 'ven-4', time: '16:30', type: 'Spuntino Pomeridiano', title: 'Frutta e Cioccolato Fondente',
+                        macros: '24g Carb • 3g Prot • 8g Grassi',
+                        ingredients: ['1 Pera (o Mela)', '15g Cioccolato fondente 85%'],
+                        recipe: 'Taglia la pera a spicchi e gustala con il cioccolato fondente.'
+                    },
+                    {
+                        id: 'ven-5', time: '20:00', type: 'Cena Sfiziosa', title: 'Avocado Toast Proteico con Uova e Bresaola',
+                        macros: '39g Carb • 46g Prot • 26g Grassi',
+                        ingredients: ['60g Pane di segale tostato', '60g Avocado maturo', '2 Uova intere', '50g Bresaola', '150g Pomodori da insalata', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Schiaccia l\'avocado con lime, sale e pepe sul pane di segale tostato. Adagia sopra le 2 uova (alla coque o sode) e accompagna con la bresaola e insalata di pomodori.'
+                    }
+                ]
+            },
+            {
+                id: 'sab',
+                short: 'SAB',
+                name: 'Sabato',
+                workout: true,
+                workoutNote: 'Palestra ore 09:00! Pre-workout leggero alle 08:00 e super Brunch di Pancake alle 10:30 (saltando lo spuntino di metà mattina).',
+                kcal: '2.000 Kcal', c: '182g', p: '158g', g: '70g',
+                meals: [
+                    {
+                        id: 'sab-0', time: '08:00', type: 'Pre-Workout (Palestra 09:00)', title: 'Caffè, Biscotti Integrali e Fondente',
+                        macros: '22g Carb • 4g Prot • 6g Grassi',
+                        ingredients: ['1 Caffè o Tè caldo', '25g Biscotti secchi integrali', '10g Cioccolato fondente 85%'],
+                        recipe: 'Ti dà la spinta giusta per l\'allenamento delle 09:00 senza appesantirti.'
+                    },
+                    {
+                        id: 'sab-1', time: '10:30', type: 'Brunch Post-Workout', title: 'Maxi Pancake Avena, Albume e Arachidi',
+                        macros: '50g Carb • 28g Prot • 15g Grassi',
+                        ingredients: ['65g Farina d\'avena', '140g Albume liquido', '15g Marmellata zero zuccheri', '15g Burro d\'arachidi 100%'],
+                        recipe: 'Fai un pancake bello alto post-palestra: unisce colazione e spuntino mattutino.'
+                    },
+                    {
+                        id: 'sab-3', time: '13:30', type: 'Pranzo Veloce', title: 'Pasta alla Mediterranea con Tonno',
+                        macros: '62g Carb • 34g Prot • 10g Grassi',
+                        ingredients: ['80g Pasta integrale', '150g Pomodorini datterini', '110g Tonno al naturale', 'Abbondante basilico fresco', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Schiaccia leggermente i datterini a crudo con olio, basilico e tonno. Scola la pasta al dente e mescola.'
+                    },
+                    {
+                        id: 'sab-4', time: '17:00', type: 'Spuntino Pomeridiano', title: 'Yogurt Greco e Mandorle',
+                        macros: '8g Carb • 20g Prot • 9g Grassi',
+                        ingredients: ['170g Yogurt Greco 0%', '15g Mandorle'],
+                        recipe: 'Pausa pomeridiana fresca e proteica.'
+                    },
+                    {
+                        id: 'sab-5', time: '20:30', type: 'Cena Sfiziosa', title: 'Medaglioni di Arista alla Senape con Funghi e Piselli',
+                        macros: '40g Carb • 62g Prot • 18g Grassi',
+                        ingredients: ['200g Arista di maiale magra', '100g Piselli cotti', '200g Funghi champignon', '40g Crostoni integrali', '1 cucchiaino Senape + 1 cucchiaino Olio EVO'],
+                        recipe: 'Massaggia l\'arista con senape e rosmarino, cuocila 4 min per lato in padella. Nella stessa padella salta i funghi a fette con i piselli e servi coi crostoni.'
+                    }
+                ]
+            },
+            {
+                id: 'dom',
+                short: 'DOM',
+                name: 'Domenica',
+                workout: false,
+                kcal: 'Giorno Flessibile', c: '~190g', p: '~150g', g: '~70g',
+                meals: [
+                    {
+                        id: 'dom-1', time: '09:00', type: 'Colazione Domenicale', title: 'Porridge Cremoso Fondente e Bosco',
+                        macros: '48g Carb • 22g Prot • 12g Grassi',
+                        ingredients: ['60g Fiocchi d\'avena', '100g Albume liquido', '100g Frutti di bosco', '15g Cioccolato fondente 85%'],
+                        recipe: 'Cuoci avena e acqua/latte, incorpora l\'albume a fine cottura e guarnisci con il fondente che si scioglie al centro.'
+                    },
+                    {
+                        id: 'dom-2', time: '11:30', type: 'Spuntino Leggero', title: 'Cubetti di Parmigiano',
+                        macros: '0g Carb • 10g Prot • 9g Grassi',
+                        ingredients: ['30g Parmigiano Reggiano'],
+                        recipe: 'Spuntino leggero in vista del pranzo o della cena libera.'
+                    },
+                    {
+                        id: 'dom-3', time: '13:30', type: 'Pranzo della Domenica', title: 'Risotto Zucca e Crudo Croccante',
+                        macros: '66g Carb • 26g Prot • 12g Grassi',
+                        ingredients: ['80g Riso Carnaroli o Basmati', '150g Zucca', '60g Prosciutto crudo sgrassato', '10g Parmigiano', '1 cucchiaino Olio EVO (5g)'],
+                        recipe: 'Cuoci il riso con la zucca finché diventa cremoso, manteca con Parmigiano e olio e completa col crudo reso croccante in padella.'
+                    },
+                    {
+                        id: 'dom-4', time: '17:00', type: 'Spuntino Pomeridiano', title: 'Yogurt Greco 0%',
+                        macros: '7g Carb • 18g Prot • 0g Grassi',
+                        ingredients: ['170g Yogurt Greco 0%'],
+                        recipe: 'Leggero e proteico prima della serata.'
+                    },
+                    {
+                        id: 'dom-5', time: '20:30', type: 'Cena (Opzione Pulita o Pasto Libero)', title: 'Carpaccio Ricco di Bresaola oppure Pizza/Cena Libera',
+                        macros: 'Flessibile',
+                        ingredients: ['120g Bresaola (se mangi a casa)', 'Rucola, pomodorini e 25g Grana a scaglie', '50g Pane di segale tostato', '1 cucchiaino Olio EVO e limone'],
+                        recipe: 'Se fai il pasto libero settimanale, goditi la serata senza esagerare coi dolci e bevendo 3-4L d\'acqua. Altrimenti prepara questo carpaccio veloce!'
+                    }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // DATABASE DISPENSA PREDEFINITO
+        // ==========================================
+        const defaultPantry = [
+            // Proteine Fresche
+            { id: 'p1', name: 'Albume liquido (in brick)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p2', name: 'Uova fresche', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p3', name: 'Yogurt Greco 0% grassi', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p4', name: 'Petto di pollo (220g)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p5', name: 'Fettine di vitello (200g)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p6', name: 'Arista di maiale magra (200g)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p7', name: 'Filetto di Orata o Branzino (230g)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p8', name: 'Mazzancolle / Gamberoni (250g)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p9', name: 'Salmone affumicato o naturale (100g)', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p10', name: 'Fesa di tacchino arrosto', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p11', name: 'Bresaola della Valtellina', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p12', name: 'Prosciutto crudo sgrassato', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p13', name: 'Prosciutto cotto magro', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p14', name: 'Parmigiano Reggiano / Grana', cat: 'Proteine & Freschi', inStock: false },
+            { id: 'p15', name: 'Philadelphia Light / Protein', cat: 'Proteine & Freschi', inStock: false },
+            
+            // Carboidrati & Dispensa
+            { id: 'c1', name: 'Farina d\'avena', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c2', name: 'Fiocchi d\'avena (per porridge)', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c3', name: 'Pasta integrale', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c4', name: 'Riso Basmati / Carnaroli', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c5', name: 'Gnocchi di sole patate', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c6', name: 'Pane di segale / Crostoni integrali', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c7', name: 'Biscotti secchi integrali', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c8', name: 'Cereali integrali', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c9', name: 'Tonno al naturale (scatolette/vetro)', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c10', name: 'Ceci cotti in vetro', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c11', name: 'Fagioli cannellini / borlotti in vetro', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c12', name: 'Lenticchie cotte in vetro', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c13', name: 'Piselli', cat: 'Carboidrati & Dispensa', inStock: false },
+
+            // Verdura & Frutta
+            { id: 'v1', name: 'Zucchine', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v2', name: 'Pomodorini datterini / Insalata', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v3', name: 'Zucca già pulita a cubetti', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v4', name: 'Spinaci freschi & Rucola', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v5', name: 'Radicchio', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v6', name: 'Funghi champignon', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v7', name: 'Avocado maturo', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v8', name: 'Frutti di bosco', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v9', name: 'Mele / Pere / Kiwi / Banane', cat: 'Frutta & Verdura', inStock: false },
+
+            // Grassi Buoni & Condimenti
+            { id: 'g1', name: 'Cioccolato Fondente min. 85%', cat: 'Grassi & Sfizi', inStock: false },
+            { id: 'g2', name: 'Burro d\'arachidi 100% naturale', cat: 'Grassi & Sfizi', inStock: false },
+            { id: 'g3', name: 'Crema proteica spalmabile', cat: 'Grassi & Sfizi', inStock: false },
+            { id: 'g4', name: 'Marmellata senza zuccheri aggiunti', cat: 'Grassi & Sfizi', inStock: false },
+            { id: 'g5', name: 'Mandorle / Noci / Anacardi', cat: 'Grassi & Sfizi', inStock: false },
+            { id: 'g6', name: 'Olive taggiasche e Capperi', cat: 'Grassi & Sfizi', inStock: false }
+        ];
+
+        // ==========================================
+        // STATO DELL'APPLICAZIONE (LOCALSTORAGE)
+        // ==========================================
+        let currentDayIndex = (new Date().getDay() + 6) % 7; // Lunedì = 0 ... Domenica = 6
+        let currentPantryFilter = 'all';
+
+        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v1')) || {
+            completedMeals: {},
+            water: {},
+            pantry: defaultPantry
+        };
+
+        function saveState() {
+            localStorage.setItem('nutriPlanGiovanni_v1', JSON.stringify(appState));
+            updateMissingBadge();
+        }
+
+        // ==========================================
+        // RENDERING PIANO GIORNALIERO
+        // ==========================================
+        function renderDaySelector() {
+            const container = document.getElementById('day-selector');
+            container.innerHTML = '';
+
+            weekData.forEach((day, idx) => {
+                const isSelected = idx === currentDayIndex;
+                const btn = document.createElement('button');
+                btn.onclick = () => { currentDayIndex = idx; renderPlan(); };
+                btn.className = `flex flex-col items-center justify-center min-w-[54px] py-2.5 px-2 rounded-2xl border transition active:scale-95 ${
+                    isSelected 
+                        ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-extrabold shadow-lg shadow-emerald-500/20' 
+                        : 'bg-slate-900/90 text-slate-400 border-slate-800 font-semibold'
+                }`;
+                btn.innerHTML = `
+                    <span class="text-[10px] uppercase tracking-wider">${day.short}</span>
+                    <div class="mt-1 flex items-center space-x-1">
+                        ${day.workout ? `<i class="fa-solid fa-dumbbell text-[10px] ${isSelected ? 'text-slate-950' : 'text-amber-400'}"></i>` : `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-slate-950' : 'bg-slate-700'}"></span>`}
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderPlan() {
+            renderDaySelector();
+            const day = weekData[currentDayIndex];
+
+            // Aggiorna Banner Palestra
+            const banner = document.getElementById('workout-banner');
+            if (day.workout) {
+                banner.classList.remove('hidden');
+                document.getElementById('workout-title').textContent = `${day.name} • Giorno di Palestra`;
+                document.getElementById('workout-desc').textContent = day.workoutNote;
+            } else {
+                banner.classList.add('hidden');
+            }
+
+            // Aggiorna Macro
+            document.getElementById('macro-kcal').textContent = day.kcal;
+            document.getElementById('macro-c').textContent = day.c;
+            document.getElementById('macro-p').textContent = day.p;
+            document.getElementById('macro-g').textContent = day.g;
+
+            // Aggiorna Acqua
+            const waterToday = appState.water[day.id] || 0;
+            document.getElementById('water-val').textContent = `${waterToday.toFixed(2)} / 3.5 L`;
+            const pct = Math.min(100, (waterToday / 3.5) * 100);
+            document.getElementById('water-bar').style.width = `${pct}%`;
+
+            // Renderizza Pasti
+            const mealsContainer = document.getElementById('meals-container');
+            mealsContainer.innerHTML = '';
+
+            day.meals.forEach(meal => {
+                const isDone = !!appState.completedMeals[meal.id];
+                const card = document.createElement('div');
+                card.className = `bg-slate-900/95 border border-slate-800 rounded-3xl p-4 transition-all ${isDone ? 'meal-done' : ''}`;
+                
+                const ingBadges = meal.ingredients.map(ing => 
+                    `<span class="inline-block bg-slate-800/90 border border-slate-700/70 text-slate-200 text-xs px-2.5 py-1 rounded-xl mr-1.5 mb-1.5 font-medium">${ing}</span>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-extrabold px-2.5 py-0.5 rounded-lg">${meal.time}</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">${meal.type}</span>
+                        </div>
+                        <button onclick="toggleMeal('${meal.id}')" class="w-8 h-8 rounded-xl flex items-center justify-center border transition ${
+                            isDone ? 'bg-emerald-500 border-emerald-400 text-slate-950' : 'bg-slate-800 border-slate-700 text-slate-400'
+                        }">
+                            <i class="fa-solid fa-check text-sm"></i>
+                        </button>
+                    </div>
+
+                    <h3 class="text-base font-extrabold text-white mt-2">${meal.title}</h3>
+                    <p class="text-[11px] font-semibold text-emerald-400/90 mt-0.5">${meal.macros}</p>
+
+                    <div class="mt-3 flex flex-wrap">
+                        ${ingBadges}
+                    </div>
+
+                    <div class="mt-2.5 pt-2.5 border-t border-slate-800/80 flex items-start space-x-2 text-xs text-slate-300 leading-relaxed">
+                        <i class="fa-solid fa-utensils text-emerald-400 mt-1 shrink-0"></i>
+                        <span>${meal.recipe}</span>
+                    </div>
+                `;
+                mealsContainer.appendChild(card);
+            });
+        }
+
+        function toggleMeal(mealId) {
+            appState.completedMeals[mealId] = !appState.completedMeals[mealId];
+            saveState();
+            renderPlan();
+        }
+
+        function updateWater(amount) {
+            const dayId = weekData[currentDayIndex].id;
+            const current = appState.water[dayId] || 0;
+            appState.water[dayId] = Math.max(0, Math.min(5, current + amount));
+            saveState();
+            renderPlan();
+        }
+
+        function resetProgress() {
+            if (confirm('Vuoi azzerare le spunte dei pasti e l\'acqua della settimana? (La dispensa non verrà toccata)')) {
+                appState.completedMeals = {};
+                appState.water = {};
+                saveState();
+                renderPlan();
+            }
+        }
+
+        // ==========================================
+        // RENDERING DISPENSA & LISTA SPESA
+        // ==========================================
+        function setPantryFilter(filter) {
+            currentPantryFilter = filter;
+            ['all', 'missing', 'home'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if (f === filter) {
+                    btn.className = 'py-2 text-xs font-extrabold rounded-xl bg-emerald-500 text-slate-950 transition';
+                } else {
+                    btn.className = 'py-2 text-xs font-bold rounded-xl text-slate-400 transition';
+                }
+            });
+            renderPantry();
+        }
+
+        function renderPantry() {
+            const container = document.getElementById('pantry-container');
+            container.innerHTML = '';
+
+            const categories = [...new Set(appState.pantry.map(i => i.cat))];
+
+            categories.forEach(cat => {
+                const items = appState.pantry.filter(i => {
+                    if (i.cat !== cat) return false;
+                    if (currentPantryFilter === 'missing') return !i.inStock;
+                    if (currentPantryFilter === 'home') return i.inStock;
+                    return true;
+                });
+
+                if (items.length === 0) return;
+
+                const section = document.createElement('div');
+                section.className = 'bg-slate-900/90 border border-slate-800 rounded-3xl p-4';
+                
+                const itemsHtml = items.map(item => `
+                    <div onclick="togglePantryItem('${item.id}')" class="flex items-center justify-between py-2.5 border-b border-slate-800/70 last:border-none cursor-pointer active:opacity-70">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 rounded-lg flex items-center justify-center border ${
+                                item.inStock 
+                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' 
+                                    : 'bg-rose-500/15 border-rose-500/40 text-rose-400'
+                            }">
+                                <i class="fa-solid ${item.inStock ? 'fa-house-circle-check' : 'fa-cart-plus'} text-xs"></i>
+                            </div>
+                            <span class="text-sm font-semibold ${item.inStock ? 'text-slate-400 line-through' : 'text-white'}">${item.name}</span>
+                        </div>
+                        <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md ${
+                            item.inStock ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+                        }">
+                            ${item.inStock ? 'In Casa' : 'Compra'}
+                        </span>
+                    </div>
+                `).join('');
+
+                section.innerHTML = `
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-400 mb-2">${cat}</h3>
+                    <div class="divide-y divide-slate-800/60">
+                        ${itemsHtml}
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+        }
+
+        function togglePantryItem(id) {
+            const item = appState.pantry.find(i => i.id === id);
+            if (item) {
+                item.inStock = !item.inStock;
+                saveState();
+                renderPantry();
+            }
+        }
+
+        function addCustomItem() {
+            const input = document.getElementById('custom-item-input');
+            const name = input.value.trim();
+            if (!name) return;
+
+            appState.pantry.unshift({
+                id: 'custom-' + Date.now(),
+                name: name,
+                cat: 'Aggiunti da Te',
+                inStock: false
+            });
+            input.value = '';
+            saveState();
+            renderPantry();
+        }
+
+        function updateMissingBadge() {
+            const missingCount = appState.pantry.filter(i => !i.inStock).length;
+            const badge = document.getElementById('missing-badge');
+            if (missingCount > 0) {
+                badge.textContent = missingCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // NAVIGAZIONE TRA TAB
+        // ==========================================
+        function switchTab(tab) {
+            const viewPlan = document.getElementById('view-plan');
+            const viewPantry = document.getElementById('view-pantry');
+            const tabPlan = document.getElementById('tab-plan');
+            const tabPantry = document.getElementById('tab-pantry');
+
+            if (tab === 'plan') {
+                viewPlan.classList.remove('hidden');
+                viewPantry.classList.add('hidden');
+                tabPlan.className = 'flex flex-col items-center space-y-1 text-emerald-400 py-1 px-4 rounded-2xl transition';
+                tabPantry.className = 'flex flex-col items-center space-y-1 text-slate-400 py-1 px-4 rounded-2xl transition relative';
+                renderPlan();
+            } else {
+                viewPlan.classList.add('hidden');
+                viewPantry.classList.remove('hidden');
+                tabPantry.className = 'flex flex-col items-center space-y-1 text-emerald-400 py-1 px-4 rounded-2xl transition relative';
+                tabPlan.className = 'flex flex-col items-center space-y-1 text-slate-400 py-1 px-4 rounded-2xl transition';
+                renderPantry();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Inizializzazione all'avvio
+        renderPlan();
+        updateMissingBadge();
+    </script>
+</body>
+</html>
