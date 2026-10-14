@@ -19,7 +19,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #F6F5F0; /* Alabastro caldo riposante */
+            background-color: #F6F5F0;
             color: #1C201D;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
@@ -32,7 +32,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .glass-bar {
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-top: 1px solid rgba(0, 0, 0, 0.06);
@@ -47,27 +47,22 @@
 
         .meal-completed {
             background-color: #FAF9F6 !important;
-            opacity: 0.6;
+            opacity: 0.55;
         }
     </style>
 </head>
 <body class="min-h-screen antialiased">
 
-    <!-- HEADER PULITO E MINIMALE -->
+    <!-- HEADER PULITO -->
     <header class="px-5 mb-5 flex justify-between items-center">
         <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-emerald-700" id="current-date-label">Piano Giornaliero</p>
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-700" id="current-date-label">Piano Giornaliero</p>
             <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5">Ciao Giovanni</h1>
         </div>
-        <div class="flex space-x-2">
-            <button onclick="openSwapModal()" class="h-10 px-3.5 rounded-2xl bg-emerald-50 border border-emerald-200/70 text-emerald-800 text-xs font-bold flex items-center space-x-1.5 active:scale-95 transition">
-                <i class="fa-solid fa-repeat"></i>
-                <span>Sostituzioni</span>
-            </button>
-            <button onclick="resetProgress()" class="w-10 h-10 rounded-2xl bg-white border border-stone-200/80 flex items-center justify-center text-stone-500 active:scale-95 transition" title="Azzera settimana">
-                <i class="fa-solid fa-rotate-right text-xs"></i>
-            </button>
-        </div>
+        <button onclick="resetProgress()" class="h-10 px-3.5 rounded-2xl bg-white border border-stone-200/80 flex items-center space-x-1.5 text-stone-500 text-xs font-semibold active:scale-95 transition">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>Reset</span>
+        </button>
     </header>
 
     <!-- ========================================== -->
@@ -75,7 +70,7 @@
     <!-- ========================================== -->
     <main id="view-plan" class="px-5 space-y-5">
         
-        <!-- SELETTORE GIORNI STILE CALENDARIO iOS -->
+        <!-- SELETTORE GIORNI -->
         <div class="flex justify-between space-x-1.5 overflow-x-auto no-scrollbar py-1" id="day-selector"></div>
 
         <!-- BANNER PALESTRA -->
@@ -84,42 +79,42 @@
                 <i class="fa-solid fa-dumbbell text-sm"></i>
             </div>
             <div>
-                <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-900" id="workout-title">Giorno di Allenamento</h3>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-900">Strategia Giorno Palestra</h3>
                 <p class="text-xs text-amber-800/90 font-medium mt-1 leading-relaxed" id="workout-desc"></p>
             </div>
         </div>
 
-        <!-- RIEPILOGO PROGRESSO GIORNALIERO (PULITO) -->
+        <!-- RIEPILOGO MACRO E ACQUA -->
         <div class="soft-card rounded-3xl p-5 space-y-4">
             <div class="flex justify-between items-center">
                 <div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400">Obiettivo Giornaliero</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400">Target Giornaliero</span>
                     <div class="flex items-baseline space-x-2 mt-0.5">
                         <span class="text-2xl font-extrabold text-stone-900" id="macro-kcal">1.960 Kcal</span>
                         <span class="text-xs font-semibold text-emerald-700" id="meals-progress-text">0/5 pasti</span>
                     </div>
                 </div>
-                <div class="flex space-x-2">
-                    <div class="px-3 py-1.5 rounded-xl bg-stone-50 border border-stone-200/50 text-center">
-                        <span class="block text-[10px] font-bold text-stone-400 uppercase">Carbo</span>
+                <div class="flex space-x-1.5">
+                    <div class="px-2.5 py-1.5 rounded-xl bg-stone-50 border border-stone-200/50 text-center">
+                        <span class="block text-[9px] font-bold text-stone-400 uppercase">Carbo</span>
                         <span class="text-xs font-extrabold text-stone-800" id="macro-c">175g</span>
                     </div>
-                    <div class="px-3 py-1.5 rounded-xl bg-stone-50 border border-stone-200/50 text-center">
-                        <span class="block text-[10px] font-bold text-stone-400 uppercase">Prot</span>
+                    <div class="px-2.5 py-1.5 rounded-xl bg-stone-50 border border-stone-200/50 text-center">
+                        <span class="block text-[9px] font-bold text-stone-400 uppercase">Prot</span>
                         <span class="text-xs font-extrabold text-emerald-700" id="macro-p">158g</span>
                     </div>
-                    <div class="px-3 py-1.5 rounded-xl bg-stone-50 border border-stone-200/50 text-center">
-                        <span class="block text-[10px] font-bold text-stone-400 uppercase">Grassi</span>
+                    <div class="px-2.5 py-1.5 rounded-xl bg-stone-50 border border-stone-200/50 text-center">
+                        <span class="block text-[9px] font-bold text-stone-400 uppercase">Grassi</span>
                         <span class="text-xs font-extrabold text-stone-800" id="macro-g">68g</span>
                     </div>
                 </div>
             </div>
 
-            <!-- BARRA ACQUA INTEGRATA E LEGGIBILE -->
+            <!-- BARRA ACQUA -->
             <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
                 <div class="flex-1 pr-4">
                     <div class="flex justify-between text-xs font-bold mb-1.5">
-                        <span class="text-stone-600 flex items-center"><i class="fa-solid fa-droplet text-sky-500 mr-1.5"></i>Acqua (Target 3.5L)</span>
+                        <span class="text-stone-600 flex items-center"><i class="fa-solid fa-droplet text-sky-500 mr-1.5"></i>Acqua (3.5L)</span>
                         <span class="text-sky-600 font-extrabold" id="water-val">0.0 L</span>
                     </div>
                     <div class="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
@@ -133,15 +128,14 @@
             </div>
         </div>
 
-        <!-- LISTA PASTI (LAYOUT AD ALTA LEGGIBILITÀ) -->
-        <div id="meals-container" class="space-y-3.5"></div>
+        <!-- LISTA PASTI -->
+        <div id="meals-container" class="space-y-4"></div>
     </main>
 
     <!-- ========================================== -->
     <!-- VISTA 2: DISPENSA & SPESA                  -->
     <!-- ========================================== -->
     <main id="view-pantry" class="px-5 space-y-4 hidden">
-        
         <div class="soft-card rounded-3xl p-5 space-y-4">
             <div class="flex justify-between items-start">
                 <div>
@@ -154,19 +148,15 @@
                 </button>
             </div>
 
-            <!-- FILTRI SEGMENTATI -->
             <div class="grid grid-cols-3 gap-1 bg-stone-100 p-1 rounded-2xl">
                 <button onclick="setPantryFilter('missing')" id="filter-missing" class="py-2 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">Da Comprare</button>
                 <button onclick="setPantryFilter('home')" id="filter-home" class="py-2 text-xs font-semibold rounded-xl text-stone-500 transition">In Casa</button>
                 <button onclick="setPantryFilter('all')" id="filter-all" class="py-2 text-xs font-semibold rounded-xl text-stone-500 transition">Tutti</button>
             </div>
 
-            <!-- AGGIUNGI ARTICOLO -->
             <div class="flex space-x-2">
                 <input type="text" id="custom-item-input" placeholder="Aggiungi ingrediente extra..." class="flex-1 bg-stone-50 border border-stone-200/80 rounded-xl px-3.5 py-2.5 text-sm text-stone-900 focus:outline-none focus:border-emerald-600">
-                <button onclick="addCustomItem()" class="bg-stone-900 text-white font-bold px-4 rounded-xl text-xs active:scale-95 transition">
-                    Aggiungi
-                </button>
+                <button onclick="addCustomItem()" class="bg-stone-900 text-white font-bold px-4 rounded-xl text-xs active:scale-95 transition">Aggiungi</button>
             </div>
         </div>
 
@@ -179,9 +169,9 @@
     <main id="view-weight" class="px-5 space-y-4 hidden">
         <div class="soft-card rounded-3xl p-5 space-y-4">
             <div>
-                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Percorso Ricomposizione</span>
-                <h2 class="text-xl font-extrabold text-stone-900 mt-0.5">Tracciamento Peso</h2>
-                <p class="text-xs text-stone-500 mt-1">Pesati 1 sola volta a settimana (es. Venerdì o Sabato mattina a digiuno).</p>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Ricomposizione Corporea</span>
+                <h2 class="text-xl font-extrabold text-stone-900 mt-0.5">Diario del Peso</h2>
+                <p class="text-xs text-stone-500 mt-1">Pesati 1 volta a settimana al mattino a digiuno.</p>
             </div>
 
             <div class="grid grid-cols-3 gap-2.5 pt-1">
@@ -194,16 +184,14 @@
                     <div class="text-lg font-extrabold text-emerald-900 mt-0.5" id="current-weight-display">110.0 kg</div>
                 </div>
                 <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-200/50">
-                    <span class="text-[10px] font-bold uppercase text-stone-400">Differenza</span>
+                    <span class="text-[10px] font-bold uppercase text-stone-400">Progresso</span>
                     <div class="text-lg font-extrabold text-emerald-700 mt-0.5" id="diff-weight-display">0.0 kg</div>
                 </div>
             </div>
 
             <div class="flex space-x-2 pt-2">
-                <input type="number" step="0.1" id="weight-input" placeholder="Inserisci peso (es. 108.5)" class="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-3.5 py-2.5 text-sm text-stone-900 focus:outline-none focus:border-emerald-600">
-                <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-bold px-5 rounded-xl text-xs active:scale-95 transition">
-                    Registra
-                </button>
+                <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 108.5)" class="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-3.5 py-2.5 text-sm text-stone-900 focus:outline-none focus:border-emerald-600">
+                <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-bold px-5 rounded-xl text-xs active:scale-95 transition">Salva</button>
             </div>
         </div>
 
@@ -213,53 +201,7 @@
         </div>
     </main>
 
-    <!-- ========================================== -->
-    <!-- MODALE SOSTITUZIONI RAPIDE (SWAP CLINICO)  -->
-    <!-- ========================================== -->
-    <div id="swap-modal" class="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 hidden flex items-end justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl animate-fade-in">
-            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
-                <div>
-                    <h3 class="text-base font-extrabold text-stone-900">Tabella Sostituzioni Rapide</h3>
-                    <p class="text-xs text-stone-500">Scambia gli ingredienti mantenendo invariati i Macro</p>
-                </div>
-                <button onclick="closeSwapModal()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="space-y-3 text-xs leading-relaxed text-stone-700 max-h-[60vh] overflow-y-auto pr-1">
-                <div class="p-3 rounded-2xl bg-stone-50 border border-stone-200/60">
-                    <strong class="text-emerald-800 block mb-1">🍝 Carboidrati Pranzo (Equivalenti a 80g di Pasta):</strong>
-                    • 80g di Riso Basmati o Carnaroli<br>
-                    • 180g di Gnocchi di sole patate<br>
-                    • 240g di Patate lesse o al forno<br>
-                    • 110g di Pane di segale o integrale
-                </div>
-                <div class="p-3 rounded-2xl bg-stone-50 border border-stone-200/60">
-                    <strong class="text-emerald-800 block mb-1">🥩 Proteine Cena (Equivalenti a 200g di Pollo):</strong>
-                    • 200g di Tacchino, Vitello magro o Arista di maiale<br>
-                    • 230g di Merluzzo, Orata, Branzino o Gamberoni<br>
-                    • 180g di Salmone fresco o Tonno fresco<br>
-                    • 130g di Bresaola o Fesa di tacchino<br>
-                    • 2 Uova intere + 120g di Albume
-                </div>
-                <div class="p-3 rounded-2xl bg-stone-50 border border-stone-200/60">
-                    <strong class="text-emerald-800 block mb-1">🥫 Proteine Veloci Pranzo:</strong>
-                    • 100g di Tonno al naturale = 100g di Salmone al naturale = 70g di Bresaola/Crudo sgrassato = 150g di Fiocchi di latte magri.
-                </div>
-                <div class="p-3 rounded-2xl bg-stone-50 border border-stone-200/60">
-                    <strong class="text-emerald-800 block mb-1">🥑 Grassi Equivalenti (1 cucchiaino Olio = 5g):</strong>
-                    • 10g di Frutta secca (Mandorle, Noci, Anacardi)<br>
-                    • 35g di Avocado maturo<br>
-                    • 25g di Olive taggiasche
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- NAVIGAZIONE INFERIORE A 3 TAB              -->
-    <!-- ========================================== -->
+    <!-- NAVIGAZIONE INFERIORE -->
     <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-6 py-2 flex justify-around items-center">
         <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-700 py-1 px-4 rounded-2xl transition">
             <i class="fa-solid fa-utensils text-base"></i>
@@ -267,7 +209,7 @@
         </button>
         <button onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-stone-400 py-1 px-4 rounded-2xl transition relative">
             <i class="fa-solid fa-basket-shopping text-base"></i>
-            <span class="text-[11px] font-semibold">Spesa</span>
+            <span class="text-[11px] font-semibold">Dispensa</span>
             <span id="missing-badge" class="absolute top-0.5 right-2.5 bg-amber-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
         </button>
         <button onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-stone-400 py-1 px-4 rounded-2xl transition">
@@ -277,13 +219,48 @@
     </nav>
 
     <script>
+        // ==========================================
+        // ALTERNATIVE SPECIFICHE PER CATEGORIA PASTO
+        // ==========================================
+        const mealSwaps = {
+            breakfast: [
+                "Alternativa 1: Porridge caldo (60g fiocchi d'avena cotti nel latte + 100g albume + 1 mela a dadini e cannella + 15g fondente)",
+                "Alternativa 2: Pancake (60g farina d'avena + 120g albume) con 15g crema proteica spalmabile e 15g burro d'arachidi",
+                "Alternativa 3: 200ml latte + 40g cereali integrali + 30g biscotti integrali + 150g Yogurt Greco 0%"
+            ],
+            snack_am: [
+                "Alternativa 1: 30g Parmigiano Reggiano a cubetti + 15g Mandorle o Noci",
+                "Alternativa 2: 170g Yogurt Greco 0% + 15g Mandorle o Nocciole",
+                "Alternativa 3: 70g Fesa di tacchino o Bresaola + 40g Philadelphia Light + 2 Gallette di riso"
+            ],
+            lunch: [
+                "Alternativa 1: 80g Riso Basmati con 110g Tonno al naturale, zucchine saltate e scorza di limone",
+                "Alternativa 2: 180g Gnocchi di patate (cuociono in 2 min) con pomodorini freschi, 100g fagioli/ceci e 60g tonno o crudo sgrassato",
+                "Alternativa 3: 80g Pasta integrale con 100g salmone (o 70g bresaola a listarelle a crudo), rucola e pomodorini"
+            ],
+            snack_pm: [
+                "Alternativa 1: 170g Yogurt Greco 0% + 15g Cioccolato fondente 85% a scaglie",
+                "Alternativa 2: 1 Mela o Pera o Arancia + 50g Fesa di tacchino + 10g Cioccolato fondente",
+                "Alternativa 3: 170g Yogurt Greco 0% + 15g Anacardi o Mandorle"
+            ],
+            dinner: [
+                "Alternativa 1: 220g Petto di pollo o tacchino alla piastra + 100g ceci/fagioli + zucchine grigliate",
+                "Alternativa 2: 230g Filetto di Orata, Branzino o Merluzzo al forno con pomodorini e olive + 40g pane di segale",
+                "Alternativa 3: Carpaccio con 130g Bresaola, rucola, 25g scaglie di Grana, pomodorini e 50g pane di segale tostato"
+            ]
+        };
+
+        // ==========================================
+        // PIANO SETTIMANALE (SENZA RADICCHIO, FUNGHI, KIWI, FRUTTI DI BOSCO)
+        // ==========================================
         const weekData = [
             {
                 id: 'lun', short: 'Lun', name: 'Lunedì', workout: false,
                 kcal: '1.960 Kcal', c: '175g', p: '158g', g: '68g',
                 meals: [
                     {
-                        id: 'lun-1', time: '07:30', type: 'Colazione', title: 'Pancake Avena, Albume e Arachidi',
+                        id: 'lun-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast',
+                        title: 'Pancake Avena, Albume e Arachidi',
                         macros: '60g C • 26g P • 14g G',
                         ingredients: [
                             { qty: '60g', item: 'Farina d\'avena' },
@@ -291,19 +268,28 @@
                             { qty: '15g', item: 'Burro d\'arachidi 100%' },
                             { qty: '15g', item: 'Marmellata zero zuccheri' }
                         ],
-                        recipe: 'Mescola farina d\'avena e albume con un goccio d\'acqua e cannella. Cuoci in padella calda 2 min per lato e farcisci.'
+                        steps: [
+                            'In una ciotola mescola con una frusta 60g di farina d\'avena, 120g di albume, 2 cucchiai d\'acqua e un pizzico di cannella fino a togliere i grumi.',
+                            'Scalda una padella antiaderente a fuoco medio-basso. Versa il composto e copri col coperchio per 2 minuti (quando vedi le bollicine in superficie, giralo).',
+                            'Cuoci l\'altro lato per 1 minuto, impiatta e spalma subito la marmellata e il burro d\'arachidi mentre è ancora caldo.'
+                        ]
                     },
                     {
-                        id: 'lun-2', time: '10:30', type: 'Spuntino', title: 'Parmigiano e Mandorle',
+                        id: 'lun-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am',
+                        title: 'Parmigiano e Mandorle',
                         macros: '2g C • 13g P • 16g G',
                         ingredients: [
                             { qty: '30g', item: 'Parmigiano Reggiano' },
                             { qty: '15g', item: 'Mandorle tostate' }
                         ],
-                        recipe: 'Spuntino salato a indice glicemico zero per mantenere alta la concentrazione alla scrivania.'
+                        steps: [
+                            'Taglia il Parmigiano a scaglie o cubetti e mangialo insieme alle mandorle.',
+                            'Zero zuccheri: mantiene la mente lucida al computer fino all\'ora di pranzo.'
+                        ]
                     },
                     {
-                        id: 'lun-3', time: '13:00', type: 'Pranzo (10 min)', title: 'Pasta Salmone, Olive e Datterini',
+                        id: 'lun-3', time: '13:00', type: 'Pranzo (10 min)', swapCat: 'lunch',
+                        title: 'Pasta Salmone, Olive e Datterini',
                         macros: '62g C • 32g P • 16g G',
                         ingredients: [
                             { qty: '80g', item: 'Pasta integrale' },
@@ -312,81 +298,114 @@
                             { qty: '10g', item: 'Olive taggiasche' },
                             { qty: '5g', item: 'Olio EVO (1 cucchiaino)' }
                         ],
-                        recipe: 'Taglia a metà i datterini con olive, salmone a listarelle, scorza di limone e olio. Scola la pasta al dente e salta 30 secondi.'
+                        steps: [
+                            'Metti a bollire l\'acqua salata e butta gli 80g di pasta integrale.',
+                            'Mentre cuoce, taglia in una ciotola capiente i datterini a metà, le olive e il salmone a striscioline.',
+                            'Aggiungi 1 cucchiaino di olio EVO, origano, basilico e una grattugiata di scorza di limone.',
+                            'Scola la pasta al dente (tieni 1 cucchiaio di acqua di cottura) e mescola tutto insieme.'
+                        ]
                     },
                     {
-                        id: 'lun-4', time: '16:30', type: 'Merenda', title: 'Yogurt Greco e Fondente',
+                        id: 'lun-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Yogurt Greco e Fondente',
                         macros: '12g C • 18g P • 8g G',
                         ingredients: [
                             { qty: '170g', item: 'Yogurt Greco 0%' },
                             { qty: '15g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Trita il cioccolato fondente a scaglie e uniscilo allo yogurt freddo.'
+                        steps: [
+                            'Versa lo yogurt greco in una tazza.',
+                            'Trita al coltello il cioccolato fondente a scaglie fini e mescola.'
+                        ]
                     },
                     {
-                        id: 'lun-5', time: '20:00', type: 'Cena', title: 'Pollo e Ceci Croccanti alla Paprika',
+                        id: 'lun-5', time: '20:00', type: 'Cena', swapCat: 'dinner',
+                        title: 'Pollo e Ceci Croccanti alla Paprika',
                         macros: '39g C • 69g P • 14g G',
                         ingredients: [
-                            { qty: '220g', item: 'Petto di pollo a bocconcini' },
-                            { qty: '80g', item: 'Ceci cotti ben asciugati' },
-                            { qty: '250g', item: 'Zucchine a bastoncini' },
-                            { qty: '5g', item: 'Olio EVO + Paprika e Rosmarino' }
+                            { qty: '220g', item: 'Petto di pollo' },
+                            { qty: '80g', item: 'Ceci cotti in vetro' },
+                            { qty: '250g', item: 'Zucchine' },
+                            { qty: '5g', item: 'Olio EVO + Paprika dolce' }
                         ],
-                        recipe: 'Condisci pollo, ceci e zucchine con paprika, rosmarino e olio. Cuoci in forno o friggitrice ad aria a 195°C per 16-18 minuti.'
+                        steps: [
+                            'Sciacqua gli 80g di ceci sotto l\'acqua e asciugali bene con carta assorbente. Taglia il pollo a bocconcini di 2-3 cm e le zucchine a bastoncini.',
+                            'Metti pollo, ceci e zucchine in una ciotola con 1 cucchiaino d\'olio, 1 cucchiaino abbondante di paprika dolce, aglio in polvere, rosmarino e sale.',
+                            'Disponi tutto nel cestello della friggitrice ad aria (o forno ventilato) a 195°C per 16-18 minuti agitando a metà cottura: i ceci diventeranno croccanti e il pollo succoso.'
+                        ]
                     }
                 ]
             },
             {
                 id: 'mar', short: 'Mar', name: 'Martedì', workout: true,
-                workoutNote: 'Ore 06:30 Micro Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Colazione Post-Workout.',
+                workoutNote: 'Ore 06:30 Pre-Workout leggero • Ore 07:00 Palestra • Ore 08:30 Porridge caldo Post-Workout.',
                 kcal: '1.980 Kcal', c: '182g', p: '158g', g: '67g',
                 meals: [
                     {
-                        id: 'mar-0', time: '06:30', type: 'Pre-Palestra', title: 'Caffè, Frutta e Fondente',
+                        id: 'mar-0', time: '06:30', type: 'Pre-Palestra', swapCat: 'snack_pm',
+                        title: 'Caffè, Banana e Fondente',
                         macros: '18g C • 2g P • 5g G',
                         ingredients: [
                             { qty: '1', item: 'Caffè espresso amaro' },
-                            { qty: '100g', item: 'Banana o frutto piccolo' },
+                            { qty: '100g', item: 'Banana (o mezza mela)' },
                             { qty: '10g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Energia immediata 30 minuti prima dei pesi senza appesantire la digestione.'
+                        steps: [
+                            'Mangia la mezza banana e il quadratino di fondente bevendo il caffè e 2 bicchieri d\'acqua 30 minuti prima di iniziare i pesi.'
+                        ]
                     },
                     {
-                        id: 'mar-1', time: '08:30', type: 'Post-Palestra', title: 'Porridge Cremoso Proteico',
+                        id: 'mar-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast',
+                        title: 'Porridge Caldo Mela, Cannella e Noci',
                         macros: '48g C • 24g P • 12g G',
                         ingredients: [
-                            { qty: '60g', item: 'Fiocchi d\'avena' },
+                            { qty: '60g', item: 'Fiocchi d\'avena (cotti in porridge)' },
                             { qty: '150ml', item: 'Latte di soia o scremato' },
                             { qty: '100g', item: 'Albume liquido' },
-                            { qty: '100g', item: 'Frutti di bosco' },
+                            { qty: '120g', item: 'Mela a cubetti + Cannella' },
                             { qty: '15g', item: 'Noci' }
                         ],
-                        recipe: 'Cuoci l\'avena nel latte per 3 min. A fine cottura versa l\'albume mescolando veloce per 1 minuto sul fuoco. Guarnisci con frutta e noci.'
+                        steps: [
+                            'In un pentolino antiaderente versa i 60g di fiocchi d\'avena, i 150ml di latte, la mela tagliata a dadini piccoli e abbondante cannella.',
+                            'Cuoci a fuoco medio per 3-4 minuti mescolando finché i fiocchi assorbono il liquido e diventano cremosi.',
+                            'Abbassa la fiamma al minimo, versa i 100g di albume liquido e mescola velocemente per 60 secondi: il porridge diventerà una crema densa e proteica.',
+                            'Versa nella ciotola e guarnisci con le noci spezzettate.'
+                        ]
                     },
                     {
-                        id: 'mar-3', time: '13:00', type: 'Pranzo (12 min)', title: 'Carbonara Fit Crudo e Zucchine',
+                        id: 'mar-3', time: '13:00', type: 'Pranzo (12 min)', swapCat: 'lunch',
+                        title: 'Carbonara Fit Crudo e Zucchine',
                         macros: '60g C • 36g P • 16g G',
                         ingredients: [
                             { qty: '80g', item: 'Pasta integrale' },
                             { qty: '1 + 50g', item: 'Uovo intero + Albume' },
                             { qty: '50g', item: 'Prosciutto crudo sgrassato' },
-                            { qty: '200g', item: 'Zucchine grattugiate' },
-                            { qty: '10g', item: 'Parmigiano grattugiato' }
+                            { qty: '200g', item: 'Zucchine' },
+                            { qty: '10g', item: 'Parmigiano Reggiano' }
                         ],
-                        recipe: 'Rosola 2 min in padella il crudo con le zucchine grattugiate. Scola la pasta e manteca a fuoco spento con l\'uovo sbattuto, pepe e Parmigiano.'
+                        steps: [
+                            'Metti su l\'acqua per la pasta. Grattugia le zucchine con una grattugia a fori larghi (a julienne).',
+                            'In una padella antiaderente rosola per 2 minuti il crudo a listarelle senza olio, poi unisci le zucchine grattugiate per altri 2 minuti.',
+                            'In una ciotolina sbatti l\'uovo intero con i 50g di albume, il Parmigiano e abbondante pepe nero.',
+                            'Scola la pasta in padella, TOGLI LA PADELLA DAL FUOCO, versa l\'uovo e mescola energicamente per creare la cremina senza stracciare l\'uovo.'
+                        ]
                     },
                     {
-                        id: 'mar-4', time: '16:30', type: 'Merenda', title: 'Spuntino Bilanciato Dolce-Salato',
+                        id: 'mar-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Spuntino Dolce-Salato Post-Workout',
                         macros: '18g C • 18g P • 6g G',
                         ingredients: [
-                            { qty: '150g', item: 'Mela media' },
+                            { qty: '150g', item: 'Pera o Mela' },
                             { qty: '60g', item: 'Fesa di tacchino arrosto' },
                             { qty: '10g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Blocca la fame pomeridiana post-allenamento mantenendo stabile la glicemia.'
+                        steps: [
+                            'Abbina il frutto e il cioccolato ai 60g di fesa di tacchino per bloccare la fame pomeridiana post-palestra.'
+                        ]
                     },
                     {
-                        id: 'mar-5', time: '20:00', type: 'Cena', title: 'Orata su Crema di Cannellini e Spinaci',
+                        id: 'mar-5', time: '20:00', type: 'Cena', swapCat: 'dinner',
+                        title: 'Orata al Cartoccio su Crema di Cannellini',
                         macros: '38g C • 58g P • 14g G',
                         ingredients: [
                             { qty: '230g', item: 'Filetto di Orata o Branzino' },
@@ -394,7 +413,11 @@
                             { qty: '200g', item: 'Spinaci freschi' },
                             { qty: '5g', item: 'Olio EVO + Pomodorini e Capperi' }
                         ],
-                        recipe: 'Frulla i cannellini con poca acqua calda, rosmarino e olio. Cuoci il filetto in padella 8 min con pomodorini e capperi e adagialo sulla crema.'
+                        steps: [
+                            'Sciacqua i cannellini e frullali col minipimer insieme a 2 cucchiai di acqua calda, sale, pepe, rosmarino e metà del cucchiaino d\'olio fino ad avere una vellutata.',
+                            'Metti il filetto di orata in padella antiaderente con 6-7 pomodorini tagliati a metà, capperi, origano e 2 cucchiai d\'acqua. Copri col coperchio e cuoci a fuoco medio per 8-10 minuti.',
+                            'Appassisci gli spinaci freschi in 2 minuti in padella. Impiatta mettendo la crema di fagioli sul fondo, il filetto di pesce sopra e gli spinaci a lato.'
+                        ]
                     }
                 ]
             },
@@ -403,7 +426,8 @@
                 kcal: '1.950 Kcal', c: '176g', p: '160g', g: '65g',
                 meals: [
                     {
-                        id: 'mer-1', time: '07:30', type: 'Colazione', title: 'Latte, Cereali, Biscotti + Greco',
+                        id: 'mer-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast',
+                        title: 'Latte, Cereali, Biscotti + Greco',
                         macros: '52g C • 26g P • 8g G',
                         ingredients: [
                             { qty: '200ml', item: 'Latte parz. scremato o soia' },
@@ -411,69 +435,94 @@
                             { qty: '30g', item: 'Biscotti secchi integrali' },
                             { qty: '150g', item: 'Yogurt Greco 0%' }
                         ],
-                        recipe: 'Abbina sempre lo yogurt greco ai cereali/biscotti per avere una quota proteica completa.'
+                        steps: [
+                            'Versa cereali e biscotti nel latte caldo o freddo.',
+                            'Mangia a parte i 150g di yogurt greco (puoi dolcificarlo con cannella o gocce zero) per garantire le proteine mattutine.'
+                        ]
                     },
                     {
-                        id: 'mer-2', time: '10:30', type: 'Spuntino', title: 'Involtini di Bresaola e Philadelphia',
+                        id: 'mer-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am',
+                        title: 'Involtini di Bresaola e Philadelphia',
                         macros: '14g C • 26g P • 6g G',
                         ingredients: [
                             { qty: '70g', item: 'Bresaola della Valtellina' },
                             { qty: '40g', item: 'Philadelphia Light/Protein' },
                             { qty: '2', item: 'Gallette di riso (o 25g segale)' }
                         ],
-                        recipe: 'Spalma il Philadelphia sulle fette di bresaola con rucola, arrotola e accompagna con le gallette.'
+                        steps: [
+                            'Stendi le fette di bresaola, spalma sopra il Philadelphia con qualche foglia di rucola e arrotola a involtino.',
+                            'Accompagna con le 2 gallette.'
+                        ]
                     },
                     {
-                        id: 'mer-3', time: '13:00', type: 'Pranzo (10 min)', title: 'Riso Basmati Tonno, Zucchine e Limone',
+                        id: 'mer-3', time: '13:00', type: 'Pranzo (10 min)', swapCat: 'lunch',
+                        title: 'Riso Basmati Tonno, Zucchine e Limone',
                         macros: '64g C • 34g P • 10g G',
                         ingredients: [
                             { qty: '80g', item: 'Riso Basmati' },
                             { qty: '110g', item: 'Tonno al naturale sgocciolato' },
-                            { qty: '150g', item: 'Zucchine a rondelle sottili' },
+                            { qty: '150g', item: 'Zucchine' },
                             { qty: '5g', item: 'Olio EVO + Scorza di limone' }
                         ],
-                        recipe: 'Bollisci il riso 10 min. Salta le zucchine 2 min in padella col tonno, unisci il riso scolato e profuma col limone.'
+                        steps: [
+                            'Fai bollire il riso basmati in acqua salata per 10 minuti.',
+                            'Taglia le zucchine a rondelle sottilissime o a julienne e saltale in padella antiaderente per 3 minuti.',
+                            'Aggiungi il tonno ben sgocciolato, il riso scolato, il cucchiaino d\'olio a crudo e abbondante scorza di limone grattugiata.'
+                        ]
                     },
                     {
-                        id: 'mer-4', time: '16:30', type: 'Merenda', title: 'Coppa Yogurt, Fondente e Mandorle',
+                        id: 'mer-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Coppa Yogurt, Fondente Fuso e Mandorle',
                         macros: '12g C • 18g P • 15g G',
                         ingredients: [
                             { qty: '170g', item: 'Yogurt Greco 0%' },
                             { qty: '15g', item: 'Cioccolato fondente 85%' },
                             { qty: '10g', item: 'Mandorle' }
                         ],
-                        recipe: 'Fai sciogliere il fondente 30 sec al microonde e colalo sullo yogurt freddo per creare una crosticina croccante.'
+                        steps: [
+                            'Fai sciogliere i 15g di cioccolato fondente in una tazzina per 30 secondi al microonde.',
+                            'Versa il cioccolato fuso sopra lo yogurt greco freddo di frigo e aggiungi le mandorle: a contatto col freddo il cioccolato creerà una crosticina croccante.'
+                        ]
                     },
                     {
-                        id: 'mer-5', time: '20:00', type: 'Cena', title: 'Straccetti di Vitello al Balsamico e Lenticchie',
+                        id: 'mer-5', time: '20:00', type: 'Cena', swapCat: 'dinner',
+                        title: 'Straccetti di Vitello al Balsamico, Lenticchie e Zucchine',
                         macros: '34g C • 56g P • 16g G',
                         ingredients: [
                             { qty: '200g', item: 'Fettine di vitello magro' },
-                            { qty: '100g', item: 'Lenticchie cotte' },
-                            { qty: '200g', item: 'Radicchio alla piastra' },
+                            { qty: '100g', item: 'Lenticchie cotte in vetro' },
+                            { qty: '200g', item: 'Zucchine o Peperoni grigliati' },
                             { qty: '5g', item: 'Olio EVO + Aceto Balsamico' }
                         ],
-                        recipe: 'Scotta gli straccetti 3 min in padella rovente, sfuma col balsamico e servi con radicchio e lenticchie calde.'
+                        steps: [
+                            'Taglia le fettine di vitello a straccetti. Scalda bene una padella antiaderente e scotta la carne per 2-3 minuti a fiamma alta.',
+                            'Sfuma con 2 cucchiai di aceto balsamico lasciando restringere per 30 secondi finché si crea una glassa lucida.',
+                            'Scalda a parte i 100g di lenticchie con un pizzico di origano e concentrato di pomodoro, e servi insieme alle zucchine grigliate condite col cucchiaino d\'olio.'
+                        ]
                     }
                 ]
             },
             {
                 id: 'gio', short: 'Gio', name: 'Giovedì', workout: true,
-                workoutNote: 'Ore 06:30 Micro Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Pancake Tiramisù.',
+                workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Pancake Tiramisù.',
                 kcal: '1.970 Kcal', c: '180g', p: '157g', g: '68g',
                 meals: [
                     {
-                        id: 'gio-0', time: '06:30', type: 'Pre-Palestra', title: 'Espresso, Kiwi e Fondente',
+                        id: 'gio-0', time: '06:30', type: 'Pre-Palestra', swapCat: 'snack_pm',
+                        title: 'Espresso, Mela/Arancia e Fondente',
                         macros: '18g C • 2g P • 5g G',
                         ingredients: [
                             { qty: '1', item: 'Caffè espresso amaro' },
-                            { qty: '2', item: 'Kiwi maturi (o 1 frutto)' },
+                            { qty: '150g', item: 'Mela o Arancia (o mezza banana)' },
                             { qty: '10g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Spuntino rapido 30 minuti prima della palestra.'
+                        steps: [
+                            'Assumi 30 minuti prima di iniziare l\'allenamento con abbondante acqua.'
+                        ]
                     },
                     {
-                        id: 'gio-1', time: '08:30', type: 'Post-Palestra', title: 'Pancake "Tiramisù Fit"',
+                        id: 'gio-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast',
+                        title: 'Pancake "Tiramisù Fit"',
                         macros: '46g C • 27g P • 15g G',
                         ingredients: [
                             { qty: '60g', item: 'Farina d\'avena' },
@@ -481,30 +530,43 @@
                             { qty: '15g', item: 'Crema proteica spalmabile' },
                             { qty: '10g', item: 'Burro d\'arachidi 100%' }
                         ],
-                        recipe: 'Mescola avena, albume e caffè freddo. Cuoci in padella e spalma le creme a caldo.'
+                        steps: [
+                            'Sbatti la farina d\'avena con l\'albume e una tazzina di caffè espresso raffreddato.',
+                            'Cuoci in padella antiaderente 2 minuti per lato.',
+                            'Guarnisci il pancake caldo con la crema spalmabile al cacao/nocciola e il burro d\'arachidi.'
+                        ]
                     },
                     {
-                        id: 'gio-3', time: '13:00', type: 'Pranzo (10 min)', title: 'Pasta Crema di Zucca e Cotto',
+                        id: 'gio-3', time: '13:00', type: 'Pranzo (10 min)', swapCat: 'lunch',
+                        title: 'Pasta Crema di Zucca e Cotto Rosolato',
                         macros: '65g C • 31g P • 14g G',
                         ingredients: [
                             { qty: '80g', item: 'Pasta integrale' },
-                            { qty: '150g', item: 'Zucca a cubetti' },
+                            { qty: '150g', item: 'Zucca già pulita a cubetti' },
                             { qty: '70g', item: 'Prosciutto cotto magro a dadini' },
                             { qty: '10g', item: 'Parmigiano + 5g Olio EVO' }
                         ],
-                        recipe: 'Cuoci la zucca 4 min al microonde, schiacciala con forchetta, acqua di cottura e Parmigiano. Condisci la pasta col cotto rosolato.'
+                        steps: [
+                            'Metti i 150g di zucca a cubetti in una ciotola adatta al microonde con 2 cucchiai d\'acqua, copri e cuoci alla massima potenza per 4 minuti finché diventa morbidissima.',
+                            'Schiaccia la zucca con una forchetta insieme al Parmigiano, l\'olio, sale, pepe e un mestolino di acqua di cottura della pasta per ottenere una crema vellutata.',
+                            'Rosola 2 minuti il prosciutto cotto in padella, scola la pasta e manteca tutto insieme.'
+                        ]
                     },
                     {
-                        id: 'gio-4', time: '16:30', type: 'Merenda', title: 'Yogurt Greco e Anacardi',
+                        id: 'gio-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Yogurt Greco e Anacardi',
                         macros: '10g C • 20g P • 8g G',
                         ingredients: [
                             { qty: '170g', item: 'Yogurt Greco 0%' },
                             { qty: '15g', item: 'Anacardi tostati' }
                         ],
-                        recipe: 'Merenda saziante e ricca di proteine.'
+                        steps: [
+                            'Unisci gli anacardi allo yogurt greco per uno spuntino croccante e proteico.'
+                        ]
                     },
                     {
-                        id: 'gio-5', time: '20:00', type: 'Cena', title: 'Gamberoni agli Agrumi con Ceci e Segale',
+                        id: 'gio-5', time: '20:00', type: 'Cena', swapCat: 'dinner',
+                        title: 'Gamberoni agli Agrumi con Ceci e Segale',
                         macros: '41g C • 57g P • 16g G',
                         ingredients: [
                             { qty: '250g', item: 'Mazzancolle o Gamberoni puliti' },
@@ -512,7 +574,11 @@
                             { qty: '40g', item: 'Pane di segale tostato' },
                             { qty: '200g', item: 'Zucchine e pomodorini + 5g Olio' }
                         ],
-                        recipe: 'Salta i gamberoni 4 min con aglio, prezzemolo, peperoncino e succo di limone. Servi con insalata tiepida di ceci e crostoni di segale.'
+                        steps: [
+                            'Scalda una padella antiaderente, aggiungi le mazzancolle sgusciate con aglio, prezzemolo e peperoncino.',
+                            'Cuoci a fiamma viva per 2 minuti per lato sfumando con succo di limone o arancia.',
+                            'Servi i gamberoni sopra un\'insalata tiepida di ceci, zucchine saltate e pomodorini, accompagnando col pane di segale tostato.'
+                        ]
                     }
                 ]
             },
@@ -521,26 +587,34 @@
                 kcal: '1.960 Kcal', c: '175g', p: '154g', g: '70g',
                 meals: [
                     {
-                        id: 'ven-1', time: '07:30', type: 'Colazione', title: 'Tè Caldo, Biscotti, Mandorle e Greco',
+                        id: 'ven-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast',
+                        title: 'Tè Caldo, Biscotti, Mandorle e Greco',
                         macros: '38g C • 24g P • 16g G',
                         ingredients: [
                             { qty: '45g', item: 'Biscotti secchi integrali + Tè' },
                             { qty: '20g', item: 'Mandorle' },
                             { qty: '170g', item: 'Yogurt Greco 0%' }
                         ],
-                        recipe: 'Colazione bilanciata tra carboidrati, proteine magre e grassi buoni.'
+                        steps: [
+                            'Prepara una tazza di tè caldo con i biscotti integrali.',
+                            'Abbina sempre lo yogurt greco e le mandorle per tenere sazio lo stomaco fino a metà mattina.'
+                        ]
                     },
                     {
-                        id: 'ven-2', time: '10:30', type: 'Spuntino', title: 'Fesa di Tacchino e Noci',
+                        id: 'ven-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am',
+                        title: 'Fesa di Tacchino e Noci',
                         macros: '2g C • 19g P • 10g G',
                         ingredients: [
                             { qty: '70g', item: 'Fesa di tacchino arrosto' },
                             { qty: '15g', item: 'Noci' }
                         ],
-                        recipe: 'Spuntino rapido spezza-fame.'
+                        steps: [
+                            'Spuntino rapido e salato senza pane.'
+                        ]
                     },
                     {
-                        id: 'ven-3', time: '13:00', type: 'Pranzo (5 min)', title: 'Gnocchi di Patate con Borlotti e Tonno',
+                        id: 'ven-3', time: '13:00', type: 'Pranzo (5 min)', swapCat: 'lunch',
+                        title: 'Gnocchi di Patate con Borlotti e Tonno',
                         macros: '62g C • 32g P • 10g G',
                         ingredients: [
                             { qty: '180g', item: 'Gnocchi di sole patate' },
@@ -548,27 +622,38 @@
                             { qty: '60g', item: 'Tonno al naturale' },
                             { qty: '150g', item: 'Pomodorini + 5g Olio EVO' }
                         ],
-                        recipe: 'Gli gnocchi cuociono in 2 minuti! Saltali in padella con pomodorini, fagioli, tonno e basilico.'
+                        steps: [
+                            'Metti in padella i pomodorini tagliati a metà con i fagioli borlotti sciacquati, il tonno e basilico fresco per 4 minuti.',
+                            'Tuffa gli gnocchi nell\'acqua bollente: appena vengono a galla (2 minuti) scolali in padella e condisci col cucchiaino d\'olio.'
+                        ]
                     },
                     {
-                        id: 'ven-4', time: '16:30', type: 'Merenda', title: 'Pera e Cioccolato Fondente',
+                        id: 'ven-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Pera e Cioccolato Fondente',
                         macros: '24g C • 3g P • 8g G',
                         ingredients: [
                             { qty: '1', item: 'Pera media (o Mela)' },
                             { qty: '15g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Pausa pomeridiana ricca di fibre e antiossidanti.'
+                        steps: [
+                            'Taglia la pera a spicchi e accompagnala col cioccolato fondente.'
+                        ]
                     },
                     {
-                        id: 'ven-5', time: '20:00', type: 'Cena', title: 'Avocado Toast con Uova e Bresaola',
+                        id: 'ven-5', time: '20:00', type: 'Cena', swapCat: 'dinner',
+                        title: 'Avocado Toast Proteico con Uova e Bresaola',
                         macros: '39g C • 46g P • 26g G',
                         ingredients: [
                             { qty: '60g', item: 'Pane di segale tostato' },
-                            { qty: '60g', item: 'Avocado maturo schiacciato' },
-                            { qty: '2', item: 'Uova sode o in camicia' },
+                            { qty: '60g', item: 'Avocado maturo' },
+                            { qty: '2', item: 'Uova intere' },
                             { qty: '50g', item: 'Bresaola + Pomodori in insalata' }
                         ],
-                        recipe: 'Spalma l\'avocado condito con lime e pepe sul pane caldo, adagia sopra le uova e servi con bresaola e pomodori.'
+                        steps: [
+                            'Immergi le 2 uova in acqua già bollente per 6 minuti (per avere il tuorlo cremoso) oppure 8 minuti (sode), poi raffreddale sotto l\'acqua.',
+                            'Tosta il pane di segale. Schiaccia la polpa dell\'avocado con succo di limone, sale e pepe nero e spalmala sui crostoni.',
+                            'Adagia sopra le uova tagliate a metà e servi con 50g di bresaola e un\'insalata di pomodori condita con 1 cucchiaino d\'olio.'
+                        ]
                     }
                 ]
             },
@@ -578,16 +663,20 @@
                 kcal: '2.000 Kcal', c: '182g', p: '158g', g: '70g',
                 meals: [
                     {
-                        id: 'sab-0', time: '08:00', type: 'Pre-Palestra', title: 'Caffè, Biscotti e Fondente',
+                        id: 'sab-0', time: '08:00', type: 'Pre-Palestra', swapCat: 'snack_pm',
+                        title: 'Caffè, Biscotti e Fondente',
                         macros: '22g C • 4g P • 6g G',
                         ingredients: [
                             { qty: '25g', item: 'Biscotti secchi integrali + Caffè' },
                             { qty: '10g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Ricarica leggera prima della palestra delle 09:00.'
+                        steps: [
+                            'Colazione rapida e digeribile 1 ora prima della palestra del sabato.'
+                        ]
                     },
                     {
-                        id: 'sab-1', time: '10:30', type: 'Brunch Post-Palestra', title: 'Maxi Pancake Avena e Albume',
+                        id: 'sab-1', time: '10:30', type: 'Brunch Post-Palestra', swapCat: 'breakfast',
+                        title: 'Maxi Pancake Avena e Albume',
                         macros: '50g C • 28g P • 15g G',
                         ingredients: [
                             { qty: '65g', item: 'Farina d\'avena' },
@@ -595,10 +684,14 @@
                             { qty: '15g', item: 'Marmellata zero zuccheri' },
                             { qty: '15g', item: 'Burro d\'arachidi 100%' }
                         ],
-                        recipe: 'Unisce colazione e spuntino di metà mattina dopo l\'allenamento.'
+                        steps: [
+                            'Prepara la pastella con 65g di farina d\'avena e 140g di albume (più un pizzico di bicarbonato o lievito per renderlo altissimo).',
+                            'Cuoci in un pentolino piccolo coperto per 3 minuti per lato e farcisci a caldo.'
+                        ]
                     },
                     {
-                        id: 'sab-3', time: '13:30', type: 'Pranzo (10 min)', title: 'Pasta Datterini, Tonno e Basilico',
+                        id: 'sab-3', time: '13:30', type: 'Pranzo (10 min)', swapCat: 'lunch',
+                        title: 'Pasta Datterini, Tonno e Basilico',
                         macros: '62g C • 34g P • 10g G',
                         ingredients: [
                             { qty: '80g', item: 'Pasta integrale' },
@@ -606,27 +699,38 @@
                             { qty: '150g', item: 'Pomodorini datterini + Basilico' },
                             { qty: '5g', item: 'Olio EVO (1 cucchiaino)' }
                         ],
-                        recipe: 'Condisci i datterini schiacciati a crudo con basilico, tonno e olio; unisci la pasta al dente.'
+                        steps: [
+                            'Taglia i datterini e schiacciali leggermente col dorso della forchetta in una ciotola con olio, sale e tanto basilico spezzettato a mano.',
+                            'Aggiungi il tonno sgocciolato e la pasta scolata al dente.'
+                        ]
                     },
                     {
-                        id: 'sab-4', time: '17:00', type: 'Merenda', title: 'Yogurt Greco e Mandorle',
+                        id: 'sab-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Yogurt Greco e Mandorle',
                         macros: '8g C • 20g P • 9g G',
                         ingredients: [
                             { qty: '170g', item: 'Yogurt Greco 0%' },
                             { qty: '15g', item: 'Mandorle' }
                         ],
-                        recipe: 'Spuntino pomeridiano.'
+                        steps: [
+                            'Spuntino leggero pre-serata.'
+                        ]
                     },
                     {
-                        id: 'sab-5', time: '20:30', type: 'Cena', title: 'Medaglioni di Arista alla Senape con Funghi',
+                        id: 'sab-5', time: '20:30', type: 'Cena', swapCat: 'dinner',
+                        title: 'Medaglioni di Arista alla Senape con Piselli e Peperoni',
                         macros: '40g C • 62g P • 18g G',
                         ingredients: [
                             { qty: '200g', item: 'Arista di maiale magra' },
                             { qty: '100g', item: 'Piselli cotti' },
-                            { qty: '200g', item: 'Funghi champignon a fette' },
-                            { qty: '40g', item: 'Crostoni integrali + 5g Olio' }
+                            { qty: '200g', item: 'Peperoni o Zucchine a listarelle' },
+                            { qty: '40g', item: 'Crostoni integrali + Senape e Olio' }
                         ],
-                        recipe: 'Rosola l\'arista massaggiata con senape e rosmarino 4 min per lato. Salta funghi e piselli nella stessa padella.'
+                        steps: [
+                            'Spennella le fettine di arista con 1 cucchiaino di senape di Digione e rosmarino tritato.',
+                            'Cuoci la carne in padella antiaderente calda 3-4 minuti per lato sfumando con un goccio d\'acqua o vino bianco.',
+                            'Nella stessa padella salta i peperoni (o zucchine) a listarelle insieme ai piselli per raccogliere il fondo di cottura, completa col cucchiaino d\'olio e servi coi crostoni.'
+                        ]
                     }
                 ]
             },
@@ -635,26 +739,34 @@
                 kcal: 'Giorno Flessibile', c: '~190g', p: '~150g', g: '~70g',
                 meals: [
                     {
-                        id: 'dom-1', time: '09:00', type: 'Colazione', title: 'Porridge Fondente e Frutti di Bosco',
+                        id: 'dom-1', time: '09:00', type: 'Colazione', swapCat: 'breakfast',
+                        title: 'Porridge Caldo Pera, Cannella e Fondente',
                         macros: '48g C • 22g P • 12g G',
                         ingredients: [
-                            { qty: '60g', item: 'Fiocchi d\'avena' },
+                            { qty: '60g', item: 'Fiocchi d\'avena (cotti in porridge)' },
                             { qty: '100g', item: 'Albume liquido' },
-                            { qty: '100g', item: 'Frutti di bosco' },
+                            { qty: '120g', item: 'Pera o Banana a fettine' },
                             { qty: '15g', item: 'Cioccolato fondente 85%' }
                         ],
-                        recipe: 'Cuoci avena e acqua/latte, manteca con l\'albume e lascia sciogliere il fondente sopra.'
+                        steps: [
+                            'Cuoci i fiocchi d\'avena in acqua o latte vegetale con la pera a cubetti per 4 minuti.',
+                            'Incorpora l\'albume a fine cottura mescolando sul fuoco per 1 minuto e metti al centro il cioccolato fondente che si scioglierà col calore.'
+                        ]
                     },
                     {
-                        id: 'dom-2', time: '11:30', type: 'Spuntino', title: 'Scaglie di Parmigiano',
+                        id: 'dom-2', time: '11:30', type: 'Spuntino', swapCat: 'snack_am',
+                        title: 'Cubetti di Parmigiano',
                         macros: '0g C • 10g P • 9g G',
                         ingredients: [
                             { qty: '30g', item: 'Parmigiano Reggiano' }
                         ],
-                        recipe: 'Leggero in vista del pasto libero.'
+                        steps: [
+                            'Spuntino leggero senza carboidrati in vista del pasto libero.'
+                        ]
                     },
                     {
-                        id: 'dom-3', time: '13:30', type: 'Pranzo', title: 'Risotto Zucca e Crudo Croccante',
+                        id: 'dom-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch',
+                        title: 'Risotto Cremoso Zucca e Crudo Croccante',
                         macros: '66g C • 26g P • 12g G',
                         ingredients: [
                             { qty: '80g', item: 'Riso Carnaroli o Basmati' },
@@ -662,30 +774,41 @@
                             { qty: '60g', item: 'Prosciutto crudo sgrassato' },
                             { qty: '10g', item: 'Parmigiano + 5g Olio EVO' }
                         ],
-                        recipe: 'Cuoci il riso con la zucca finché diventa cremoso e guarnisci col crudo croccante.'
+                        steps: [
+                            'Fai cuocere la zucca a dadini piccoli in un pentolino con poca acqua finché si sfalda, poi unisci il riso portandolo a cottura.',
+                            'A fuoco spento manteca con Parmigiano e olio EVO e guarnisci con il prosciutto crudo rosolato a parte.'
+                        ]
                     },
                     {
-                        id: 'dom-4', time: '17:00', type: 'Merenda', title: 'Yogurt Greco 0%',
+                        id: 'dom-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm',
+                        title: 'Yogurt Greco 0%',
                         macros: '7g C • 18g P • 0g G',
                         ingredients: [
                             { qty: '170g', item: 'Yogurt Greco 0%' }
                         ],
-                        recipe: 'Spuntino proteico pulito.'
+                        steps: [
+                            'Leggero e proteico prima della cena libera.'
+                        ]
                     },
                     {
-                        id: 'dom-5', time: '20:30', type: 'Cena / Pasto Libero', title: 'Carpaccio di Bresaola oppure Cena Libera',
+                        id: 'dom-5', time: '20:30', type: 'Cena / Pasto Libero', swapCat: 'dinner',
+                        title: 'Carpaccio di Bresaola oppure Cena Libera',
                         macros: 'Pasto Libero Settimanale',
                         ingredients: [
                             { qty: '120g', item: 'Bresaola (oppure Pizza/Cena fuori)' },
                             { qty: '25g', item: 'Grana a scaglie e Rucola' },
                             { qty: '50g', item: 'Pane di segale tostato' }
                         ],
-                        recipe: 'Goditi la cena libera settimanale in compagnia bevendo abbondante acqua!'
+                        steps: [
+                            'Se fai il pasto libero fuori casa, goditelo in tranquillità bevendo abbondante acqua.',
+                            'Se mangi a casa, disponi la bresaola sul piatto con rucola, pomodorini, scaglie di Grana, succo di limone, 1 cucchiaino di olio e pane di segale caldo.'
+                        ]
                     }
                 ]
             }
         ];
 
+        // DISPENSA AGGIORNATA (RIMOSSI FUNGHI, RADICCHIO, KIWI, FRUTTI DI BOSCO)
         const defaultPantry = [
             { id: 'p1', name: 'Albume liquido (in brick)', cat: 'Proteine & Freschi', inStock: false },
             { id: 'p2', name: 'Uova fresche', cat: 'Proteine & Freschi', inStock: false },
@@ -702,12 +825,12 @@
             { id: 'p13', name: 'Prosciutto cotto magro', cat: 'Proteine & Freschi', inStock: false },
             { id: 'p14', name: 'Parmigiano Reggiano / Grana', cat: 'Proteine & Freschi', inStock: false },
             { id: 'p15', name: 'Philadelphia Light / Protein', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'c1', name: 'Farina d\'avena', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c2', name: 'Fiocchi d\'avena', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c1', name: 'Farina d\'avena (per pancake)', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c2', name: 'Fiocchi d\'avena (per porridge)', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c3', name: 'Pasta integrale', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c4', name: 'Riso Basmati / Carnaroli', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c5', name: 'Gnocchi di sole patate', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c6', name: 'Pane di segale / Crostoni', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'c6', name: 'Pane di segale / Gallette / Crostoni', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c7', name: 'Biscotti secchi integrali', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c8', name: 'Cereali integrali', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c9', name: 'Tonno al naturale', cat: 'Carboidrati & Dispensa', inStock: false },
@@ -719,24 +842,23 @@
             { id: 'v2', name: 'Pomodorini datterini / Insalata', cat: 'Frutta & Verdura', inStock: false },
             { id: 'v3', name: 'Zucca già pulita a cubetti', cat: 'Frutta & Verdura', inStock: false },
             { id: 'v4', name: 'Spinaci freschi & Rucola', cat: 'Frutta & Verdura', inStock: false },
-            { id: 'v5', name: 'Radicchio', cat: 'Frutta & Verdura', inStock: false },
-            { id: 'v6', name: 'Funghi champignon', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v5', name: 'Peperoni', cat: 'Frutta & Verdura', inStock: false },
             { id: 'v7', name: 'Avocado maturo', cat: 'Frutta & Verdura', inStock: false },
-            { id: 'v8', name: 'Frutti di bosco', cat: 'Frutta & Verdura', inStock: false },
-            { id: 'v9', name: 'Mele / Pere / Kiwi / Banane', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v9', name: 'Mele / Pere / Banane / Arance', cat: 'Frutta & Verdura', inStock: false },
             { id: 'g1', name: 'Cioccolato Fondente min. 85%', cat: 'Grassi & Sfizi', inStock: false },
             { id: 'g2', name: 'Burro d\'arachidi 100%', cat: 'Grassi & Sfizi', inStock: false },
             { id: 'g3', name: 'Crema proteica spalmabile', cat: 'Grassi & Sfizi', inStock: false },
             { id: 'g4', name: 'Marmellata zero zuccheri', cat: 'Grassi & Sfizi', inStock: false },
             { id: 'g5', name: 'Mandorle / Noci / Anacardi', cat: 'Grassi & Sfizi', inStock: false },
-            { id: 'g6', name: 'Olive taggiasche e Capperi', cat: 'Grassi & Sfizi', inStock: false }
+            { id: 'g6', name: 'Olive taggiasche, Capperi e Senape', cat: 'Grassi & Sfizi', inStock: false }
         ];
 
         let currentDayIndex = (new Date().getDay() + 6) % 7;
         let currentPantryFilter = 'missing';
         let openRecipes = {};
+        let openSwaps = {};
 
-        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v3')) || {
+        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v4')) || {
             completedMeals: {},
             water: {},
             pantry: defaultPantry,
@@ -744,7 +866,7 @@
         };
 
         function saveState() {
-            localStorage.setItem('nutriPlanGiovanni_v3', JSON.stringify(appState));
+            localStorage.setItem('nutriPlanGiovanni_v4', JSON.stringify(appState));
             updateMissingBadge();
         }
 
@@ -801,22 +923,35 @@
             const mealsContainer = document.getElementById('meals-container');
             mealsContainer.innerHTML = '';
 
-            // Trova il prossimo pasto non ancora completato per metterlo in risalto
             const nextMealId = (day.meals.find(m => !appState.completedMeals[m.id]) || {}).id;
 
             day.meals.forEach(meal => {
                 const isDone = !!appState.completedMeals[meal.id];
                 const isNext = meal.id === nextMealId;
                 const isRecipeOpen = !!openRecipes[meal.id];
+                const isSwapOpen = !!openSwaps[meal.id];
 
                 const card = document.createElement('div');
                 card.className = `soft-card rounded-3xl p-5 transition-all ${isDone ? 'meal-completed' : ''} ${isNext ? 'ring-2 ring-emerald-700/20' : ''}`;
                 
                 const ingRows = meal.ingredients.map(ing => `
-                    <li class="flex justify-between items-center py-1.5 border-b border-stone-100 last:border-none text-sm">
+                    <li class="flex justify-between items-center py-2 border-b border-stone-100 last:border-none text-sm">
                         <span class="text-stone-700 font-medium">${ing.item}</span>
-                        <span class="font-bold text-stone-900 bg-stone-100 px-2.5 py-0.5 rounded-lg text-xs">${ing.qty}</span>
+                        <span class="font-bold text-stone-900 bg-stone-100 px-2.5 py-0.5 rounded-lg text-xs shrink-0 ml-2">${ing.qty}</span>
                     </li>
+                `).join('');
+
+                const stepsHtml = meal.steps.map((s, idx) => `
+                    <div class="flex items-start space-x-2.5 mb-2 last:mb-0">
+                        <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
+                        <p class="text-xs text-stone-600 leading-relaxed">${s}</p>
+                    </div>
+                `).join('');
+
+                const swapsList = (mealSwaps[meal.swapCat] || []).map(sw => `
+                    <div class="p-2.5 rounded-xl bg-white border border-stone-200/70 text-xs text-stone-700 leading-snug">
+                        <i class="fa-solid fa-repeat text-amber-600 mr-1.5"></i>${sw}
+                    </div>
                 `).join('');
 
                 card.innerHTML = `
@@ -837,20 +972,37 @@
                         </button>
                     </div>
 
-                    <!-- LISTA INGREDIENTI PULITA E ALLINEATA -->
-                    <ul class="mt-3.5 bg-stone-50/70 rounded-2xl px-3.5 py-1.5 border border-stone-100">
+                    <!-- INGREDIENTI -->
+                    <ul class="mt-3.5 bg-stone-50/80 rounded-2xl px-3.5 py-1 border border-stone-100">
                         ${ingRows}
                     </ul>
 
-                    <!-- PULSANTE RICETTA ESPANDIBILE -->
-                    <div class="mt-3">
-                        <button onclick="toggleRecipe('${meal.id}')" class="text-xs font-bold text-emerald-800 flex items-center space-x-1.5 py-1">
-                            <i class="fa-solid ${isRecipeOpen ? 'fa-chevron-up' : 'fa-book-open'} text-[11px]"></i>
-                            <span>${isRecipeOpen ? 'Nascondi preparazione' : 'Vedi preparazione rapida'}</span>
+                    <!-- BARRA AZIONI PASTO: RICETTA PASSO PASSO + SOSTITUZIONI PASTO -->
+                    <div class="mt-3.5 flex space-x-2">
+                        <button onclick="toggleRecipe('${meal.id}')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 border transition ${
+                            isRecipeOpen ? 'bg-emerald-800 text-white border-emerald-800' : 'bg-stone-50 text-stone-700 border-stone-200/70'
+                        }">
+                            <i class="fa-solid fa-fire-burner text-[11px]"></i>
+                            <span>Ricetta Passo-Passo</span>
                         </button>
-                        <div class="${isRecipeOpen ? 'block' : 'hidden'} mt-2 pt-2.5 border-t border-stone-100 text-xs text-stone-600 leading-relaxed">
-                            ${meal.recipe}
-                        </div>
+                        <button onclick="toggleSwap('${meal.id}')" class="py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 border transition ${
+                            isSwapOpen ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50/80 text-amber-800 border-amber-200/70'
+                        }">
+                            <i class="fa-solid fa-repeat text-[11px]"></i>
+                            <span>Alternative</span>
+                        </button>
+                    </div>
+
+                    <!-- BOX RICETTA DETTAGLIATA PASSO PASSO -->
+                    <div class="${isRecipeOpen ? 'block' : 'hidden'} mt-3 pt-3 border-t border-stone-100">
+                        <span class="block text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 mb-2">Procedimento in Cucina:</span>
+                        ${stepsHtml}
+                    </div>
+
+                    <!-- BOX SOSTITUZIONI SPECIFICHE DI QUESTO PASTO -->
+                    <div class="${isSwapOpen ? 'block' : 'hidden'} mt-3 p-3 rounded-2xl bg-amber-50/50 border border-amber-200/60 space-y-2">
+                        <span class="block text-[10px] font-extrabold uppercase tracking-wider text-amber-900">Con cosa puoi sostituire questo pasto:</span>
+                        ${swapsList}
                     </div>
                 `;
                 mealsContainer.appendChild(card);
@@ -859,6 +1011,13 @@
 
         function toggleRecipe(mealId) {
             openRecipes[mealId] = !openRecipes[mealId];
+            if (openRecipes[mealId]) openSwaps[mealId] = false;
+            renderPlan();
+        }
+
+        function toggleSwap(mealId) {
+            openSwaps[mealId] = !openSwaps[mealId];
+            if (openSwaps[mealId]) openRecipes[mealId] = false;
             renderPlan();
         }
 
@@ -886,7 +1045,7 @@
         }
 
         // ==========================================
-        // DISPENSA & COPIA LISTA SPESA
+        // DISPENSA & SPESA
         // ==========================================
         function setPantryFilter(filter) {
             currentPantryFilter = filter;
@@ -1016,12 +1175,6 @@
             saveState();
             renderWeights();
         }
-
-        // ==========================================
-        // MODALE & NAVIGAZIONE
-        // ==========================================
-        function openSwapModal() { document.getElementById('swap-modal').classList.remove('hidden'); }
-        function closeSwapModal() { document.getElementById('swap-modal').classList.add('hidden'); }
 
         function switchTab(tab) {
             ['plan', 'pantry', 'weight'].forEach(t => {
