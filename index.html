@@ -1265,31 +1265,64 @@
         // =========================================================================
         // 5. NAVIGAZIONE & LOGIN
         // =========================================================================
-        function hideAllScreens() {
-            ['screen-login', 'screen-super-admin', 'screen-hub', 'screen-admin-nutri', 'screen-admin-pt', 'module-nutrition', 'module-workout'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add('hidden');
-            });
-        }
-
-        async function checkAuthOnLoad() {
-            setThemePalette('neutral');
+        // SALVATAGGIO ISTANTANEO (NON BLOCCA MAI L'INTERFACCIA)
+        function saveState(targetClientCode = null) {
+            try {
+                localStorage.setItem('nutriPlanPro_v18', JSON.stringify(masterState));
+            } catch (e) {}
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
-                loadUserHub(masterState.activeCode);
-                if (sbClient) {
-                    try {
-                        const { data } = await withTimeout(sbClient.from('clients').select('*').eq('client_code', masterState.activeCode).maybeSingle());
-                        if (data && data.profile_data) {
-                            masterState.users[masterState.activeCode] = data.profile_data;
-                            loadUserHub(masterState.activeCode);
-                        }
-                    } catch (e) {}
-                }
+                updateMissingBadge();
+                updateAdherence();
+            }
+            // Sincronizza con Supabase in background senza bloccare il telefono
+            const codeToSync = targetClientCode || masterState.activeCode;
+            if (sbClient && codeToSync && masterState.users[codeToSync]) {
+                const u = masterState.users[codeToSync];
+                sbClient.from('clients').upsert({
+                    client_code: u.code,
+                    name: u.name,
+                    nutri_code: u.nutriCode,
+                    pt_code: u.ptCode,
+                    profile_data: u,
+                    updated_at: new Date().toISOString()
+                }).then(() => {}).catch(() => {});
             }
         }
 
+        // SINCRONIZZAZIONE SILENZIOSA IN BACKGROUND
+        async function syncFromCloudInBackground(code) {
+            if (!sbClient) return;
+            try {
+                const { data, error } = await withTimeout(
+                    sbClient.from('clients').select('profile_data').eq('client_code', code).maybeSingle(),
+                    2000
+                );
+                if (!error && data && data.profile_data) {
+                    masterState.users[code] = data.profile_data;
+                    localStorage.setItem('nutriPlanPro_v18', JSON.stringify(masterState));
+                    // Aggiorna silenziosamente i numeri dell'Hub se l'utente è nella schermata Hub
+                    if (!document.getElementById('screen-hub').classList.contains('hidden')) {
+                        loadUserHub(code);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        // AVVIO ISTANTANEO (0 MILLISECONDI DI ATTESA)
+        function checkAuthOnLoad() {
+            setThemePalette('neutral');
+            if (masterState.activeCode && masterState.users[masterState.activeCode]) {
+                // 1. Apre SUBITO la schermata senza aspettare la rete!
+                loadUserHub(masterState.activeCode);
+                // 2. Controlla il cloud in background mentre usi già l'app
+                syncFromCloudInBackground(masterState.activeCode);
+            }
+        }
+
+        // LOGIN LAMPO (PRIMA CONTROLLA LA MEMORIA LOCALE, POI IL CLOUD IN PARALLELO)
         async function handleLogin() {
             const inputEl = document.getElementById('login-code-input');
+            const btnEl = document.getElementById('login-btn');
             let raw = (inputEl ? inputEl.value : '').trim().toUpperCase();
             document.getElementById('login-error').classList.add('hidden');
 
@@ -1301,6 +1334,7 @@
             if (raw === '8492' || raw === 'KNX-8492' || raw === 'FN-8492' || raw === 'GIOVANNI') raw = 'ID-8492';
             if (raw === '3105' || raw === 'KNX-3105' || raw === 'FN-3105') raw = 'ID-3105';
 
+            // 1. Accesso Immediato Console Master
             if (raw === 'ADMIN-MASTER') {
                 setThemePalette('neutral');
                 hideAllScreens();
@@ -1309,36 +1343,19 @@
                 return;
             }
 
-            // Controlla prima se su Supabase c'è una versione aggiornata
-            if (sbClient) {
-                try {
-                    const { data: proData } = await withTimeout(sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle());
-                    if (proData) {
-                        masterState.professionals[raw] = { proCode: proData.pro_code, role: proData.role, studioName: proData.studio_name };
-                    }
-                    const { data: cliData } = await withTimeout(sbClient.from('clients').select('*').eq('client_code', raw).maybeSingle());
-                    if (cliData && cliData.profile_data) {
-                        masterState.users[raw] = cliData.profile_data;
-                    }
-                } catch (e) {}
+            // 2. Se il Cliente è già in memoria, ENTRA ALL'ISTANTE (0ms) e sincronizza in background!
+            if (masterState.users[raw]) {
+                masterState.activeCode = raw;
+                saveState();
+                loadUserHub(raw);
+                syncFromCloudInBackground(raw);
+                return;
             }
 
+            // 3. Se il Professionista è già in memoria, ENTRA ALL'ISTANTE (0ms) e scarica i clienti in background!
             if (masterState.professionals[raw]) {
                 const pro = masterState.professionals[raw];
                 masterState.activeProCode = raw;
-
-                if (sbClient) {
-                    try {
-                        const col = pro.role === 'nutri' ? 'nutri_code' : 'pt_code';
-                        const { data: myCloudClients } = await withTimeout(sbClient.from('clients').select('*').eq(col, raw));
-                        if (myCloudClients) {
-                            myCloudClients.forEach(row => {
-                                if (row.profile_data) masterState.users[row.client_code] = row.profile_data;
-                            });
-                        }
-                    } catch (e) {}
-                }
-
                 hideAllScreens();
                 if (pro.role === 'nutri') {
                     setThemePalette('nutri');
@@ -1349,14 +1366,45 @@
                     document.getElementById('screen-admin-pt').classList.remove('hidden');
                     renderAdminPt();
                 }
+                // Scarica eventuali nuovi clienti dal cloud in background
+                if (sbClient) {
+                    const col = pro.role === 'nutri' ? 'nutri_code' : 'pt_code';
+                    sbClient.from('clients').select('*').eq(col, raw).then(({ data }) => {
+                        if (data && data.length > 0) {
+                            data.forEach(row => { if (row.profile_data) masterState.users[row.client_code] = row.profile_data; });
+                            if (pro.role === 'nutri') renderAdminNutri(); else renderAdminPt();
+                        }
+                    }).catch(() => {});
+                }
                 return;
             }
 
-            if (masterState.users[raw]) {
-                masterState.activeCode = raw;
-                saveState();
-                loadUserHub(raw);
-                return;
+            // 4. Solo se il codice è totalmente sconosciuto al telefono (es. nuovo cliente su nuovo telefono), cerca sul Cloud in parallelo
+            if (sbClient) {
+                const origText = btnEl.textContent;
+                btnEl.textContent = 'Verifica in corso...';
+                try {
+                    const [proRes, cliRes] = await withTimeout(Promise.all([
+                        sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle(),
+                        sbClient.from('clients').select('*').eq('client_code', raw).maybeSingle()
+                    ]), 1500);
+
+                    btnEl.textContent = origText;
+
+                    if (proRes.data) {
+                        masterState.professionals[raw] = { proCode: proRes.data.pro_code, role: proRes.data.role, studioName: proRes.data.studio_name };
+                        return handleLogin();
+                    }
+                    if (cliRes.data && cliRes.data.profile_data) {
+                        masterState.users[raw] = cliRes.data.profile_data;
+                        masterState.activeCode = raw;
+                        saveState();
+                        loadUserHub(raw);
+                        return;
+                    }
+                } catch (e) {
+                    btnEl.textContent = origText;
+                }
             }
 
             document.getElementById('login-error').classList.remove('hidden');
