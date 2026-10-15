@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Fit & Nutri Pro">
-    <title>Fit & Nutri Pro</title>
+    <meta name="apple-mobile-web-app-title" content="Fit & Nutri SaaS">
+    <title>Fit & Nutri Pro — SaaS Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
@@ -53,14 +54,33 @@
             box-shadow: 0 8px 28px -6px rgba(24, 28, 25, 0.05);
         }
 
-        @keyframes pulseMuscle {
-            0%, 100% { opacity: 0.45; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.04); }
+        /* MOTORE SIMULAZIONE BIOMECCANICA INTERNA (NESSUN LINK ESTERNO) */
+        @keyframes animPressBar {
+            0%, 100% { transform: translateY(0px); }
+            45%, 55% { transform: translateY(-26px); }
         }
-        .muscle-active {
-            animation: pulseMuscle 1.8s infinite ease-in-out;
-            transform-origin: center;
+        @keyframes animPullBar {
+            0%, 100% { transform: translateY(-24px); }
+            45%, 55% { transform: translateY(5px); }
         }
+        @keyframes animLegExtend {
+            0%, 100% { transform: rotate(0deg); }
+            45%, 55% { transform: rotate(-38deg); }
+        }
+        @keyframes animHipThrust {
+            0%, 100% { transform: translateY(10px); }
+            45%, 55% { transform: translateY(-10px); }
+        }
+        @keyframes animGlowMuscle {
+            0%, 100% { opacity: 0.35; filter: drop-shadow(0 0 2px #f59e0b); }
+            50% { opacity: 1; filter: drop-shadow(0 0 10px #ea580c); }
+        }
+
+        .bio-bar-push { animation: animPressBar 3.2s infinite ease-in-out; }
+        .bio-bar-pull { animation: animPullBar 3.4s infinite ease-in-out; }
+        .bio-leg-move { animation: animLegExtend 3.2s infinite ease-in-out; transform-origin: 65px 84px; }
+        .bio-hip-move { animation: animHipThrust 3.2s infinite ease-in-out; }
+        .bio-muscle-glow { animation: animGlowMuscle 1.6s infinite ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen antialiased">
@@ -73,7 +93,7 @@
                     <i class="fa-solid fa-stopwatch text-xl animate-spin" style="animation-duration: 6s;"></i>
                 </div>
                 <div class="min-w-0">
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 block truncate" id="timer-label">Recupero Serie</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 block truncate" id="timer-label">Timer Attivo</span>
                     <span class="text-2xl font-extrabold font-mono text-white leading-none" id="timer-display">01:30</span>
                 </div>
             </div>
@@ -86,158 +106,303 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- SCHERMATA 0: LOGIN BLINDATO (NESSUN ACCESSO RAPIDO VISIBILE) -->
+    <!-- SCHERMATA 0: LOGIN UNICO MULTI-TENANT                      -->
     <!-- ========================================================== -->
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-[#F4F3EE]">
         <div class="max-w-sm mx-auto w-full space-y-6">
             <div class="text-center space-y-2">
-                <div class="w-16 h-16 rounded-3xl bg-emerald-800 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-900/20 text-2xl">
-                    <i class="fa-solid fa-shield-heart"></i>
+                <div class="w-16 h-16 rounded-3xl bg-stone-900 text-white flex items-center justify-center mx-auto shadow-lg text-2xl">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
-                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Area Riservata</span>
-                <h1 class="text-3xl font-extrabold text-stone-900">Fit & Nutri Portal</h1>
+                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Piattaforma Cloud Multi-Studio</span>
+                <h1 class="text-3xl font-extrabold text-stone-900">Fit & Nutri Pro</h1>
                 <p class="text-sm text-stone-500 leading-relaxed">
-                    Inserisci il tuo Codice Univoco Atleta/Paziente oppure la chiave Professionista (PT / Nutrizionista).
+                    Inserisci il tuo <strong>Codice Personale Cliente</strong> oppure la tua <strong>Chiave Professionista (PT / Nutrizionista)</strong>.
                 </p>
             </div>
 
             <div class="soft-card rounded-3xl p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Identificativo (ID)</label>
-                    <input type="text" id="login-code-input" placeholder="Es. FN-XXXX" class="w-full bg-stone-50 border-2 border-stone-200 rounded-2xl px-4 py-3.5 text-lg font-extrabold text-stone-900 uppercase text-center tracking-widest focus:outline-none focus:border-emerald-700">
-                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice ID non riconosciuto. Verifica con il tuo professionista.</p>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Identificativo</label>
+                    <input type="text" id="login-code-input" placeholder="Es. XXX-0000" class="w-full bg-stone-50 border-2 border-stone-200 rounded-2xl px-4 py-3.5 text-lg font-extrabold text-stone-900 uppercase text-center tracking-widest focus:outline-none focus:border-emerald-700">
+                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice non trovato. Verifica la sigla con il tuo Studio.</p>
                 </div>
 
-                <button onclick="handleLogin()" class="w-full bg-emerald-800 text-white font-extrabold py-4 rounded-2xl text-base shadow-md active:scale-98 transition">
-                    Sblocca Piano Personale
+                <button onclick="handleLogin()" id="login-btn" class="w-full bg-emerald-800 text-white font-extrabold py-4 rounded-2xl text-base shadow-md active:scale-98 transition">
+                    Accedi al Portale
                 </button>
             </div>
 
-            <p class="text-center text-[11px] text-stone-400 font-medium">
-                Sistema protetto • Accesso consentito solo con codice ID assegnato.
+            <div class="text-center space-y-2">
+                <p id="cloud-status-indicator" class="text-xs font-bold text-stone-500">
+                    <i class="fa-solid fa-database mr-1"></i>Stato Database: Memoria Locale Attiva
+                </p>
+                <button onclick="toggleSupabaseModal()" class="text-[11px] font-extrabold text-emerald-800 underline">
+                    ⚙️ Configura Connessione Cloud Supabase
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODALE CONFIGURAZIONE DIRETTA SUPABASE -->
+    <div id="supabase-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-5">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 class="text-base font-extrabold text-stone-900">Connessione Cloud Supabase</h3>
+                <button onclick="toggleSupabaseModal()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-stone-500 leading-relaxed">
+                Incolla qui <strong>Project URL</strong> e <strong>Anon Public Key</strong> del tuo progetto Supabase per sincronizzare in tempo reale tutti i telefoni di PT, Nutrizionisti e Clienti.
             </p>
-        </div>
-    </section>
-
-    <!-- ========================================================== -->
-    <!-- PORTALE PROFESSIONISTA 1: AREA NUTRIZIONISTA (NUTRI-PRO)   -->
-    <!-- ========================================================== -->
-    <section id="screen-admin-nutri" class="app-padding px-5 space-y-5 hidden">
-        <header class="flex justify-between items-center border-b border-stone-200 pb-4">
-            <div>
-                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg">Portale Biologo Nutrizionista</span>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Gestione Piani & Pazienti</h1>
-            </div>
-            <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold">Esci</button>
-        </header>
-
-        <!-- Selettore Paziente da Modificare -->
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <h2 class="text-base font-extrabold text-stone-900">1. Seleziona o Crea Codice Paziente</h2>
-            <div class="grid grid-cols-2 gap-2" id="nutri-patient-list"></div>
-            <button onclick="createNewPatientCode()" class="w-full py-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-extrabold">
-                + Genera Nuovo Codice Paziente (Auto ID)
-            </button>
-        </div>
-
-        <!-- Editor Parametri Nutrizionali del Paziente Selezionato -->
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-base font-extrabold text-stone-900">2. Configura Piano Alimentare</h2>
-                <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="nutri-editing-badge">ID: FN-8492</span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 text-xs">
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Nome Visualizzato</label>
-                    <input type="text" id="adm-nutri-name" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Target Kcal Giorno</label>
-                    <input type="text" id="adm-nutri-kcal" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Carboidrati (g)</label>
-                    <input type="text" id="adm-nutri-c" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Proteine (g)</label>
-                    <input type="text" id="adm-nutri-p" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Grassi (g)</label>
-                    <input type="text" id="adm-nutri-g" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Target Acqua (Litri)</label>
-                    <input type="number" step="0.5" id="adm-nutri-water" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-            </div>
-
-            <button onclick="saveAdminNutrition()" class="w-full py-3.5 rounded-2xl bg-emerald-800 text-white font-extrabold text-sm shadow-md">
-                Salva Modifiche Piano Nutrizionale
-            </button>
-        </div>
-    </section>
-
-    <!-- ========================================================== -->
-    <!-- PORTALE PROFESSIONISTA 2: AREA PERSONAL TRAINER (PT-PRO)   -->
-    <!-- ========================================================== -->
-    <section id="screen-admin-pt" class="app-padding px-5 space-y-5 hidden">
-        <header class="flex justify-between items-center border-b border-stone-200 pb-4">
-            <div>
-                <span class="text-xs font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2.5 py-1 rounded-lg">Portale Personal Trainer</span>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Gestione Schede Palestra</h1>
-            </div>
-            <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold">Esci</button>
-        </header>
-
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <h2 class="text-base font-extrabold text-stone-900">1. Seleziona Codice Atleta</h2>
-            <div class="grid grid-cols-2 gap-2" id="pt-athlete-list"></div>
-        </div>
-
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-base font-extrabold text-stone-900">2. Aggiungi Esercizio alla Scheda</h2>
-                <span class="text-xs font-extrabold text-amber-900 bg-amber-100 px-2.5 py-1 rounded-lg" id="pt-editing-badge">ID: FN-8492</span>
-            </div>
-
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="font-bold text-stone-500 block mb-1">Giornata Scheda</label>
-                    <select id="adm-pt-day" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                        <option value="0">Scheda A (Martedì)</option>
-                        <option value="1">Scheda B (Giovedì)</option>
-                        <option value="2">Scheda C (Sabato)</option>
+                    <label class="font-bold text-stone-600 block mb-1">Supabase Project URL</label>
+                    <input type="text" id="sb-url-input" placeholder="https://xyz.supabase.co" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-mono text-stone-900">
+                </div>
+                <div>
+                    <label class="font-bold text-stone-600 block mb-1">Supabase Anon Key (Public)</label>
+                    <input type="text" id="sb-key-input" placeholder="eyJhbGciOiJIUzI1NiIsInR..." class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-mono text-stone-900">
+                </div>
+            </div>
+            <div class="space-y-2 pt-2">
+                <button onclick="saveSupabaseConfig()" class="w-full py-3 rounded-2xl bg-emerald-800 text-white font-extrabold text-xs">
+                    1. Salva e Connetti a Supabase
+                </button>
+                <button onclick="seedSupabaseDatabase()" class="w-full py-3 rounded-2xl bg-amber-100 text-amber-950 border border-amber-300 font-extrabold text-xs">
+                    2. Invia Profili Iniziali al Database Cloud (1° Avvio)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- CONSOLE SUPER-ADMIN (CODICE: ADMIN-MASTER - SOLO PER TE)   -->
+    <!-- ========================================================== -->
+    <section id="screen-super-admin" class="app-padding px-5 space-y-5 hidden">
+        <header class="flex justify-between items-start border-b border-stone-200 pb-4">
+            <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-white bg-stone-900 px-2.5 py-1 rounded-lg">Console Proprietario Piattaforma</span>
+                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Gestione Studi & Licenze</h1>
+                <p class="text-xs text-stone-500">Crea nuovi codici di accesso per i Nutrizionisti e i PT a cui vendi l'app.</p>
+            </div>
+            <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold">Esci</button>
+        </header>
+
+        <div class="soft-card rounded-3xl p-5 space-y-4">
+            <h2 class="text-base font-extrabold text-stone-900">Crea Nuovo Professionista (B2B)</h2>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                    <label class="font-bold text-stone-500 block mb-1">Ruolo Professionista</label>
+                    <select id="sa-role" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
+                        <option value="nutri">Biologo Nutrizionista</option>
+                        <option value="pt">Personal Trainer / Palestra</option>
                     </select>
                 </div>
                 <div>
-                    <label class="font-bold text-stone-500 block mb-1">Nome Esercizio</label>
-                    <input type="text" id="adm-pt-exname" placeholder="Es. Hip Thrust Bilanciere" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
+                    <label class="font-bold text-stone-500 block mb-1">Sigla Clienti (3 Lettere)</label>
+                    <input type="text" id="sa-prefix" maxlength="4" placeholder="Es. MED" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold uppercase text-stone-900">
                 </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="font-bold text-stone-500 block mb-1">Muscolo</label>
-                        <input type="text" id="adm-pt-muscle" placeholder="Glutei" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                    </div>
-                    <div>
-                        <label class="font-bold text-stone-500 block mb-1">Serie x Reps</label>
-                        <input type="text" id="adm-pt-sets" placeholder="4x10" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                    </div>
-                    <div>
-                        <label class="font-bold text-stone-500 block mb-1">Recupero (s)</label>
-                        <input type="number" id="adm-pt-rest" value="90" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                    </div>
+                <div class="col-span-2">
+                    <label class="font-bold text-stone-500 block mb-1">Nome Studio / Palestra</label>
+                    <input type="text" id="sa-name" placeholder="Es. Studio Nutrizione Dott. Bianchi" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
                 </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Indicazioni Tecniche del Coach</label>
-                    <input type="text" id="adm-pt-note" placeholder="Es. Contrai 2 secondi in cima..." class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-medium text-stone-900">
+                <div class="col-span-2">
+                    <label class="font-bold text-stone-500 block mb-1">Codice di Accesso Riservato al Professionista</label>
+                    <input type="text" id="sa-code" placeholder="Es. NUT-BIANCHI" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold uppercase text-stone-900">
+                </div>
+            </div>
+            <button onclick="createNewProfessional()" class="w-full py-3.5 rounded-2xl bg-emerald-800 text-white font-extrabold text-xs shadow-md">
+                + Attiva Licenza Professionista
+            </button>
+        </div>
+
+        <div class="soft-card rounded-3xl p-5 space-y-3">
+            <h2 class="text-base font-extrabold text-stone-900">Professionisti Attivi sulla Piattaforma</h2>
+            <div id="sa-pro-list" class="divide-y divide-stone-100 text-xs"></div>
+        </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- PORTALE 1: AREA NUTRIZIONISTA (EDITOR GIORNO PER GIORNO)   -->
+    <!-- ========================================================== -->
+    <section id="screen-admin-nutri" class="app-padding px-5 space-y-5 hidden">
+        <header class="flex justify-between items-start border-b border-stone-200 pb-4">
+            <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="nutri-studio-badge">Studio Nutrizione</span>
+                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Editor Piani Alimentari</h1>
+                <p class="text-xs text-stone-500 mt-0.5">Seleziona un tuo paziente per modificare piatti, grammature e ricette giorno per giorno.</p>
+            </div>
+            <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold shrink-0">Esci</button>
+        </header>
+
+        <!-- 1. SELETTORE PAZIENTI ISOLATI PER QUESTO NUTRIZIONISTA -->
+        <div class="soft-card rounded-3xl p-5 space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-extrabold text-stone-900">1. I Tuoi Pazienti Esclusivi</h2>
+                <span class="text-xs font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200" id="nutri-prefix-label">Sigla: FOR</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2" id="nutri-patient-list"></div>
+
+            <div class="grid grid-cols-1 gap-2 pt-2 border-t border-stone-100">
+                <button onclick="createNewClientForPro('nutri')" class="w-full py-3 rounded-2xl bg-emerald-800 text-white text-xs font-extrabold shadow-sm">
+                    + Crea Nuovo Paziente (Genera Codice con la tua Sigla)
+                </button>
+                <button onclick="linkExistingClientToPro('nutri')" class="w-full py-2.5 rounded-2xl bg-stone-100 text-stone-700 text-xs font-bold border border-stone-200">
+                    🔗 Aggancia Codice Cliente già registrato in Palestra (es. KNX-8492)
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. EDITOR COMPLETO PASTI GIORNO PER GIORNO -->
+        <div id="nutri-editor-box" class="space-y-4">
+            
+            <!-- Parametri generali paziente -->
+            <div class="soft-card rounded-3xl p-5 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-extrabold text-stone-900">Anagrafica & Target Acqua</h3>
+                    <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="nutri-editing-badge">ID</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5 text-xs">
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Nome Paziente</label>
+                        <input type="text" id="adm-nutri-name" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Target Acqua (Litri)</label>
+                        <input type="number" step="0.5" id="adm-nutri-water" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="font-bold text-stone-500 block mb-1">Note Cliniche / Stile di Vita</label>
+                        <input type="text" id="adm-nutri-bio" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-medium text-stone-900">
+                    </div>
                 </div>
             </div>
 
-            <button onclick="addExerciseFromAdmin()" class="w-full py-3.5 rounded-2xl bg-amber-600 text-white font-extrabold text-sm shadow-md">
-                + Carica Esercizio nella Scheda Atleta
+            <!-- Selettore Giorno da Modificare (Lun - Dom) -->
+            <div class="soft-card rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-base font-extrabold text-stone-900">2. Scegli il Giorno da Compilare</h3>
+                    <button onclick="copyDayToAllWeek()" class="text-[11px] font-bold text-emerald-800 underline">Copia su altri giorni</button>
+                </div>
+
+                <div class="grid grid-cols-7 gap-1" id="adm-nutri-day-tabs"></div>
+
+                <!-- Macro del Giorno Selezionato -->
+                <div class="grid grid-cols-4 gap-2 pt-2 border-t border-stone-100 text-xs">
+                    <div>
+                        <label class="font-bold text-stone-400 block text-[10px] uppercase">Kcal Giorno</label>
+                        <input type="text" id="adm-day-kcal" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-400 block text-[10px] uppercase">Carbo</label>
+                        <input type="text" id="adm-day-c" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-400 block text-[10px] uppercase">Proteine</label>
+                        <input type="text" id="adm-day-p" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-400 block text-[10px] uppercase">Grassi</label>
+                        <input type="text" id="adm-day-g" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <label class="text-xs font-bold text-stone-700 flex items-center space-x-2">
+                        <input type="checkbox" id="adm-day-workout" onchange="updateDayMacros()" class="w-4 h-4 accent-emerald-700 rounded">
+                        <span>Segna come Giorno di Palestra</span>
+                    </label>
+                </div>
+                <input type="text" id="adm-day-workout-note" onchange="updateDayMacros()" placeholder="Nota protocollo giorno palestra (es. Pre-workout alle 06:30...)" class="w-full bg-amber-50/60 border border-amber-200 rounded-xl px-3 py-2 text-xs text-amber-950">
+            </div>
+
+            <!-- Lista Pasti del Giorno Selezionato (Modificabili uno ad uno) -->
+            <div id="adm-nutri-meals-list" class="space-y-4"></div>
+
+            <!-- Bottone Aggiungi Nuovo Pasto al Giorno -->
+            <button onclick="addNewMealToDay()" class="w-full py-3.5 rounded-2xl bg-white border-2 border-dashed border-emerald-600 text-emerald-800 font-extrabold text-xs">
+                + Aggiungi Nuovo Pasto / Spuntino a questo Giorno
+            </button>
+
+            <!-- Bottone Salva Tutto sul Cloud -->
+            <button onclick="syncAdminChangesToCloud('Piano nutrizionale salvato e sincronizzato sul telefono del paziente!')" class="w-full py-4 rounded-3xl bg-emerald-800 text-white font-extrabold text-base shadow-lg">
+                <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salva Tutto il Piano del Paziente
+            </button>
+        </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- PORTALE 2: AREA PERSONAL TRAINER (EDITOR SCHEDE COMPLETO)  -->
+    <!-- ========================================================== -->
+    <section id="screen-admin-pt" class="app-padding px-5 space-y-5 hidden">
+        <header class="flex justify-between items-start border-b border-stone-200 pb-4">
+            <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2.5 py-1 rounded-lg" id="pt-studio-badge">Club / PT</span>
+                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Costruttore Schede Palestra</h1>
+                <p class="text-xs text-stone-500 mt-0.5">Seleziona un tuo atleta per creare o modificare esercizi, serie, Kg e ripetizioni.</p>
+            </div>
+            <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold shrink-0">Esci</button>
+        </header>
+
+        <!-- 1. SELETTORE ATLETI ESCLUSIVI DI QUESTO PT -->
+        <div class="soft-card rounded-3xl p-5 space-y-4">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-extrabold text-stone-900">1. Atleti del Tuo Club</h2>
+                <span class="text-xs font-extrabold text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200" id="pt-prefix-label">Sigla: KNX</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2" id="pt-athlete-list"></div>
+
+            <div class="grid grid-cols-1 gap-2 pt-2 border-t border-stone-100">
+                <button onclick="createNewClientForPro('pt')" class="w-full py-3 rounded-2xl bg-amber-600 text-white text-xs font-extrabold shadow-sm">
+                    + Crea Nuovo Atleta (Genera Codice con la tua Sigla)
+                </button>
+                <button onclick="linkExistingClientToPro('pt')" class="w-full py-2.5 rounded-2xl bg-stone-100 text-stone-700 text-xs font-bold border border-stone-200">
+                    🔗 Aggancia Codice Atleta già seguito da un Nutrizionista
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. EDITOR COMPLETO SCHEDE A / B / C -->
+        <div id="pt-editor-box" class="space-y-4">
+            <div class="soft-card rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-base font-extrabold text-stone-900">2. Seleziona Giornata Scheda</h2>
+                    <span class="text-xs font-extrabold text-amber-900 bg-amber-100 px-2.5 py-1 rounded-lg" id="pt-editing-badge">ID</span>
+                </div>
+
+                <!-- Tab Scheda A / B / C -->
+                <div class="grid grid-cols-3 gap-2" id="adm-pt-day-tabs"></div>
+
+                <!-- Titolo e Sottotitolo della Giornata di Allenamento -->
+                <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-stone-100 text-xs">
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Giorno / Etichetta</label>
+                        <input type="text" id="adm-wo-daylabel" onchange="updateWorkoutDayHeader()" placeholder="Es. Martedì" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Focus Muscolare</label>
+                        <input type="text" id="adm-wo-title" onchange="updateWorkoutDayHeader()" placeholder="Es. Upper Body & Spinta" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="font-bold text-stone-500 block mb-1">Sottotitolo / Note Seduta</label>
+                        <input type="text" id="adm-wo-subtitle" onchange="updateWorkoutDayHeader()" placeholder="Es. Martedì • Ore 07:00 • Durata 55 min" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-medium text-stone-900">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista Esercizi Modificabili della Giornata -->
+            <div id="adm-pt-exercises-list" class="space-y-4"></div>
+
+            <!-- Bottone Aggiungi Nuovo Esercizio -->
+            <button onclick="addNewExerciseToWorkoutDay()" class="w-full py-3.5 rounded-2xl bg-white border-2 border-dashed border-amber-600 text-amber-900 font-extrabold text-xs">
+                + Aggiungi Nuovo Esercizio a questa Scheda
+            </button>
+
+            <!-- Bottone Salva Scheda sul Cloud -->
+            <button onclick="syncAdminChangesToCloud('Scheda di allenamento salvata e inviata al telefono dell\'atleta!')" class="w-full py-4 rounded-3xl bg-stone-900 text-white font-extrabold text-base shadow-lg">
+                <i class="fa-solid fa-cloud-arrow-up mr-2 text-amber-400"></i>Salva Tutta la Scheda dell'Atleta
             </button>
         </div>
     </section>
@@ -249,8 +414,8 @@
         <div class="space-y-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800" id="hub-user-code">ID: FN-8492</span>
-                    <h1 class="text-3xl font-extrabold text-stone-900 mt-0.5" id="hub-user-greeting">Ciao Giovanni 👋</h1>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="hub-user-code">ID</span>
+                    <h1 class="text-3xl font-extrabold text-stone-900 mt-1.5" id="hub-user-greeting">Ciao 👋</h1>
                 </div>
                 <button onclick="logout()" class="px-3.5 py-2 rounded-2xl bg-white border border-stone-200 text-stone-600 text-xs font-bold shadow-sm">
                     <i class="fa-solid fa-right-from-bracket mr-1"></i>Esci
@@ -259,20 +424,20 @@
 
             <p class="text-sm text-stone-500 font-semibold" id="hub-user-bio"></p>
 
-            <!-- CARD 1: SCHEDA ALLENAMENTO PRO -->
+            <!-- CARD 1: SCHEDA ALLENAMENTO -->
             <div onclick="openModule('workout')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-amber-500/30 relative overflow-hidden">
                 <div class="flex items-start justify-between">
                     <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0">
                         <i class="fa-solid fa-dumbbell"></i>
                     </div>
-                    <span class="bg-amber-100 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-xl">Mar • Gio • Sab</span>
+                    <span class="bg-amber-100 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-xl">Simulatore 3D Interno</span>
                 </div>
                 <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Scheda Allenamento</h2>
                 <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Tracking carichi per singola serie (Kg + Reps), storico sessioni precedenti, focus biomeccanico e recupero smart.
+                    Tracking carichi per singola serie, storico pesi precedenti, simulazione biomeccanica interna e timer recupero.
                 </p>
                 <div class="mt-5 flex items-center text-sm font-extrabold text-amber-800">
-                    <span>Inizia Allenamento</span>
+                    <span>Apri Scheda Sala Pesi</span>
                     <i class="fa-solid fa-arrow-right ml-2"></i>
                 </div>
             </div>
@@ -283,11 +448,11 @@
                     <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-2xl shrink-0">
                         <i class="fa-solid fa-utensils"></i>
                     </div>
-                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold px-3 py-1 rounded-xl" id="hub-kcal-badge">1.960 Kcal / die</span>
+                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold px-3 py-1 rounded-xl" id="hub-kcal-badge">1.960 Kcal</span>
                 </div>
                 <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Piano Alimentare</h2>
                 <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Menu giornaliero su misura, ricette passo-passo, sostituzioni rapide, lista della spesa e guida fuori casa.
+                    Menu giornaliero, ricette passo-passo, sostituzioni rapide, lista della spesa automatica e guida fuori casa.
                 </p>
                 <div class="mt-5 flex items-center text-sm font-extrabold text-emerald-800">
                     <span>Apri Alimentazione</span>
@@ -297,15 +462,14 @@
         </div>
 
         <div class="text-center text-xs text-stone-400 font-semibold pt-8">
-            Fit & Nutri Pro • Profilo Cloud Sincronizzato
+            Fit & Nutri Pro • Sincronizzazione Cloud Attiva
         </div>
     </section>
 
     <!-- ========================================================= -->
-    <!-- MODULO B: SCHEDA ALLENAMENTO PROFESSIONALE                -->
+    <!-- MODULO B: SCHEDA ALLENAMENTO ATLETA                       -->
     <!-- ========================================================= -->
     <div id="module-workout" class="app-padding hidden">
-        
         <header class="px-5 mb-4 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
@@ -314,12 +478,10 @@
                 </div>
                 <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate">Allenamento</h1>
             </div>
-            <div class="flex items-center space-x-2 shrink-0">
-                <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
-                    <i class="fa-solid fa-table-cells-large"></i>
-                    <span>Hub</span>
-                </button>
-            </div>
+            <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition shrink-0">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Hub</span>
+            </button>
         </header>
 
         <main class="px-5 space-y-4">
@@ -345,7 +507,7 @@
                     </div>
                     <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
                         <span class="block text-[10px] font-bold uppercase text-stone-400">Intensità</span>
-                        <span class="text-sm font-extrabold text-amber-800">RPE 8</span>
+                        <span class="text-sm font-extrabold text-amber-800">RPE 8.5</span>
                     </div>
                 </div>
             </div>
@@ -353,7 +515,7 @@
             <div id="exercises-container" class="space-y-4"></div>
 
             <div class="pt-2 pb-4">
-                <button onclick="finishAndSaveWorkout()" class="w-full py-4 rounded-3xl bg-emerald-800 text-white font-extrabold text-base shadow-lg shadow-emerald-900/20 flex items-center justify-center space-x-2 active:scale-98 transition">
+                <button onclick="finishAndSaveWorkout()" class="w-full py-4 rounded-3xl bg-emerald-800 text-white font-extrabold text-base shadow-lg flex items-center justify-center space-x-2 active:scale-98 transition">
                     <i class="fa-solid fa-flag-checkered"></i>
                     <span>Concludi e Salva Carichi nello Storico</span>
                 </button>
@@ -373,10 +535,9 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODULO A: NUTRIZIONE COMPLETA              -->
+    <!-- MODULO A: NUTRIZIONE PAZIENTE              -->
     <!-- ========================================== -->
     <div id="module-nutrition" class="app-padding hidden">
-        
         <header class="px-5 mb-5 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
@@ -409,9 +570,7 @@
                         <p class="text-xs text-amber-900 font-medium mt-0.5 leading-snug" id="workout-desc"></p>
                     </div>
                 </div>
-                <button onclick="openModule('workout')" class="px-3 py-2 rounded-xl bg-amber-600 text-white text-xs font-extrabold shrink-0 self-center">
-                    Scheda
-                </button>
+                <button onclick="openModule('workout')" class="px-3 py-2 rounded-xl bg-amber-600 text-white text-xs font-extrabold shrink-0 self-center">Scheda</button>
             </div>
 
             <div class="soft-card rounded-3xl p-5 space-y-4">
@@ -419,7 +578,7 @@
                     <div class="min-w-0">
                         <span class="text-xs font-bold uppercase tracking-wider text-stone-400">Target Giornaliero</span>
                         <div class="text-2xl font-extrabold text-stone-900 mt-0.5" id="macro-kcal">1.960 Kcal</div>
-                        <span class="inline-block mt-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-xl" id="meals-progress-text">0 di 5 completati</span>
+                        <span class="inline-block mt-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-xl" id="meals-progress-text">0 completati</span>
                     </div>
                     <div class="flex space-x-1.5 shrink-0">
                         <div class="px-2.5 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
@@ -463,7 +622,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <h2 class="text-xl font-extrabold text-stone-900">Dispensa & Spesa</h2>
-                        <p class="text-xs text-stone-500 mt-0.5">Somma automatica delle quantità del tuo profilo.</p>
+                        <p class="text-xs text-stone-500 mt-0.5">Somma automatica delle quantità del tuo piano.</p>
                     </div>
                     <button onclick="shareShoppingListWhatsApp()" class="bg-emerald-700 text-white text-xs font-extrabold px-3.5 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
                         <i class="fa-brands fa-whatsapp text-sm"></i>
@@ -567,7 +726,7 @@
                 </div>
 
                 <div class="flex space-x-2">
-                    <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 66.2)" class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-900">
+                    <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 108.5)" class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-900">
                     <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-extrabold px-5 rounded-2xl text-xs shrink-0">Salva</button>
                 </div>
             </div>
@@ -583,7 +742,6 @@
             </div>
         </main>
 
-        <!-- BARRA NAVIGAZIONE NUTRIZIONE -->
         <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5 grid grid-cols-4 gap-1">
             <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-700 py-1 rounded-2xl transition">
                 <i class="fa-solid fa-utensils text-base"></i>
@@ -607,14 +765,167 @@
 
     <script>
         // =========================================================================
-        // FUNZIONE GENERATRICE DEL PIANO SETTIMANALE (SINCRONIZZATA PER COPPIA!)
-        // Permette a te e alla tua ragazza di cucinare gli STESSI piatti ma con
-        // grammature calibrate sul vostro metabolismo e lavoro!
+        // 1. CONNESSIONE CLOUD SUPABASE (INSERISCI QUI OPPURE DALLA FINESTRA IN-APP)
+        // =========================================================================
+        const DEFAULT_SB_URL = ''; 
+        const DEFAULT_SB_KEY = '';
+
+        let sbUrl = localStorage.getItem('fitNutri_sbUrl') || DEFAULT_SB_URL;
+        let sbKey = localStorage.getItem('fitNutri_sbKey') || DEFAULT_SB_KEY;
+        let sbClient = null;
+
+        function initSupabase() {
+            if (sbUrl && sbKey && window.supabase) {
+                try {
+                    sbClient = window.supabase.createClient(sbUrl, sbKey);
+                    document.getElementById('cloud-status-indicator').innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-600 mr-1"></i>Cloud Supabase Attivo e Sincronizzato';
+                } catch (e) {
+                    console.error('Errore init Supabase:', e);
+                }
+            }
+        }
+        initSupabase();
+
+        function toggleSupabaseModal() {
+            const modal = document.getElementById('supabase-modal');
+            modal.classList.toggle('hidden');
+            document.getElementById('sb-url-input').value = sbUrl;
+            document.getElementById('sb-key-input').value = sbKey;
+        }
+
+        function saveSupabaseConfig() {
+            sbUrl = document.getElementById('sb-url-input').value.trim();
+            sbKey = document.getElementById('sb-key-input').value.trim();
+            localStorage.setItem('fitNutri_sbUrl', sbUrl);
+            localStorage.setItem('fitNutri_sbKey', sbKey);
+            initSupabase();
+            alert('✅ Connessione Supabase salvata!');
+        }
+
+        async function seedSupabaseDatabase() {
+            if (!sbClient) return alert('Inserisci prima Project URL e Anon Key e clicca il bottone 1!');
+            try {
+                for (const pro of Object.values(masterState.professionals)) {
+                    await sbClient.from('professionals').upsert({
+                        pro_code: pro.proCode,
+                        role: pro.role,
+                        studio_name: pro.studioName,
+                        prefix: pro.prefix
+                    });
+                }
+                for (const u of Object.values(masterState.users)) {
+                    await sbClient.from('clients').upsert({
+                        client_code: u.code,
+                        name: u.name,
+                        nutri_code: u.nutriCode,
+                        pt_code: u.ptCode,
+                        profile_data: u
+                    });
+                }
+                alert('🚀 Database Cloud Supabase popolato con tutti i profili e gli studi!');
+                toggleSupabaseModal();
+            } catch (err) {
+                alert('Errore durante il caricamento su Supabase. Verifica di aver eseguito la query SQL.');
+            }
+        }
+
+        // =========================================================================
+        // 2. SIMULATORE BIOMECCANICO 3D VETTORIALE INTERNO (ZERO YOUTUBE)
+        // =========================================================================
+        function getInternalBiomechanicsSimulator(animType, primaryMuscle) {
+            const hl = '#ea580c';
+            if (animType === 'push') {
+                return `
+                    <div class="bg-stone-900 rounded-2xl p-4 text-white flex items-center space-x-4">
+                        <svg viewBox="0 0 140 130" class="w-28 h-28 shrink-0 bg-stone-800/80 rounded-xl p-2 border border-stone-700">
+                            <rect x="25" y="95" width="90" height="8" rx="4" fill="#44403c"/>
+                            <rect x="46" y="68" width="48" height="26" rx="8" fill="${hl}" class="bio-muscle-glow"/>
+                            <circle cx="70" cy="54" r="10" fill="#a8a29e"/>
+                            <g class="bio-bar-push">
+                                <line x1="18" y1="62" x2="122" y2="62" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+                                <rect x="14" y="52" width="8" height="20" rx="2" fill="#fbbf24"/>
+                                <rect x="118" y="52" width="8" height="20" rx="2" fill="#fbbf24"/>
+                                <line x1="42" y1="75" x2="32" y2="62" stroke="#d6d3d1" stroke-width="6" stroke-linecap="round"/>
+                                <line x1="98" y1="75" x2="108" y2="62" stroke="#d6d3d1" stroke-width="6" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                        <div class="space-y-1.5 text-xs">
+                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                            <div class="font-extrabold text-sm text-white">Biomeccanica di Spinta</div>
+                            <div class="text-stone-300">• <strong>Concentrica (1s):</strong> Espira spingendo il carico.</div>
+                            <div class="text-stone-300">• <strong>Eccentrica (2s):</strong> Inspira frenando con <strong>${primaryMuscle}</strong>.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (animType === 'pull') {
+                return `
+                    <div class="bg-stone-900 rounded-2xl p-4 text-white flex items-center space-x-4">
+                        <svg viewBox="0 0 140 130" class="w-28 h-28 shrink-0 bg-stone-800/80 rounded-xl p-2 border border-stone-700">
+                            <line x1="70" y1="5" x2="70" y2="55" stroke="#78716c" stroke-width="2" stroke-dasharray="3,3"/>
+                            <polygon points="45,55 95,55 82,105 58,105" fill="${hl}" class="bio-muscle-glow"/>
+                            <circle cx="70" cy="42" r="9" fill="#a8a29e"/>
+                            <g class="bio-bar-pull">
+                                <line x1="22" y1="48" x2="118" y2="48" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="35" y1="48" x2="50" y2="68" stroke="#d6d3d1" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="105" y1="48" x2="90" y2="68" stroke="#d6d3d1" stroke-width="5" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                        <div class="space-y-1.5 text-xs">
+                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                            <div class="font-extrabold text-sm text-white">Biomeccanica di Trazione</div>
+                            <div class="text-stone-300">• <strong>Trazione (1s):</strong> Espira guidando il movimento coi gomiti.</div>
+                            <div class="text-stone-300">• <strong>Rilascio (2s):</strong> Allunga <strong>${primaryMuscle}</strong> senza perdere le scapole.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (animType === 'hip') {
+                return `
+                    <div class="bg-stone-900 rounded-2xl p-4 text-white flex items-center space-x-4">
+                        <svg viewBox="0 0 140 130" class="w-28 h-28 shrink-0 bg-stone-800/80 rounded-xl p-2 border border-stone-700">
+                            <rect x="12" y="72" width="28" height="36" rx="4" fill="#44403c"/>
+                            <line x1="10" y1="108" x2="130" y2="108" stroke="#57534e" stroke-width="3"/>
+                            <g class="bio-hip-move">
+                                <line x1="32" y1="74" x2="78" y2="74" stroke="#d6d3d1" stroke-width="9" stroke-linecap="round"/>
+                                <circle cx="78" cy="74" r="12" fill="${hl}" class="bio-muscle-glow"/>
+                                <circle cx="78" cy="62" r="7" fill="#fbbf24"/>
+                                <line x1="78" y1="74" x2="108" y2="105" stroke="#d6d3d1" stroke-width="8" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+                        <div class="space-y-1.5 text-xs">
+                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                            <div class="font-extrabold text-sm text-white">Estensione d'Anca & Core</div>
+                            <div class="text-stone-300">• <strong>Picco (2s):</strong> Contrai <strong>${primaryMuscle}</strong> in isometria al vertice.</div>
+                            <div class="text-stone-300">• <strong>Eccentrica (2s):</strong> Scendi controllando il bacino.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            return `
+                <div class="bg-stone-900 rounded-2xl p-4 text-white flex items-center space-x-4">
+                    <svg viewBox="0 0 140 130" class="w-28 h-28 shrink-0 bg-stone-800/80 rounded-xl p-2 border border-stone-700">
+                        <path d="M 30 45 L 30 88 L 65 88" fill="none" stroke="#57534e" stroke-width="7" stroke-linecap="round"/>
+                        <rect x="36" y="74" width="32" height="14" rx="6" fill="${hl}" class="bio-muscle-glow"/>
+                        <g class="bio-leg-move">
+                            <line x1="65" y1="84" x2="65" y2="118" stroke="#d6d3d1" stroke-width="8" stroke-linecap="round"/>
+                            <circle cx="72" cy="114" r="7" fill="#fbbf24"/>
+                        </g>
+                    </svg>
+                    <div class="space-y-1.5 text-xs">
+                        <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                        <div class="font-extrabold text-sm text-white">Spinta / Estensione Gambe</div>
+                        <div class="text-stone-300">• <strong>Attivazione:</strong> Tensione costante su <strong>${primaryMuscle}</strong>.</div>
+                        <div class="text-stone-300">• <strong>Controllo:</strong> Ritorno lento in 2-3 secondi senza bloccare l'articolazione.</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // 3. GENERATORI DI DEFAULT (GIOVANNI & RAGAZZA)
         // =========================================================================
         function buildSyncedWeekPlan(isFemaleActive) {
-            // Parametri differenziati:
-            // Giovanni (isFemaleActive = false): 1.960 Kcal (Lavoro sedentario PC, taglio carbo, alte proteine: 220g pollo, 80g pasta)
-            // Ragazza (isFemaleActive = true): 1.800 Kcal (23a, 170cm, 67kg, lavoro fisico in piedi al supermercato + palestra: 150g pollo, 75g pasta + pane/energia per lavoro in piedi)
             const pPasta = isFemaleActive ? 75 : 80;
             const pChicken = isFemaleActive ? 150 : 220;
             const pFish = isFemaleActive ? 170 : 230;
@@ -625,503 +936,149 @@
 
             return [
                 {
-                    id: 'lun', short: 'Lun', name: 'Lunedì', workout: false,
-                    kcal: isFemaleActive ? '1.800 Kcal' : '1.960 Kcal',
-                    c: isFemaleActive ? '185g' : '175g',
-                    p: isFemaleActive ? '115g' : '158g',
-                    g: isFemaleActive ? '60g' : '68g',
+                    id: 'lun', short: 'Lun', name: 'Lunedì', workout: false, workoutNote: '',
+                    kcal: isFemaleActive ? '1.800 Kcal' : '1.960 Kcal', c: isFemaleActive ? '185g' : '175g', p: isFemaleActive ? '115g' : '158g', g: isFemaleActive ? '60g' : '68g',
                     meals: [
-                        {
-                            id: 'lun-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 4,
-                            title: 'Pancake Avena, Albume e Arachidi', macros: isFemaleActive ? '52g C • 22g P • 13g G' : '60g C • 26g P • 14g G',
-                            ingredients: [
-                                { qty: pOats, unit: 'g', item: 'Farina d\'avena', pId: 'c1' },
-                                { qty: pEggWhite, unit: 'g', item: 'Albume liquido', pId: 'p1' },
-                                { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' },
-                                { qty: 15, unit: 'g', item: 'Marmellata zero zuccheri', pId: 'g4' }
-                            ],
-                            steps: ['Sbatti farina d\'avena, albume, 2 cucchiai d\'acqua e cannella.', 'Cuoci in padella calda 2 min per lato e farcisci a caldo.']
-                        },
-                        {
-                            id: 'lun-2', time: '10:30', type: 'Spuntino Lavoro', swapCat: 'snack_am', timer: 0,
-                            title: isFemaleActive ? 'Panino Integrale Fesa (Energia Reparto)' : 'Parmigiano e Mandorle (Focus PC)',
-                            macros: isFemaleActive ? '26g C • 18g P • 4g G' : '2g C • 13g P • 16g G',
-                            ingredients: isFemaleActive ? [
-                                { qty: 50, unit: 'g', item: 'Pane di segale o integrale', pId: 'c6' },
-                                { qty: 60, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' },
-                                { qty: 10, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }
-                            ] : [
-                                { qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' },
-                                { qty: 15, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }
-                            ],
-                            steps: [isFemaleActive ? 'Lavorando in piedi tra gli scaffali ti serve una quota di carboidrati complessi a lento rilascio a metà mattina.' : 'Taglia il Parmigiano a cubetti e abbinalo alle mandorle per non avere sonnolenza al computer.']
-                        },
-                        {
-                            id: 'lun-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
-                            title: 'Pasta Salmone, Olive e Datterini', macros: '60g C • 30g P • 15g G',
-                            ingredients: [
-                                { qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' },
-                                { qty: isFemaleActive ? 80 : 100, unit: 'g', item: 'Salmone naturale o affumicato', pId: 'p9' },
-                                { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' },
-                                { qty: 10, unit: 'g', item: 'Olive taggiasche + 5g Olio EVO', pId: 'g6' }
-                            ],
-                            steps: ['Bollisci la pasta 10 min.', 'Condisci con datterini, olive, salmone, olio e scorza di limone.']
-                        },
-                        {
-                            id: 'lun-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
-                            title: 'Yogurt Greco e Fondente', macros: '12g C • 18g P • 8g G',
-                            ingredients: [
-                                { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' },
-                                { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Trita il cioccolato fondente a scaglie nello yogurt freddo.']
-                        },
-                        {
-                            id: 'lun-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 16,
-                            title: 'Pollo e Ceci Croccanti alla Paprika', macros: '38g C • 52g P • 14g G',
-                            ingredients: [
-                                { qty: pChicken, unit: 'g', item: 'Petto di pollo', pId: 'p4' },
-                                { qty: 80, unit: 'g', item: 'Ceci cotti in vetro', pId: 'c10' },
-                                { qty: 250, unit: 'g', item: 'Zucchine', pId: 'v1' }
-                            ],
-                            steps: ['Potete cuocerlo insieme nella stessa teglia! Condisci pollo, ceci e zucchine con paprika e olio.', 'Cuoci a 195°C per 16 minuti.']
-                        }
+                        { id: 'lun-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 4, title: 'Pancake Avena, Albume e Arachidi', macros: isFemaleActive ? '52g C • 22g P • 13g G' : '60g C • 26g P • 14g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Farina d\'avena', pId: 'c1' }, { qty: pEggWhite, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }, { qty: 15, unit: 'g', item: 'Marmellata zero zuccheri', pId: 'g4' }], steps: ['Sbatti farina d\'avena, albume, 2 cucchiai d\'acqua e cannella.', 'Cuoci in padella calda 2 min per lato e farcisci a caldo.'] },
+                        { id: 'lun-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: isFemaleActive ? 'Panino Integrale Fesa (Energia Reparto)' : 'Parmigiano e Mandorle (Focus PC)', macros: isFemaleActive ? '26g C • 18g P • 4g G' : '2g C • 13g P • 16g G', ingredients: isFemaleActive ? [{ qty: 50, unit: 'g', item: 'Pane di segale o integrale', pId: 'c6' }, { qty: 60, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 10, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }] : [{ qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }, { qty: 15, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }], steps: [isFemaleActive ? 'Energia a lento rilascio per il lavoro in piedi.' : 'Taglia il Parmigiano a cubetti e abbinalo alle mandorle.'] },
+                        { id: 'lun-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Salmone, Olive e Datterini', macros: '60g C • 30g P • 15g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: isFemaleActive ? 80 : 100, unit: 'g', item: 'Salmone naturale o affumicato', pId: 'p9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olive taggiasche + 5g Olio EVO', pId: 'g6' }], steps: ['Bollisci la pasta 10 min.', 'Condisci con datterini, olive, salmone, olio e scorza di limone.'] },
+                        { id: 'lun-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco e Fondente', macros: '12g C • 18g P • 8g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Trita il cioccolato fondente a scaglie nello yogurt freddo.'] },
+                        { id: 'lun-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 16, title: 'Pollo e Ceci Croccanti alla Paprika', macros: '38g C • 52g P • 14g G', ingredients: [{ qty: pChicken, unit: 'g', item: 'Petto di pollo', pId: 'p4' }, { qty: 80, unit: 'g', item: 'Ceci cotti in vetro', pId: 'c10' }, { qty: 250, unit: 'g', item: 'Zucchine', pId: 'v1' }], steps: ['Condisci pollo, ceci e zucchine con paprika e olio.', 'Cuoci a 195°C per 16 minuti.'] }
                     ]
                 },
                 {
-                    id: 'mar', short: 'Mar', name: 'Martedì', workout: true,
-                    workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra Insieme • Ore 08:30 Porridge Caldo.',
-                    kcal: isFemaleActive ? '1.850 Kcal' : '1.980 Kcal',
-                    c: isFemaleActive ? '190g' : '182g',
-                    p: isFemaleActive ? '118g' : '158g',
-                    g: isFemaleActive ? '60g' : '67g',
+                    id: 'mar', short: 'Mar', name: 'Martedì', workout: true, workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Porridge Caldo.',
+                    kcal: isFemaleActive ? '1.850 Kcal' : '1.980 Kcal', c: isFemaleActive ? '190g' : '182g', p: isFemaleActive ? '118g' : '158g', g: isFemaleActive ? '60g' : '67g',
                     meals: [
-                        {
-                            id: 'mar-0', time: '06:30', type: 'Pre-Palestra', swapCat: 'snack_pm', timer: 0,
-                            title: 'Caffè, Banana e Fondente', macros: '18g C • 2g P • 5g G',
-                            ingredients: [
-                                { qty: 100, unit: 'g', item: 'Banana o Mela', pId: 'v9' },
-                                { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Energia rapida 30 min prima dei pesi.']
-                        },
-                        {
-                            id: 'mar-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast', timer: 5,
-                            title: 'Porridge Caldo Mela, Cannella e Noci', macros: '48g C • 22g P • 12g G',
-                            ingredients: [
-                                { qty: pOats, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' },
-                                { qty: 150, unit: 'ml', item: 'Latte di soia o scremato', pId: 'p16' },
-                                { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' },
-                                { qty: 120, unit: 'g', item: 'Mela a dadini + Cannella', pId: 'v9' },
-                                { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' }
-                            ],
-                            steps: ['Cuoci i fiocchi d\'avena nel latte con la mela e cannella per 4 min.', 'Aggiungi l\'albume a fuoco basso mescolando per 1 min e guarnisci con le noci.']
-                        },
-                        {
-                            id: 'mar-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
-                            title: 'Carbonara Fit Crudo e Zucchine', macros: '58g C • 32g P • 15g G',
-                            ingredients: [
-                                { qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' },
-                                { qty: 1, unit: 'pz', item: 'Uovo intero', pId: 'p2' },
-                                { qty: 40, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' },
-                                { qty: 200, unit: 'g', item: 'Zucchine grattugiate', pId: 'v1' },
-                                { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }
-                            ],
-                            steps: ['Rosola il crudo con le zucchine grattugiate per 3 min.', 'Scola la pasta a fuoco spento e manteca con uovo, pepe e Parmigiano.']
-                        },
-                        {
-                            id: 'mar-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
-                            title: 'Pera, Fesa di Tacchino e Fondente', macros: '18g C • 16g P • 6g G',
-                            ingredients: [
-                                { qty: 150, unit: 'g', item: 'Pera o Mela', pId: 'v9' },
-                                { qty: 50, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' },
-                                { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Ottimo spezza-fame pomeridiano post-palestra.']
-                        },
-                        {
-                            id: 'mar-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 10,
-                            title: 'Orata al Cartoccio su Crema di Cannellini', macros: '38g C • 46g P • 14g G',
-                            ingredients: [
-                                { qty: pFish, unit: 'g', item: 'Filetto di Orata o Branzino', pId: 'p7' },
-                                { qty: 100, unit: 'g', item: 'Fagioli cannellini cotti', pId: 'c11' },
-                                { qty: 200, unit: 'g', item: 'Spinaci freschi', pId: 'v4' }
-                            ],
-                            steps: ['Frulla i cannellini con acqua calda, rosmarino e olio.', 'Cuoci il filetto di orata in padella coperta per 10 min con pomodorini e capperi e servi sulla crema.']
-                        }
+                        { id: 'mar-0', time: '06:30', type: 'Pre-Palestra', swapCat: 'snack_pm', timer: 0, title: 'Caffè, Banana e Fondente', macros: '18g C • 2g P • 5g G', ingredients: [{ qty: 100, unit: 'g', item: 'Banana o Mela', pId: 'v9' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Energia rapida 30 min prima dei pesi.'] },
+                        { id: 'mar-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast', timer: 5, title: 'Porridge Caldo Mela, Cannella e Noci', macros: '48g C • 22g P • 12g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' }, { qty: 150, unit: 'ml', item: 'Latte di soia o scremato', pId: 'p16' }, { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 120, unit: 'g', item: 'Mela a dadini + Cannella', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' }], steps: ['Cuoci i fiocchi d\'avena nel latte con la mela e cannella per 4 min.', 'Aggiungi l\'albume a fuoco basso mescolando per 1 min e guarnisci con le noci.'] },
+                        { id: 'mar-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Carbonara Fit Crudo e Zucchine', macros: '58g C • 32g P • 15g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: 1, unit: 'pz', item: 'Uovo intero', pId: 'p2' }, { qty: 40, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' }, { qty: 200, unit: 'g', item: 'Zucchine grattugiate', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Rosola il crudo con le zucchine grattugiate per 3 min.', 'Scola la pasta a fuoco spento e manteca con uovo, pepe e Parmigiano.'] },
+                        { id: 'mar-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Pera, Fesa di Tacchino e Fondente', macros: '18g C • 16g P • 6g G', ingredients: [{ qty: 150, unit: 'g', item: 'Pera o Mela', pId: 'v9' }, { qty: 50, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Ottimo spezza-fame pomeridiano post-palestra.'] },
+                        { id: 'mar-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 10, title: 'Orata al Cartoccio su Crema di Cannellini', macros: '38g C • 46g P • 14g G', ingredients: [{ qty: pFish, unit: 'g', item: 'Filetto di Orata o Branzino', pId: 'p7' }, { qty: 100, unit: 'g', item: 'Fagioli cannellini cotti', pId: 'c11' }, { qty: 200, unit: 'g', item: 'Spinaci freschi', pId: 'v4' }], steps: ['Frulla i cannellini con acqua calda, rosmarino e olio.', 'Cuoci il filetto di orata in padella coperta per 10 min con pomodorini e capperi.'] }
                     ]
                 },
                 {
-                    id: 'mer', short: 'Mer', name: 'Mercoledì', workout: false,
-                    kcal: isFemaleActive ? '1.800 Kcal' : '1.950 Kcal',
-                    c: isFemaleActive ? '185g' : '176g',
-                    p: isFemaleActive ? '115g' : '160g',
-                    g: isFemaleActive ? '58g' : '65g',
+                    id: 'mer', short: 'Mer', name: 'Mercoledì', workout: false, workoutNote: '',
+                    kcal: isFemaleActive ? '1.800 Kcal' : '1.950 Kcal', c: isFemaleActive ? '185g' : '176g', p: isFemaleActive ? '115g' : '160g', g: isFemaleActive ? '58g' : '65g',
                     meals: [
-                        {
-                            id: 'mer-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 0,
-                            title: 'Latte, Cereali, Biscotti + Greco', macros: '52g C • 26g P • 8g G',
-                            ingredients: [
-                                { qty: 200, unit: 'ml', item: 'Latte parz. scremato o soia', pId: 'p16' },
-                                { qty: 40, unit: 'g', item: 'Cereali integrali', pId: 'c8' },
-                                { qty: 30, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' },
-                                { qty: 150, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }
-                            ],
-                            steps: ['Abbina sempre lo yogurt greco per garantire la quota proteica.']
-                        },
-                        {
-                            id: 'mer-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0,
-                            title: 'Involtini Bresaola, Philadelphia e Gallette', macros: '18g C • 22g P • 6g G',
-                            ingredients: [
-                                { qty: 60, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' },
-                                { qty: 40, unit: 'g', item: 'Philadelphia Light/Protein', pId: 'p15' },
-                                { qty: 30, unit: 'g', item: 'Gallette o Pane di segale', pId: 'c6' }
-                            ],
-                            steps: ['Spalma il Philadelphia sulla bresaola con rucola, arrotola e servi con le gallette.']
-                        },
-                        {
-                            id: 'mer-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
-                            title: 'Riso Basmati Tonno, Zucchine e Limone', macros: '62g C • 30g P • 10g G',
-                            ingredients: [
-                                { qty: pPasta, unit: 'g', item: 'Riso Basmati', pId: 'c4' },
-                                { qty: isFemaleActive ? 90 : 110, unit: 'g', item: 'Tonno al naturale', pId: 'c9' },
-                                { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }
-                            ],
-                            steps: ['Cuoci il riso basmati 10 min e uniscilo a zucchine saltate, tonno, olio e limone.']
-                        },
-                        {
-                            id: 'mer-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 1,
-                            title: 'Coppa Yogurt, Fondente Fuso e Mandorle', macros: '12g C • 18g P • 15g G',
-                            ingredients: [
-                                { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' },
-                                { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' },
-                                { qty: 10, unit: 'g', item: 'Mandorle', pId: 'g5' }
-                            ],
-                            steps: ['Sciogli il fondente 30 sec al microonde e versalo sullo yogurt freddo.']
-                        },
-                        {
-                            id: 'mer-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6,
-                            title: 'Straccetti di Vitello al Balsamico, Lenticchie e Zucchine', macros: '34g C • 45g P • 14g G',
-                            ingredients: [
-                                { qty: pMeat, unit: 'g', item: 'Fettine di vitello magro', pId: 'p5' },
-                                { qty: 100, unit: 'g', item: 'Lenticchie cotte in vetro', pId: 'c12' },
-                                { qty: 200, unit: 'g', item: 'Zucchine grigliate', pId: 'v1' }
-                            ],
-                            steps: ['Scotta gli straccetti di vitello 3 min e sfuma con aceto balsamico.', 'Servi con lenticchie calde e zucchine grigliate.']
-                        }
+                        { id: 'mer-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 0, title: 'Latte, Cereali, Biscotti + Greco', macros: '52g C • 26g P • 8g G', ingredients: [{ qty: 200, unit: 'ml', item: 'Latte parz. scremato o soia', pId: 'p16' }, { qty: 40, unit: 'g', item: 'Cereali integrali', pId: 'c8' }, { qty: 30, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 150, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }], steps: ['Abbina sempre lo yogurt greco per garantire la quota proteica.'] },
+                        { id: 'mer-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Involtini Bresaola, Philadelphia e Gallette', macros: '18g C • 22g P • 6g G', ingredients: [{ qty: 60, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' }, { qty: 40, unit: 'g', item: 'Philadelphia Light/Protein', pId: 'p15' }, { qty: 30, unit: 'g', item: 'Gallette o Pane di segale', pId: 'c6' }], steps: ['Spalma il Philadelphia sulla bresaola con rucola, arrotola e servi con le gallette.'] },
+                        { id: 'mer-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Riso Basmati Tonno, Zucchine e Limone', macros: '62g C • 30g P • 10g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Riso Basmati', pId: 'c4' }, { qty: isFemaleActive ? 90 : 110, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }], steps: ['Cuoci il riso basmati 10 min e uniscilo a zucchine saltate, tonno, olio e limone.'] },
+                        { id: 'mer-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 1, title: 'Coppa Yogurt, Fondente Fuso e Mandorle', macros: '12g C • 18g P • 15g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }, { qty: 10, unit: 'g', item: 'Mandorle', pId: 'g5' }], steps: ['Sciogli il fondente 30 sec al microonde e versalo sullo yogurt freddo.'] },
+                        { id: 'mer-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6, title: 'Straccetti di Vitello al Balsamico, Lenticchie e Zucchine', macros: '34g C • 45g P • 14g G', ingredients: [{ qty: pMeat, unit: 'g', item: 'Fettine di vitello magro', pId: 'p5' }, { qty: 100, unit: 'g', item: 'Lenticchie cotte in vetro', pId: 'c12' }, { qty: 200, unit: 'g', item: 'Zucchine grigliate', pId: 'v1' }], steps: ['Scotta gli straccetti di vitello 3 min e sfuma con aceto balsamico.', 'Servi con lenticchie calde e zucchine grigliate.'] }
                     ]
                 },
                 {
-                    id: 'gio', short: 'Gio', name: 'Giovedì', workout: true,
-                    workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Pancake Tiramisù.',
-                    kcal: isFemaleActive ? '1.850 Kcal' : '1.970 Kcal',
-                    c: isFemaleActive ? '188g' : '180g',
-                    p: isFemaleActive ? '116g' : '157g',
-                    g: isFemaleActive ? '62g' : '68g',
+                    id: 'gio', short: 'Gio', name: 'Giovedì', workout: true, workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Pancake Tiramisù.',
+                    kcal: isFemaleActive ? '1.850 Kcal' : '1.970 Kcal', c: isFemaleActive ? '188g' : '180g', p: isFemaleActive ? '116g' : '157g', g: isFemaleActive ? '62g' : '68g',
                     meals: [
-                        {
-                            id: 'gio-0', time: '06:30', type: 'Pre-Palestra', swapCat: 'snack_pm', timer: 0,
-                            title: 'Espresso, Mela/Arancia e Fondente', macros: '18g C • 2g P • 5g G',
-                            ingredients: [
-                                { qty: 150, unit: 'g', item: 'Mela o Arancia', pId: 'v9' },
-                                { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Mangia 30 minuti prima di iniziare il riscaldamento.']
-                        },
-                        {
-                            id: 'gio-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast', timer: 4,
-                            title: 'Pancake "Tiramisù Fit"', macros: '46g C • 25g P • 15g G',
-                            ingredients: [
-                                { qty: pOats, unit: 'g', item: 'Farina d\'avena', pId: 'c1' },
-                                { qty: pEggWhite, unit: 'g', item: 'Albume liquido', pId: 'p1' },
-                                { qty: 15, unit: 'g', item: 'Crema proteica spalmabile', pId: 'g3' },
-                                { qty: 10, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }
-                            ],
-                            steps: ['Mescola farina d\'avena, albume e 1 caffè freddo.', 'Cuoci in padella 2 min per lato e spalma le creme a caldo.']
-                        },
-                        {
-                            id: 'gio-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
-                            title: 'Pasta Crema di Zucca e Cotto Rosolato', macros: '65g C • 28g P • 14g G',
-                            ingredients: [
-                                { qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' },
-                                { qty: 150, unit: 'g', item: 'Zucca a cubetti', pId: 'v3' },
-                                { qty: 60, unit: 'g', item: 'Prosciutto cotto magro', pId: 'p13' },
-                                { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }
-                            ],
-                            steps: ['Cuoci la zucca 4 min al microonde, schiacciala con Parmigiano e olio.', 'Condisci la pasta col cotto rosolato.']
-                        },
-                        {
-                            id: 'gio-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
-                            title: 'Yogurt Greco e Anacardi', macros: '10g C • 20g P • 8g G',
-                            ingredients: [
-                                { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' },
-                                { qty: 15, unit: 'g', item: 'Anacardi o Mandorle', pId: 'g5' }
-                            ],
-                            steps: ['Spuntino proteico pomeridiano.']
-                        },
-                        {
-                            id: 'gio-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6,
-                            title: 'Gamberoni agli Agrumi con Ceci e Segale', macros: '41g C • 48g P • 16g G',
-                            ingredients: [
-                                { qty: isFemaleActive ? 190 : 250, unit: 'g', item: 'Mazzancolle o Gamberoni puliti', pId: 'p8' },
-                                { qty: 100, unit: 'g', item: 'Ceci cotti in vetro', pId: 'c10' },
-                                { qty: pBreadDinner, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' },
-                                { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }
-                            ],
-                            steps: ['Salta i gamberoni 4 min con aglio, prezzemolo e limone.', 'Servi con ceci, zucchine e pane di segale.']
-                        }
+                        { id: 'gio-0', time: '06:30', type: 'Pre-Palestra', swapCat: 'snack_pm', timer: 0, title: 'Espresso, Mela/Arancia e Fondente', macros: '18g C • 2g P • 5g G', ingredients: [{ qty: 150, unit: 'g', item: 'Mela o Arancia', pId: 'v9' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Mangia 30 minuti prima di iniziare il riscaldamento.'] },
+                        { id: 'gio-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast', timer: 4, title: 'Pancake "Tiramisù Fit"', macros: '46g C • 25g P • 15g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Farina d\'avena', pId: 'c1' }, { qty: pEggWhite, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 15, unit: 'g', item: 'Crema proteica spalmabile', pId: 'g3' }, { qty: 10, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }], steps: ['Mescola farina d\'avena, albume e 1 caffè freddo.', 'Cuoci in padella 2 min per lato e spalma le creme a caldo.'] },
+                        { id: 'gio-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Crema di Zucca e Cotto Rosolato', macros: '65g C • 28g P • 14g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: 150, unit: 'g', item: 'Zucca a cubetti', pId: 'v3' }, { qty: 60, unit: 'g', item: 'Prosciutto cotto magro', pId: 'p13' }, { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Cuoci la zucca 4 min al microonde, schiacciala con Parmigiano e olio.', 'Condisci la pasta col cotto rosolato.'] },
+                        { id: 'gio-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco e Anacardi', macros: '10g C • 20g P • 8g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Anacardi o Mandorle', pId: 'g5' }], steps: ['Spuntino proteico pomeridiano.'] },
+                        { id: 'gio-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6, title: 'Gamberoni agli Agrumi con Ceci e Segale', macros: '41g C • 48g P • 16g G', ingredients: [{ qty: isFemaleActive ? 190 : 250, unit: 'g', item: 'Mazzancolle o Gamberoni puliti', pId: 'p8' }, { qty: 100, unit: 'g', item: 'Ceci cotti in vetro', pId: 'c10' }, { qty: pBreadDinner, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }, { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }], steps: ['Salta i gamberoni 4 min con aglio, prezzemolo e limone.', 'Servi con ceci, zucchine e pane di segale.'] }
                     ]
                 },
                 {
-                    id: 'ven', short: 'Ven', name: 'Venerdì', workout: false,
-                    kcal: isFemaleActive ? '1.800 Kcal' : '1.960 Kcal',
-                    c: isFemaleActive ? '182g' : '175g',
-                    p: isFemaleActive ? '115g' : '154g',
-                    g: isFemaleActive ? '62g' : '70g',
+                    id: 'ven', short: 'Ven', name: 'Venerdì', workout: false, workoutNote: '',
+                    kcal: isFemaleActive ? '1.800 Kcal' : '1.960 Kcal', c: isFemaleActive ? '182g' : '175g', p: isFemaleActive ? '115g' : '154g', g: isFemaleActive ? '62g' : '70g',
                     meals: [
-                        {
-                            id: 'ven-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 0,
-                            title: 'Tè Caldo, Biscotti, Mandorle e Greco', macros: '38g C • 24g P • 16g G',
-                            ingredients: [
-                                { qty: 45, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' },
-                                { qty: 20, unit: 'g', item: 'Mandorle', pId: 'g5' },
-                                { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }
-                            ],
-                            steps: ['Accompagna i biscotti e il tè con lo yogurt greco e le mandorle.']
-                        },
-                        {
-                            id: 'ven-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0,
-                            title: 'Fesa di Tacchino, Gallette e Noci', macros: '15g C • 19g P • 10g G',
-                            ingredients: [
-                                { qty: 60, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' },
-                                { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' },
-                                { qty: isFemaleActive ? 20 : 0, unit: 'g', item: isFemaleActive ? 'Gallette di riso' : 'Zero pane (opz.)', pId: 'c6' }
-                            ],
-                            steps: ['Spuntino salato veloce.']
-                        },
-                        {
-                            id: 'ven-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 4,
-                            title: 'Gnocchi di Patate con Borlotti e Tonno', macros: '62g C • 30g P • 10g G',
-                            ingredients: [
-                                { qty: 180, unit: 'g', item: 'Gnocchi di sole patate', pId: 'c5' },
-                                { qty: 100, unit: 'g', item: 'Fagioli borlotti cotti', pId: 'c11' },
-                                { qty: 60, unit: 'g', item: 'Tonno al naturale', pId: 'c9' },
-                                { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }
-                            ],
-                            steps: ['Cuoci gli gnocchi 2 min e saltali con pomodorini, fagioli e tonno.']
-                        },
-                        {
-                            id: 'ven-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
-                            title: 'Pera e Cioccolato Fondente', macros: '24g C • 3g P • 8g G',
-                            ingredients: [
-                                { qty: 150, unit: 'g', item: 'Pera o Mela', pId: 'v9' },
-                                { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Taglia la pera a spicchi e abbinala al cioccolato fondente.']
-                        },
-                        {
-                            id: 'ven-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6,
-                            title: 'Avocado Toast Proteico con Uova e Bresaola', macros: '39g C • 42g P • 24g G',
-                            ingredients: [
-                                { qty: 60, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' },
-                                { qty: 60, unit: 'g', item: 'Avocado maturo', pId: 'v7' },
-                                { qty: 2, unit: 'pz', item: 'Uova intere', pId: 'p2' },
-                                { qty: isFemaleActive ? 35 : 50, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' },
-                                { qty: 150, unit: 'g', item: 'Pomodori in insalata', pId: 'v2' }
-                            ],
-                            steps: ['Bollisci le uova 6 min, spalma l\'avocado sul pane tostato e servi con uova, bresaola e pomodori.']
-                        }
+                        { id: 'ven-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 0, title: 'Tè Caldo, Biscotti, Mandorle e Greco', macros: '38g C • 24g P • 16g G', ingredients: [{ qty: 45, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 20, unit: 'g', item: 'Mandorle', pId: 'g5' }, { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }], steps: ['Accompagna i biscotti e il tè con lo yogurt greco e le mandorle.'] },
+                        { id: 'ven-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Fesa di Tacchino e Noci', macros: '15g C • 19g P • 10g G', ingredients: [{ qty: 60, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' }], steps: ['Spuntino salato veloce.'] },
+                        { id: 'ven-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 4, title: 'Gnocchi di Patate con Borlotti e Tonno', macros: '62g C • 30g P • 10g G', ingredients: [{ qty: 180, unit: 'g', item: 'Gnocchi di sole patate', pId: 'c5' }, { qty: 100, unit: 'g', item: 'Fagioli borlotti cotti', pId: 'c11' }, { qty: 60, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }], steps: ['Cuoci gli gnocchi 2 min e saltali con pomodorini, fagioli e tonno.'] },
+                        { id: 'ven-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Pera e Cioccolato Fondente', macros: '24g C • 3g P • 8g G', ingredients: [{ qty: 150, unit: 'g', item: 'Pera o Mela', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Taglia la pera a spicchi e abbinala al cioccolato fondente.'] },
+                        { id: 'ven-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6, title: 'Avocado Toast Proteico con Uova e Bresaola', macros: '39g C • 42g P • 24g G', ingredients: [{ qty: 60, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }, { qty: 60, unit: 'g', item: 'Avocado maturo', pId: 'v7' }, { qty: 2, unit: 'pz', item: 'Uova intere', pId: 'p2' }, { qty: isFemaleActive ? 35 : 50, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' }, { qty: 150, unit: 'g', item: 'Pomodori in insalata', pId: 'v2' }], steps: ['Bollisci le uova 6 min, spalma l\'avocado sul pane tostato e servi con uova, bresaola e pomodori.'] }
                     ]
                 },
                 {
-                    id: 'sab', short: 'Sab', name: 'Sabato', workout: true,
-                    workoutNote: 'Ore 08:00 Pre-Workout • Ore 09:00 Palestra • Ore 10:30 Brunch.',
-                    kcal: isFemaleActive ? '1.850 Kcal' : '2.000 Kcal',
-                    c: isFemaleActive ? '190g' : '182g',
-                    p: isFemaleActive ? '118g' : '158g',
-                    g: isFemaleActive ? '62g' : '70g',
+                    id: 'sab', short: 'Sab', name: 'Sabato', workout: true, workoutNote: 'Ore 08:00 Pre-Workout • Ore 09:00 Palestra • Ore 10:30 Brunch.',
+                    kcal: isFemaleActive ? '1.850 Kcal' : '2.000 Kcal', c: isFemaleActive ? '190g' : '182g', p: isFemaleActive ? '118g' : '158g', g: isFemaleActive ? '62g' : '70g',
                     meals: [
-                        {
-                            id: 'sab-0', time: '08:00', type: 'Pre-Palestra', swapCat: 'snack_pm', timer: 0,
-                            title: 'Caffè, Biscotti e Fondente', macros: '22g C • 4g P • 6g G',
-                            ingredients: [
-                                { qty: 25, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' },
-                                { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Spuntino rapido 1 ora prima della palestra del sabato.']
-                        },
-                        {
-                            id: 'sab-1', time: '10:30', type: 'Brunch Post-Palestra', swapCat: 'breakfast', timer: 5,
-                            title: 'Maxi Pancake Avena e Albume', macros: '50g C • 26g P • 15g G',
-                            ingredients: [
-                                { qty: pOats + 5, unit: 'g', item: 'Farina d\'avena', pId: 'c1' },
-                                { qty: pEggWhite + 20, unit: 'g', item: 'Albume liquido', pId: 'p1' },
-                                { qty: 15, unit: 'g', item: 'Marmellata zero zuccheri', pId: 'g4' },
-                                { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }
-                            ],
-                            steps: ['Cuoci il maxi pancake in padella antiaderente e farcisci a caldo.']
-                        },
-                        {
-                            id: 'sab-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch', timer: 10,
-                            title: 'Pasta Datterini, Tonno e Basilico', macros: '62g C • 32g P • 10g G',
-                            ingredients: [
-                                { qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' },
-                                { qty: isFemaleActive ? 90 : 110, unit: 'g', item: 'Tonno al naturale', pId: 'c9' },
-                                { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }
-                            ],
-                            steps: ['Schiaccia i datterini a crudo con basilico, tonno e olio; unisci la pasta al dente.']
-                        },
-                        {
-                            id: 'sab-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
-                            title: 'Yogurt Greco e Mandorle', macros: '8g C • 20g P • 9g G',
-                            ingredients: [
-                                { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' },
-                                { qty: 15, unit: 'g', item: 'Mandorle', pId: 'g5' }
-                            ],
-                            steps: ['Merenda proteica pre-serata.']
-                        },
-                        {
-                            id: 'sab-5', time: '20:30', type: 'Cena', swapCat: 'dinner', timer: 8,
-                            title: 'Medaglioni di Arista alla Senape con Piselli e Peperoni', macros: '40g C • 50g P • 16g G',
-                            ingredients: [
-                                { qty: pMeat, unit: 'g', item: 'Arista di maiale magra', pId: 'p6' },
-                                { qty: 100, unit: 'g', item: 'Piselli cotti', pId: 'c13' },
-                                { qty: 200, unit: 'g', item: 'Peperoni a listarelle', pId: 'v5' },
-                                { qty: pBreadDinner, unit: 'g', item: 'Pane di segale o Crostoni', pId: 'c6' }
-                            ],
-                            steps: ['Massaggia l\'arista con senape e rosmarino e cuocila 4 min per lato.', 'Salta peperoni e piselli in padella e servi coi crostoni.']
-                        }
+                        { id: 'sab-0', time: '08:00', type: 'Pre-Palestra', swapCat: 'snack_pm', timer: 0, title: 'Caffè, Biscotti e Fondente', macros: '22g C • 4g P • 6g G', ingredients: [{ qty: 25, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Spuntino rapido 1 ora prima della palestra del sabato.'] },
+                        { id: 'sab-1', time: '10:30', type: 'Brunch Post-Palestra', swapCat: 'breakfast', timer: 5, title: 'Maxi Pancake Avena e Albume', macros: '50g C • 26g P • 15g G', ingredients: [{ qty: pOats + 5, unit: 'g', item: 'Farina d\'avena', pId: 'c1' }, { qty: pEggWhite + 20, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 15, unit: 'g', item: 'Marmellata zero zuccheri', pId: 'g4' }, { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }], steps: ['Cuoci il maxi pancake in padella antiaderente e farcisci a caldo.'] },
+                        { id: 'sab-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Datterini, Tonno e Basilico', macros: '62g C • 32g P • 10g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: isFemaleActive ? 90 : 110, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }], steps: ['Schiaccia i datterini a crudo con basilico, tonno e olio; unisci la pasta al dente.'] },
+                        { id: 'sab-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco e Mandorle', macros: '8g C • 20g P • 9g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Mandorle', pId: 'g5' }], steps: ['Merenda proteica pre-serata.'] },
+                        { id: 'sab-5', time: '20:30', type: 'Cena', swapCat: 'dinner', timer: 8, title: 'Medaglioni di Arista alla Senape con Piselli e Peperoni', macros: '40g C • 50g P • 16g G', ingredients: [{ qty: pMeat, unit: 'g', item: 'Arista di maiale magra', pId: 'p6' }, { qty: 100, unit: 'g', item: 'Piselli cotti', pId: 'c13' }, { qty: 200, unit: 'g', item: 'Peperoni a listarelle', pId: 'v5' }, { qty: pBreadDinner, unit: 'g', item: 'Pane di segale o Crostoni', pId: 'c6' }], steps: ['Massaggia l\'arista con senape e rosmarino e cuocila 4 min per lato.', 'Salta peperoni e piselli in padella e servi coi crostoni.'] }
                     ]
                 },
                 {
-                    id: 'dom', short: 'Dom', name: 'Domenica', workout: false,
+                    id: 'dom', short: 'Dom', name: 'Domenica', workout: false, workoutNote: '',
                     kcal: 'Giorno Flessibile', c: isFemaleActive ? '~185g' : '~190g', p: isFemaleActive ? '~115g' : '~150g', g: '~65g',
                     meals: [
-                        {
-                            id: 'dom-1', time: '09:00', type: 'Colazione', swapCat: 'breakfast', timer: 5,
-                            title: 'Porridge Caldo Pera, Cannella e Fondente', macros: '48g C • 22g P • 12g G',
-                            ingredients: [
-                                { qty: pOats, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' },
-                                { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' },
-                                { qty: 120, unit: 'g', item: 'Pera o Banana a fettine', pId: 'v9' },
-                                { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
-                            ],
-                            steps: ['Cuoci avena e pera in acqua/latte per 4 min, incorpora l\'albume e guarnisci col fondente.']
-                        },
-                        {
-                            id: 'dom-2', time: '11:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0,
-                            title: 'Cubetti di Parmigiano', macros: '0g C • 10g P • 9g G',
-                            ingredients: [
-                                { qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }
-                            ],
-                            steps: ['Spuntino leggero in vista del pasto libero.']
-                        },
-                        {
-                            id: 'dom-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch', timer: 14,
-                            title: 'Risotto Cremoso Zucca e Crudo Croccante', macros: '66g C • 26g P • 12g G',
-                            ingredients: [
-                                { qty: pPasta, unit: 'g', item: 'Riso Carnaroli o Basmati', pId: 'c4' },
-                                { qty: 150, unit: 'g', item: 'Zucca a dadini', pId: 'v3' },
-                                { qty: 50, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' },
-                                { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }
-                            ],
-                            steps: ['Cuoci il riso con la zucca finché diventa cremoso, manteca col Parmigiano e aggiungi il crudo rosolato.']
-                        },
-                        {
-                            id: 'dom-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
-                            title: 'Yogurt Greco 0%', macros: '7g C • 18g P • 0g G',
-                            ingredients: [
-                                { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }
-                            ],
-                            steps: ['Spuntino proteico leggero prima della serata libera.']
-                        },
-                        {
-                            id: 'dom-5', time: '20:30', type: 'Cena / Libero', swapCat: 'dinner', timer: 0,
-                            title: 'Carpaccio di Bresaola oppure Cena Libera', macros: 'Pasto Libero Settimanale',
-                            ingredients: [
-                                { qty: isFemaleActive ? 90 : 120, unit: 'g', item: 'Bresaola (oppure Pizza/Cena fuori)', pId: 'p11' },
-                                { qty: 20, unit: 'g', item: 'Grana a scaglie', pId: 'p14' },
-                                { qty: 50, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }
-                            ],
-                            steps: ['Goditi il tuo pasto libero settimanale bevendo abbondante acqua!']
-                        }
+                        { id: 'dom-1', time: '09:00', type: 'Colazione', swapCat: 'breakfast', timer: 5, title: 'Porridge Caldo Pera, Cannella e Fondente', macros: '48g C • 22g P • 12g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' }, { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 120, unit: 'g', item: 'Pera o Banana a fettine', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Cuoci avena e pera in acqua/latte per 4 min, incorpora l\'albume e guarnisci col fondente.'] },
+                        { id: 'dom-2', time: '11:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Cubetti di Parmigiano', macros: '0g C • 10g P • 9g G', ingredients: [{ qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Spuntino leggero in vista del pasto libero.'] },
+                        { id: 'dom-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch', timer: 14, title: 'Risotto Cremoso Zucca e Crudo Croccante', macros: '66g C • 26g P • 12g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Riso Carnaroli o Basmati', pId: 'c4' }, { qty: 150, unit: 'g', item: 'Zucca a dadini', pId: 'v3' }, { qty: 50, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' }, { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Cuoci il riso con la zucca finché diventa cremoso, manteca col Parmigiano e aggiungi il crudo rosolato.'] },
+                        { id: 'dom-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco 0%', macros: '7g C • 18g P • 0g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }], steps: ['Spuntino proteico leggero prima della serata libera.'] },
+                        { id: 'dom-5', time: '20:30', type: 'Cena / Libero', swapCat: 'dinner', timer: 0, title: 'Carpaccio di Bresaola oppure Cena Libera', macros: 'Pasto Libero Settimanale', ingredients: [{ qty: isFemaleActive ? 90 : 120, unit: 'g', item: 'Bresaola (oppure Pizza/Cena fuori)', pId: 'p11' }, { qty: 20, unit: 'g', item: 'Grana a scaglie', pId: 'p14' }, { qty: 50, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }], steps: ['Goditi il tuo pasto libero settimanale bevendo abbondante acqua!'] }
                     ]
                 }
             ];
         }
 
-        // =========================================================================
-        // SCHEDE DI ALLENAMENTO DIFFERENZIATE (UOMO vs DONNA)
-        // =========================================================================
         function buildWorkoutProgram(isFemale) {
             if (!isFemale) {
-                // SCHEDA GIOVANNI (Focus Upper/Lower & Metabolico)
                 return [
                     {
                         id: 'wo-a', dayLabel: 'Martedì', shortTitle: 'Scheda A', title: 'Upper Body & Spinta', subtitle: 'Martedì • Ore 07:00 • Ipertrofia',
                         exercises: [
-                            { id: 'ex-a1', name: 'Chest Press Orizzontale', primaryMuscle: 'Gran Pettorale', secondaryMuscle: 'Deltoide Ant. • Tricipiti', muscleGroup: 'chest', tut: '2-0-1-0', rest: 90, videoQuery: 'Chest+Press+esecuzione', note: 'Adduci le scapole contro lo schienale. Scendi controllato in 2 secondi.', defaultSets: [{ type: 'W', kg: 35, reps: 12 }, { type: 'N', kg: 50, reps: 10 }, { type: 'N', kg: 55, reps: 10 }, { type: 'N', kg: 55, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 12', '47.5kg x 10', '50kg x 10', '50kg x 9'] }] },
-                            { id: 'ex-a2', name: 'Lat Machine Avanti Presa Prona', primaryMuscle: 'Gran Dorsale', secondaryMuscle: 'Bicipiti', muscleGroup: 'back', tut: '2-1-1-1', rest: 90, videoQuery: 'Lat+Machine+avanti+esecuzione', note: 'Petto alto, tira la sbarra verso la clavicola spingendo i gomiti in basso.', defaultSets: [{ type: 'W', kg: 40, reps: 12 }, { type: 'N', kg: 55, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'D', kg: 45, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['40kg x 12', '52.5kg x 10', '55kg x 10', '45kg x 12'] }] },
-                            { id: 'ex-a3', name: 'Shoulder Press con Manubri', primaryMuscle: 'Deltoidi', secondaryMuscle: 'Tricipiti', muscleGroup: 'shoulders', tut: '2-0-1-0', rest: 90, videoQuery: 'Shoulder+Press+manubri', note: 'Gomiti leggermente chiusi in avanti (piano scapolare).', defaultSets: [{ type: 'N', kg: 16, reps: 10 }, { type: 'N', kg: 18, reps: 10 }, { type: 'N', kg: 18, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['14kg x 10', '16kg x 10', '16kg x 9'] }] },
-                            { id: 'ex-a4', name: 'Alzate Laterali con Manubri', primaryMuscle: 'Deltoide Laterale', secondaryMuscle: 'Trapezio', muscleGroup: 'shoulders', tut: '2-1-1-1', rest: 60, videoQuery: 'Alzate+laterali+manubri', note: 'Spingi i manubri verso le pareti laterali fino ad altezza spalle.', defaultSets: [{ type: 'N', kg: 8, reps: 15 }, { type: 'N', kg: 10, reps: 12 }, { type: 'D', kg: 8, reps: 15 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['8kg x 15', '8kg x 12', '6kg x 15'] }] },
-                            { id: 'ex-a5', name: 'Pushdown Tricipiti con Corda', primaryMuscle: 'Tricipiti', secondaryMuscle: 'Anconeo', muscleGroup: 'arms', tut: '2-0-1-2', rest: 60, videoQuery: 'Pushdown+corda+tricipiti', note: 'Gomiti incollati ai fianchi, apri la corda nel punto basso.', defaultSets: [{ type: 'N', kg: 20, reps: 12 }, { type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 25, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['20kg x 12', '22.5kg x 12', '22.5kg x 10'] }] }
+                            { id: 'ex-a1', name: 'Chest Press Orizzontale', primaryMuscle: 'Gran Pettorale', secondaryMuscle: 'Deltoide Ant. • Tricipiti', animType: 'push', tut: '2-0-1-0', rest: 90, note: 'Adduci le scapole contro lo schienale. Scendi controllato in 2 secondi.', defaultSets: [{ type: 'W', kg: 35, reps: 12 }, { type: 'N', kg: 50, reps: 10 }, { type: 'N', kg: 55, reps: 10 }, { type: 'N', kg: 55, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 12', '47.5kg x 10', '50kg x 10', '50kg x 9'] }] },
+                            { id: 'ex-a2', name: 'Lat Machine Avanti Presa Prona', primaryMuscle: 'Gran Dorsale', secondaryMuscle: 'Bicipiti', animType: 'pull', tut: '2-1-1-1', rest: 90, note: 'Petto alto, tira la sbarra verso la clavicola spingendo i gomiti in basso.', defaultSets: [{ type: 'W', kg: 40, reps: 12 }, { type: 'N', kg: 55, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'D', kg: 45, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['40kg x 12', '52.5kg x 10', '55kg x 10', '45kg x 12'] }] },
+                            { id: 'ex-a3', name: 'Shoulder Press con Manubri', primaryMuscle: 'Deltoidi', secondaryMuscle: 'Tricipiti', animType: 'push', tut: '2-0-1-0', rest: 90, note: 'Gomiti leggermente chiusi in avanti (piano scapolare).', defaultSets: [{ type: 'N', kg: 16, reps: 10 }, { type: 'N', kg: 18, reps: 10 }, { type: 'N', kg: 18, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['14kg x 10', '16kg x 10', '16kg x 9'] }] },
+                            { id: 'ex-a4', name: 'Alzate Laterali con Manubri', primaryMuscle: 'Deltoide Laterale', secondaryMuscle: 'Trapezio', animType: 'push', tut: '2-1-1-1', rest: 60, note: 'Spingi i manubri verso le pareti laterali fino ad altezza spalle.', defaultSets: [{ type: 'N', kg: 8, reps: 15 }, { type: 'N', kg: 10, reps: 12 }, { type: 'D', kg: 8, reps: 15 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['8kg x 15', '8kg x 12', '6kg x 15'] }] },
+                            { id: 'ex-a5', name: 'Pushdown Tricipiti con Corda', primaryMuscle: 'Tricipiti', secondaryMuscle: 'Anconeo', animType: 'push', tut: '2-0-1-2', rest: 60, note: 'Gomiti incollati ai fianchi, apri la corda nel punto basso.', defaultSets: [{ type: 'N', kg: 20, reps: 12 }, { type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 25, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['20kg x 12', '22.5kg x 12', '22.5kg x 10'] }] }
                         ]
                     },
                     {
                         id: 'wo-b', dayLabel: 'Giovedì', shortTitle: 'Scheda B', title: 'Gambe, Glutei & Core', subtitle: 'Giovedì • Ore 07:00 • Alto Consumo',
                         exercises: [
-                            { id: 'ex-b1', name: 'Leg Press 45°', primaryMuscle: 'Quadricipiti • Glutei', secondaryMuscle: 'Femorali', muscleGroup: 'legs', tut: '3-0-1-0', rest: 120, videoQuery: 'Leg+Press+45+esecuzione', note: 'Piedi larghezza spalle, spingi coi talloni senza bloccare le ginocchia.', defaultSets: [{ type: 'W', kg: 80, reps: 15 }, { type: 'N', kg: 110, reps: 12 }, { type: 'N', kg: 130, reps: 10 }, { type: 'N', kg: 140, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['80kg x 15', '110kg x 12', '120kg x 10', '130kg x 10'] }] },
-                            { id: 'ex-b2', name: 'Leg Curl Seduto', primaryMuscle: 'Bicipite Femorale', secondaryMuscle: 'Polpacci', muscleGroup: 'legs', tut: '2-0-1-1', rest: 90, videoQuery: 'Leg+Curl+seduto', note: 'Trattieni 1 secondo in massima chiusura.', defaultSets: [{ type: 'N', kg: 45, reps: 12 }, { type: 'N', kg: 50, reps: 12 }, { type: 'N', kg: 55, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['45kg x 12', '50kg x 12', '50kg x 10'] }] },
-                            { id: 'ex-b3', name: 'Leg Extension', primaryMuscle: 'Quadricipiti', secondaryMuscle: 'Vasto Mediale', muscleGroup: 'legs', tut: '2-0-1-2', rest: 75, videoQuery: 'Leg+Extension+esecuzione', note: 'Contrai 2 secondi in cima.', defaultSets: [{ type: 'N', kg: 40, reps: 15 }, { type: 'N', kg: 45, reps: 12 }, { type: 'D', kg: 35, reps: 15 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 15', '40kg x 12', '30kg x 15'] }] },
-                            { id: 'ex-b4', name: 'Crunch Addominali', primaryMuscle: 'Retto Addome', secondaryMuscle: 'Obliqui', muscleGroup: 'core', tut: '2-1-1-1', rest: 60, videoQuery: 'Crunch+addominali', note: 'Espira tutta l\'aria chiudendo l\'addome.', defaultSets: [{ type: 'N', kg: 30, reps: 15 }, { type: 'N', kg: 35, reps: 15 }, { type: 'N', kg: 35, reps: 15 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 15', '30kg x 15', '35kg x 12'] }] }
+                            { id: 'ex-b1', name: 'Leg Press 45°', primaryMuscle: 'Quadricipiti • Glutei', secondaryMuscle: 'Femorali', animType: 'legs', tut: '3-0-1-0', rest: 120, note: 'Piedi larghezza spalle, spingi coi talloni senza bloccare le ginocchia.', defaultSets: [{ type: 'W', kg: 80, reps: 15 }, { type: 'N', kg: 110, reps: 12 }, { type: 'N', kg: 130, reps: 10 }, { type: 'N', kg: 140, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['80kg x 15', '110kg x 12', '120kg x 10', '130kg x 10'] }] },
+                            { id: 'ex-b2', name: 'Leg Curl Seduto', primaryMuscle: 'Bicipite Femorale', secondaryMuscle: 'Polpacci', animType: 'legs', tut: '2-0-1-1', rest: 90, note: 'Trattieni 1 secondo in massima chiusura.', defaultSets: [{ type: 'N', kg: 45, reps: 12 }, { type: 'N', kg: 50, reps: 12 }, { type: 'N', kg: 55, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['45kg x 12', '50kg x 12', '50kg x 10'] }] },
+                            { id: 'ex-b3', name: 'Leg Extension', primaryMuscle: 'Quadricipiti', secondaryMuscle: 'Vasto Mediale', animType: 'legs', tut: '2-0-1-2', rest: 75, note: 'Contrai 2 secondi in cima.', defaultSets: [{ type: 'N', kg: 40, reps: 15 }, { type: 'N', kg: 45, reps: 12 }, { type: 'D', kg: 35, reps: 15 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 15', '40kg x 12', '30kg x 15'] }] },
+                            { id: 'ex-b4', name: 'Crunch Addominali', primaryMuscle: 'Retto Addome', secondaryMuscle: 'Obliqui', animType: 'hip', tut: '2-1-1-1', rest: 60, note: 'Espira tutta l\'aria chiudendo l\'addome.', defaultSets: [{ type: 'N', kg: 30, reps: 15 }, { type: 'N', kg: 35, reps: 15 }, { type: 'N', kg: 35, reps: 15 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 15', '30kg x 15', '35kg x 12'] }] }
                         ]
                     },
                     {
                         id: 'wo-c', dayLabel: 'Sabato', shortTitle: 'Scheda C', title: 'Dorso, Braccia & Full Body', subtitle: 'Sabato • Ore 09:00 • Volume',
                         exercises: [
-                            { id: 'ex-c1', name: 'Pulley Basso con Triangolo', primaryMuscle: 'Centro Schiena', secondaryMuscle: 'Bicipiti', muscleGroup: 'back', tut: '2-0-1-1', rest: 90, videoQuery: 'Pulley+basso+esecuzione', note: 'Schiena dritta, chiudi le scapole portando il triangolo all\'ombelico.', defaultSets: [{ type: 'W', kg: 40, reps: 12 }, { type: 'N', kg: 55, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'N', kg: 60, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['40kg x 12', '50kg x 10', '55kg x 10', '55kg x 10'] }] },
-                            { id: 'ex-c2', name: 'Panca Inclinata 30° Manubri', primaryMuscle: 'Pettorale Alto', secondaryMuscle: 'Spalle • Tricipiti', muscleGroup: 'chest', tut: '2-1-1-0', rest: 90, videoQuery: 'Panca+inclinata+manubri', note: 'Allunga bene il pettorale in discesa.', defaultSets: [{ type: 'N', kg: 20, reps: 10 }, { type: 'N', kg: 22, reps: 10 }, { type: 'N', kg: 24, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['18kg x 10', '20kg x 10', '22kg x 8'] }] },
-                            { id: 'ex-c3', name: 'Curl Bicipiti con Manubri', primaryMuscle: 'Bicipiti', secondaryMuscle: 'Avambracci', muscleGroup: 'arms', tut: '2-0-1-1', rest: 60, videoQuery: 'Curl+manubri+bicipiti', note: 'Supina il polso salendo senza oscillare col busto.', defaultSets: [{ type: 'N', kg: 10, reps: 12 }, { type: 'N', kg: 12, reps: 10 }, { type: 'D', kg: 8, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 12', '12kg x 10', '8kg x 12'] }] }
+                            { id: 'ex-c1', name: 'Pulley Basso con Triangolo', primaryMuscle: 'Centro Schiena', secondaryMuscle: 'Bicipiti', animType: 'pull', tut: '2-0-1-1', rest: 90, note: 'Schiena dritta, chiudi le scapole portando il triangolo all\'ombelico.', defaultSets: [{ type: 'W', kg: 40, reps: 12 }, { type: 'N', kg: 55, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'N', kg: 60, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['40kg x 12', '50kg x 10', '55kg x 10', '55kg x 10'] }] },
+                            { id: 'ex-c2', name: 'Panca Inclinata 30° Manubri', primaryMuscle: 'Pettorale Alto', secondaryMuscle: 'Spalle • Tricipiti', animType: 'push', tut: '2-1-1-0', rest: 90, note: 'Allunga bene il pettorale in discesa.', defaultSets: [{ type: 'N', kg: 20, reps: 10 }, { type: 'N', kg: 22, reps: 10 }, { type: 'N', kg: 24, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['18kg x 10', '20kg x 10', '22kg x 8'] }] },
+                            { id: 'ex-c3', name: 'Curl Bicipiti con Manubri', primaryMuscle: 'Bicipiti', secondaryMuscle: 'Avambracci', animType: 'pull', tut: '2-0-1-1', rest: 60, note: 'Supina il polso salendo senza oscillare col busto.', defaultSets: [{ type: 'N', kg: 10, reps: 12 }, { type: 'N', kg: 12, reps: 10 }, { type: 'D', kg: 8, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 12', '12kg x 10', '8kg x 12'] }] }
                         ]
                     }
                 ];
             } else {
-                // SCHEDA RAGAZZA (23a, 170cm, 67kg — Focus Glutei, Femorali, Core & Tonificazione Upper)
                 return [
                     {
                         id: 'wo-f-a', dayLabel: 'Martedì', shortTitle: 'Scheda A', title: 'Glutei Focus & Femorali', subtitle: 'Martedì • Ore 07:00 • Rimodellamento Lower',
                         exercises: [
-                            { id: 'ex-fa1', name: 'Hip Thrust con Bilanciere o Macchina', primaryMuscle: 'Grande Gluteo', secondaryMuscle: 'Femorali • Core', muscleGroup: 'legs', tut: '2-0-1-2', rest: 90, videoQuery: 'Hip+Thrust+esecuzione+corretta', note: 'Mento verso lo sterno, spingi coi talloni e blocca 2 secondi in retroversione di bacino in alto.', defaultSets: [{ type: 'W', kg: 30, reps: 12 }, { type: 'N', kg: 50, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'N', kg: 60, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 12', '45kg x 10', '55kg x 10', '55kg x 8'] }] },
-                            { id: 'ex-fa2', name: 'Leg Press 45° Piedi Alti e Larghi', primaryMuscle: 'Glutei • Femorali', secondaryMuscle: 'Quadricipiti', muscleGroup: 'legs', tut: '3-0-1-0', rest: 90, videoQuery: 'Leg+Press+piedi+alti+glutei', note: 'Posiziona i piedi nella parte alta della pedana per spostare il focus sui glutei.', defaultSets: [{ type: 'N', kg: 60, reps: 12 }, { type: 'N', kg: 70, reps: 12 }, { type: 'N', kg: 80, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['60kg x 12', '70kg x 10', '75kg x 10'] }] },
-                            { id: 'ex-fa3', name: 'Stacco Rumeno con Manubri (RDL)', primaryMuscle: 'Catena Posteriore • Glutei', secondaryMuscle: 'Lombari', muscleGroup: 'legs', tut: '3-1-1-0', rest: 90, videoQuery: 'Stacco+rumeno+manubri+glutei', note: 'Porta indietro il bacino come per chiudere una portiera col sedere, manubri attaccati alle tibie.', defaultSets: [{ type: 'N', kg: 14, reps: 12 }, { type: 'N', kg: 16, reps: 10 }, { type: 'N', kg: 16, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['12kg x 12', '14kg x 10', '16kg x 10'] }] },
-                            { id: 'ex-fa4', name: 'Abductor Machine (Aperture Gluteo Medio)', primaryMuscle: 'Gluteo Medio (Lato Alto)', secondaryMuscle: 'Tensore Fascia Lata', muscleGroup: 'legs', tut: '2-0-1-2', rest: 60, videoQuery: 'Abductor+machine+esecuzione', note: 'Trattieni 2 secondi in massima apertura.', defaultSets: [{ type: 'N', kg: 40, reps: 15 }, { type: 'N', kg: 45, reps: 15 }, { type: 'D', kg: 35, reps: 20 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 15', '40kg x 15', '30kg x 20'] }] }
+                            { id: 'ex-fa1', name: 'Hip Thrust con Bilanciere o Macchina', primaryMuscle: 'Grande Gluteo', secondaryMuscle: 'Femorali • Core', animType: 'hip', tut: '2-0-1-2', rest: 90, note: 'Mento verso lo sterno, spingi coi talloni e blocca 2 secondi in cima.', defaultSets: [{ type: 'W', kg: 30, reps: 12 }, { type: 'N', kg: 50, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'N', kg: 60, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 12', '45kg x 10', '55kg x 10', '55kg x 8'] }] },
+                            { id: 'ex-fa2', name: 'Leg Press 45° Piedi Alti', primaryMuscle: 'Glutei • Femorali', secondaryMuscle: 'Quadricipiti', animType: 'legs', tut: '3-0-1-0', rest: 90, note: 'Piedi nella parte alta della pedana per spostare il focus sui glutei.', defaultSets: [{ type: 'N', kg: 60, reps: 12 }, { type: 'N', kg: 70, reps: 12 }, { type: 'N', kg: 80, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['60kg x 12', '70kg x 10', '75kg x 10'] }] },
+                            { id: 'ex-fa3', name: 'Stacco Rumeno con Manubri (RDL)', primaryMuscle: 'Catena Posteriore • Glutei', secondaryMuscle: 'Lombari', animType: 'hip', tut: '3-1-1-0', rest: 90, note: 'Porta indietro il bacino tenendo i manubri vicini alle tibie.', defaultSets: [{ type: 'N', kg: 14, reps: 12 }, { type: 'N', kg: 16, reps: 10 }, { type: 'N', kg: 16, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['12kg x 12', '14kg x 10', '16kg x 10'] }] },
+                            { id: 'ex-fa4', name: 'Abductor Machine', primaryMuscle: 'Gluteo Medio', secondaryMuscle: 'Tensore Fascia Lata', animType: 'legs', tut: '2-0-1-2', rest: 60, note: 'Trattieni 2 secondi in massima apertura.', defaultSets: [{ type: 'N', kg: 40, reps: 15 }, { type: 'N', kg: 45, reps: 15 }, { type: 'D', kg: 35, reps: 20 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 15', '40kg x 15', '30kg x 20'] }] }
                         ]
                     },
                     {
                         id: 'wo-f-b', dayLabel: 'Giovedì', shortTitle: 'Scheda B', title: 'Upper Body Tonificazione & Postura', subtitle: 'Giovedì • Ore 07:00 • Schiena, Spalle & Braccia',
                         exercises: [
-                            { id: 'ex-fb1', name: 'Lat Machine Avanti Presa Media', primaryMuscle: 'Dorsali (Effetto Vita Stretta)', secondaryMuscle: 'Bicipiti', muscleGroup: 'back', tut: '2-0-1-1', rest: 75, videoQuery: 'Lat+machine+donna+esecuzione', note: 'Abbassa le spalle prima di tirare la sbarra al petto.', defaultSets: [{ type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 35, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['25kg x 12', '30kg x 10', '30kg x 10'] }] },
-                            { id: 'ex-fb2', name: 'Pulley Basso con Triangolo', primaryMuscle: 'Postura Centro Schiena', secondaryMuscle: 'Spalle Post.', muscleGroup: 'back', tut: '2-0-1-1', rest: 75, videoQuery: 'Pulley+basso+esecuzione', note: 'Ottimo per scaricare la schiena dal lavoro al supermercato.', defaultSets: [{ type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 30, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['25kg x 12', '25kg x 12', '30kg x 10'] }] },
-                            { id: 'ex-fb3', name: 'Shoulder Press con Manubri + Alzate Laterali', primaryMuscle: 'Deltoidi Tonici', secondaryMuscle: 'Tricipiti', muscleGroup: 'shoulders', tut: '2-0-1-1', rest: 60, videoQuery: 'Shoulder+press+manubri', note: 'Movimento controllato per definire la linea delle spalle.', defaultSets: [{ type: 'N', kg: 6, reps: 12 }, { type: 'N', kg: 8, reps: 10 }, { type: 'N', kg: 8, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['6kg x 12', '6kg x 12', '8kg x 8'] }] },
-                            { id: 'ex-fb4', name: 'Pushdown Tricipiti ai Cavi', primaryMuscle: 'Tricipiti (Retro Braccio)', secondaryMuscle: 'Spalle', muscleGroup: 'arms', tut: '2-0-1-2', rest: 60, videoQuery: 'Pushdown+tricipiti+cavo', note: 'Stendi completamente le braccia verso il basso.', defaultSets: [{ type: 'N', kg: 12, reps: 15 }, { type: 'N', kg: 15, reps: 12 }, { type: 'N', kg: 15, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 15', '12.5kg x 12', '12.5kg x 12'] }] }
+                            { id: 'ex-fb1', name: 'Lat Machine Avanti Presa Media', primaryMuscle: 'Dorsali', secondaryMuscle: 'Bicipiti', animType: 'pull', tut: '2-0-1-1', rest: 75, note: 'Abbassa le spalle prima di tirare la sbarra al petto.', defaultSets: [{ type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 35, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['25kg x 12', '30kg x 10', '30kg x 10'] }] },
+                            { id: 'ex-fb2', name: 'Pulley Basso con Triangolo', primaryMuscle: 'Centro Schiena', secondaryMuscle: 'Spalle Post.', animType: 'pull', tut: '2-0-1-1', rest: 75, note: 'Ottimo per migliorare la postura lavorativa.', defaultSets: [{ type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 30, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['25kg x 12', '25kg x 12', '30kg x 10'] }] },
+                            { id: 'ex-fb3', name: 'Shoulder Press con Manubri', primaryMuscle: 'Deltoidi Tonici', secondaryMuscle: 'Tricipiti', animType: 'push', tut: '2-0-1-1', rest: 60, note: 'Movimento controllato per definire la linea delle spalle.', defaultSets: [{ type: 'N', kg: 6, reps: 12 }, { type: 'N', kg: 8, reps: 10 }, { type: 'N', kg: 8, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['6kg x 12', '6kg x 12', '8kg x 8'] }] },
+                            { id: 'ex-fb4', name: 'Pushdown Tricipiti ai Cavi', primaryMuscle: 'Tricipiti', secondaryMuscle: 'Spalle', animType: 'push', tut: '2-0-1-2', rest: 60, note: 'Stendi completamente le braccia verso il basso.', defaultSets: [{ type: 'N', kg: 12, reps: 15 }, { type: 'N', kg: 15, reps: 12 }, { type: 'N', kg: 15, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 15', '12.5kg x 12', '12.5kg x 12'] }] }
                         ]
                     },
                     {
                         id: 'wo-f-c', dayLabel: 'Sabato', shortTitle: 'Scheda C', title: 'Glutei, Gambe & Addome', subtitle: 'Sabato • Ore 09:00 • Full Sculpt',
                         exercises: [
-                            { id: 'ex-fc1', name: 'Squat Bulgaro (o Affondi Dietro con Manubri)', primaryMuscle: 'Glutei • Quadricipiti', secondaryMuscle: 'Core', muscleGroup: 'legs', tut: '2-1-1-0', rest: 90, videoQuery: 'Affondi+dietro+manubri+glutei', note: 'Busto leggermente inclinato in avanti per massimizzare il lavoro sul gluteo.', defaultSets: [{ type: 'N', kg: 8, reps: 10 }, { type: 'N', kg: 10, reps: 10 }, { type: 'N', kg: 10, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['8kg x 10', '8kg x 10', '10kg x 8'] }] },
-                            { id: 'ex-fc2', name: 'Slanci Glutei al Cavo Basso (Kickback)', primaryMuscle: 'Grande Gluteo', secondaryMuscle: 'Femorali', muscleGroup: 'legs', tut: '2-0-1-2', rest: 60, videoQuery: 'Glute+kickback+cavo+cavigliera', note: 'Spingi indietro con la cavigliera senza inarcare la schiena.', defaultSets: [{ type: 'N', kg: 10, reps: 12 }, { type: 'N', kg: 12.5, reps: 12 }, { type: 'N', kg: 15, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 12', '12.5kg x 10', '12.5kg x 10'] }] },
-                            { id: 'ex-fc3', name: 'Leg Curl Seduto', primaryMuscle: 'Femorali', secondaryMuscle: 'Glutei', muscleGroup: 'legs', tut: '2-0-1-1', rest: 75, videoQuery: 'Leg+curl+seduto', note: 'Movimento fluido.', defaultSets: [{ type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 35, reps: 12 }, { type: 'N', kg: 35, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 12', '30kg x 12', '35kg x 10'] }] },
-                            { id: 'ex-fc4', name: 'Plank Isometrico + Crunch', primaryMuscle: 'Core & Addome Piatto', secondaryMuscle: 'Trasverso', muscleGroup: 'core', tut: 'Isometria', rest: 60, videoQuery: 'Plank+addominali+esecuzione', note: 'Tieni l\'ombelico retratto verso la colonna.', defaultSets: [{ type: 'N', kg: 0, reps: 45 }, { type: 'N', kg: 0, reps: 45 }, { type: 'N', kg: 0, reps: 45 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['0kg x 40', '0kg x 40', '0kg x 40'] }] }
+                            { id: 'ex-fc1', name: 'Affondi Dietro con Manubri (o Squat Bulgaro)', primaryMuscle: 'Glutei • Quadricipiti', secondaryMuscle: 'Core', animType: 'legs', tut: '2-1-1-0', rest: 90, note: 'Busto leggermente inclinato in avanti per attivare il gluteo.', defaultSets: [{ type: 'N', kg: 8, reps: 10 }, { type: 'N', kg: 10, reps: 10 }, { type: 'N', kg: 10, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['8kg x 10', '8kg x 10', '10kg x 8'] }] },
+                            { id: 'ex-fc2', name: 'Slanci Glutei al Cavo Basso', primaryMuscle: 'Grande Gluteo', secondaryMuscle: 'Femorali', animType: 'hip', tut: '2-0-1-2', rest: 60, note: 'Spingi indietro con la cavigliera senza inarcare la schiena.', defaultSets: [{ type: 'N', kg: 10, reps: 12 }, { type: 'N', kg: 12.5, reps: 12 }, { type: 'N', kg: 15, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 12', '12.5kg x 10', '12.5kg x 10'] }] },
+                            { id: 'ex-fc3', name: 'Leg Curl Seduto', primaryMuscle: 'Femorali', secondaryMuscle: 'Glutei', animType: 'legs', tut: '2-0-1-1', rest: 75, note: 'Movimento fluido.', defaultSets: [{ type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 35, reps: 12 }, { type: 'N', kg: 35, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 12', '30kg x 12', '35kg x 10'] }] },
+                            { id: 'ex-fc4', name: 'Plank Isometrico + Crunch', primaryMuscle: 'Core & Addome', secondaryMuscle: 'Trasverso', animType: 'hip', tut: 'Isometria', rest: 60, note: 'Tieni l\'ombelico retratto verso la colonna.', defaultSets: [{ type: 'N', kg: 0, reps: 45 }, { type: 'N', kg: 0, reps: 45 }, { type: 'N', kg: 0, reps: 45 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['0kg x 40', '0kg x 40', '0kg x 40'] }] }
                         ]
                     }
                 ];
             }
         }
 
-        // =========================================================================
-        // DATABASE MULTI-UTENTE CON CODICI UNIVOCI (FN-8492 & FN-3105)
-        // =========================================================================
         const defaultPantry = [
             { id: 'p1', name: 'Albume liquido', cat: 'Proteine & Freschi', inStock: false, packSize: 500, packName: 'brick da 500g' },
             { id: 'p2', name: 'Uova fresche', cat: 'Proteine & Freschi', inStock: false, packSize: 6, packName: 'confezione da 6' },
@@ -1205,56 +1162,64 @@
             { id: 'nsv5', label: '🔥 Addome più sgonfio e leggero al risveglio' }
         ];
 
-        const initialDatabase = {
-            'FN-8492': {
-                code: 'FN-8492',
+        // =========================================================================
+        // 4. DATABASE MULTI-TENANT (ISOLAMENTO TOTALE PER STUDIO E SIGLA)
+        // =========================================================================
+        const initialProfessionals = {
+            'PT-KINEXIA': { proCode: 'PT-KINEXIA', role: 'pt', studioName: 'Club Kinexia Fitness', prefix: 'KNX' },
+            'PT-IRON': { proCode: 'PT-IRON', role: 'pt', studioName: 'Iron Gym Club (Studio 2)', prefix: 'IRN' },
+            'NUT-FORLENZA': { proCode: 'NUT-FORLENZA', role: 'nutri', studioName: 'Studio Nutrizione Principale', prefix: 'FOR' },
+            'NUT-ROSSI': { proCode: 'NUT-ROSSI', role: 'nutri', studioName: 'Studio Dott. Rossi (Studio 2)', prefix: 'ROS' }
+        };
+
+        const initialUsers = {
+            'KNX-8492': {
+                code: 'KNX-8492',
                 name: 'Giovanni',
-                bio: '25 anni • 174 cm • Lavoro al PC • Palestra Mar/Gio/Sab (Deficit Ipocalorico)',
+                bio: '25 anni • 174 cm • Lavoro al PC • Palestra Mar/Gio/Sab',
+                ptCode: 'PT-KINEXIA',
+                nutriCode: 'NUT-FORLENZA',
                 startWeight: 110.0,
                 waterTarget: 3.5,
                 weekData: buildSyncedWeekPlan(false),
                 workoutProgram: buildWorkoutProgram(false),
-                completedMeals: {},
-                offPlanMeals: {},
-                swappedMeals: {},
-                water: {},
+                completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
                 pantry: JSON.parse(JSON.stringify(defaultPantry)),
                 weights: [{ date: 'Inizio', val: 110.0 }],
-                prepDone: {},
-                nsvDone: {},
-                workoutLogs: {},
-                workoutHistory: {}
+                prepDone: {}, nsvDone: {}, workoutLogs: {}, workoutHistory: {}
             },
-            'FN-3105': {
-                code: 'FN-3105',
+            'KNX-3105': {
+                code: 'KNX-3105',
                 name: 'La Tua Ragazza',
                 bio: '23 anni • 170 cm • 67 kg • Lavoro attivo in piedi (Supermercato) + Palestra Mar/Gio/Sab',
+                ptCode: 'PT-KINEXIA',
+                nutriCode: 'NUT-FORLENZA',
                 startWeight: 67.0,
                 waterTarget: 3.0,
                 weekData: buildSyncedWeekPlan(true),
                 workoutProgram: buildWorkoutProgram(true),
-                completedMeals: {},
-                offPlanMeals: {},
-                swappedMeals: {},
-                water: {},
+                completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
                 pantry: JSON.parse(JSON.stringify(defaultPantry)),
                 weights: [{ date: 'Inizio', val: 67.0 }],
-                prepDone: {},
-                nsvDone: {},
-                workoutLogs: {},
-                workoutHistory: {}
+                prepDone: {}, nsvDone: {}, workoutLogs: {}, workoutHistory: {}
             }
         };
 
-        let masterState = JSON.parse(localStorage.getItem('fitNutriMultiDB_v10')) || {
+        let masterState = JSON.parse(localStorage.getItem('fitNutriSaaS_v12')) || {
             activeCode: null,
-            adminSelectedCode: 'FN-8492',
-            users: initialDatabase
+            activeProCode: null,
+            adminSelectedCode: 'KNX-8492',
+            adminNutriDayIdx: 0,
+            adminPtDayIdx: 0,
+            professionals: initialProfessionals,
+            users: initialUsers
         };
 
-        // Garantisce che entrambi i profili esistano sempre
-        if (!masterState.users['FN-8492']) masterState.users['FN-8492'] = initialDatabase['FN-8492'];
-        if (!masterState.users['FN-3105']) masterState.users['FN-3105'] = initialDatabase['FN-3105'];
+        if (!masterState.professionals) masterState.professionals = initialProfessionals;
+        if (!masterState.users['KNX-8492']) masterState.users['KNX-8492'] = initialUsers['KNX-8492'];
+        if (!masterState.users['KNX-3105']) masterState.users['KNX-3105'] = initialUsers['KNX-3105'];
+        if (masterState.adminNutriDayIdx === undefined) masterState.adminNutriDayIdx = 0;
+        if (masterState.adminPtDayIdx === undefined) masterState.adminPtDayIdx = 0;
 
         let currentDayIndex = (new Date().getDay() + 6) % 7;
         let currentWorkoutIndex = 0;
@@ -1269,22 +1234,41 @@
         let timerSecondsLeft = 0;
 
         function currentUser() {
-            return masterState.users[masterState.activeCode] || masterState.users['FN-8492'];
+            return masterState.users[masterState.activeCode] || masterState.users['KNX-8492'];
         }
 
-        function saveState() {
-            localStorage.setItem('fitNutriMultiDB_v10', JSON.stringify(masterState));
+        async function saveState(targetClientCode = null) {
+            localStorage.setItem('fitNutriSaaS_v12', JSON.stringify(masterState));
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
                 updateMissingBadge();
                 updateAdherence();
             }
+            const codeToSync = targetClientCode || masterState.activeCode;
+            if (sbClient && codeToSync && masterState.users[codeToSync]) {
+                const u = masterState.users[codeToSync];
+                try {
+                    await sbClient.from('clients').upsert({
+                        client_code: u.code,
+                        name: u.name,
+                        nutri_code: u.nutriCode,
+                        pt_code: u.ptCode,
+                        profile_data: u,
+                        updated_at: new Date().toISOString()
+                    });
+                } catch (e) { console.error('Sync error:', e); }
+            }
+        }
+
+        async function syncAdminChangesToCloud(msg) {
+            await saveState(masterState.adminSelectedCode);
+            alert('✅ ' + msg);
         }
 
         // =========================================================================
-        // AUTENTICAZIONE MULTI-PROFILO (ATLETI, NUTRIZIONISTA, PERSONAL TRAINER)
+        // 5. SISTEMA DI LOGIN (SUPER-ADMIN, NUTRIZIONISTA, PT, CLIENTE)
         // =========================================================================
         function hideAllScreens() {
-            ['screen-login', 'screen-hub', 'screen-admin-nutri', 'screen-admin-pt', 'module-nutrition', 'module-workout'].forEach(id => {
+            ['screen-login', 'screen-super-admin', 'screen-hub', 'screen-admin-nutri', 'screen-admin-pt', 'module-nutrition', 'module-workout'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
         }
@@ -1295,28 +1279,74 @@
             }
         }
 
-        function handleLogin() {
+        async function handleLogin() {
             const raw = document.getElementById('login-code-input').value.trim().toUpperCase();
             document.getElementById('login-error').classList.add('hidden');
 
-            if (raw === 'NUTRI-PRO') {
+            // 1. Accesso Console Proprietario Piattaforma (Giovanni)
+            if (raw === 'ADMIN-MASTER') {
                 hideAllScreens();
-                document.getElementById('screen-admin-nutri').classList.remove('hidden');
-                renderAdminNutri();
+                document.getElementById('screen-super-admin').classList.remove('hidden');
+                renderSuperAdmin();
                 return;
             }
-            if (raw === 'PT-PRO') {
+
+            // 2. Se Supabase è attivo, scarica eventuali nuovi professionisti e clienti dal Cloud
+            if (sbClient) {
+                try {
+                    const { data: proData } = await sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle();
+                    if (proData) {
+                        masterState.professionals[raw] = {
+                            proCode: proData.pro_code,
+                            role: proData.role,
+                            studioName: proData.studio_name,
+                            prefix: proData.prefix
+                        };
+                    }
+                    const { data: cliData } = await sbClient.from('clients').select('*').eq('client_code', raw).maybeSingle();
+                    if (cliData && cliData.profile_data) {
+                        masterState.users[raw] = cliData.profile_data;
+                    }
+                } catch (e) {}
+            }
+
+            // 3. Verifica se è il codice di un Professionista (PT o Nutrizionista)
+            if (masterState.professionals[raw]) {
+                const pro = masterState.professionals[raw];
+                masterState.activeProCode = raw;
+
+                // Se Supabase è attivo, scarica tutti i clienti appartenenti a questo professionista
+                if (sbClient) {
+                    try {
+                        const col = pro.role === 'nutri' ? 'nutri_code' : 'pt_code';
+                        const { data: myCloudClients } = await sbClient.from('clients').select('*').eq(col, raw);
+                        if (myCloudClients) {
+                            myCloudClients.forEach(row => {
+                                if (row.profile_data) masterState.users[row.client_code] = row.profile_data;
+                            });
+                        }
+                    } catch (e) {}
+                }
+
                 hideAllScreens();
-                document.getElementById('screen-admin-pt').classList.remove('hidden');
-                renderAdminPt();
+                if (pro.role === 'nutri') {
+                    document.getElementById('screen-admin-nutri').classList.remove('hidden');
+                    renderAdminNutri();
+                } else {
+                    document.getElementById('screen-admin-pt').classList.remove('hidden');
+                    renderAdminPt();
+                }
                 return;
             }
+
+            // 4. Verifica se è il codice di un Cliente/Atleta
             if (masterState.users[raw]) {
                 masterState.activeCode = raw;
                 saveState();
                 loadUserHub(raw);
                 return;
             }
+
             document.getElementById('login-error').classList.remove('hidden');
         }
 
@@ -1333,6 +1363,7 @@
 
         function logout() {
             masterState.activeCode = null;
+            masterState.activeProCode = null;
             saveState();
             stopTimer();
             document.getElementById('login-code-input').value = '';
@@ -1360,16 +1391,79 @@
         }
 
         // =========================================================================
-        // PORTALI PROFESSIONISTI (NUTRIZIONISTA & PERSONAL TRAINER)
+        // 6. CONSOLE SUPER-ADMIN (PER CREARE NUOVI PT E NUTRIZIONISTI)
         // =========================================================================
+        function renderSuperAdmin() {
+            const list = document.getElementById('sa-pro-list');
+            list.innerHTML = Object.values(masterState.professionals).map(p => `
+                <div class="py-3 flex justify-between items-center">
+                    <div>
+                        <span class="font-extrabold text-stone-900">${p.studioName}</span>
+                        <span class="block text-stone-500">Ruolo: ${p.role === 'nutri' ? 'Nutrizionista' : 'PT / Palestra'} • Sigla Clienti: <strong>${p.prefix}-XXXX</strong></span>
+                    </div>
+                    <span class="bg-stone-100 border border-stone-200 px-3 py-1 rounded-xl font-mono font-extrabold text-emerald-800">${p.proCode}</span>
+                </div>
+            `).join('');
+        }
+
+        async function createNewProfessional() {
+            const role = document.getElementById('sa-role').value;
+            const prefix = document.getElementById('sa-prefix').value.trim().toUpperCase();
+            const studioName = document.getElementById('sa-name').value.trim();
+            const proCode = document.getElementById('sa-code').value.trim().toUpperCase();
+
+            if (!prefix || !studioName || !proCode) return alert('Compila tutti i campi per creare la licenza.');
+
+            masterState.professionals[proCode] = { proCode, role, studioName, prefix };
+            localStorage.setItem('fitNutriSaaS_v12', JSON.stringify(masterState));
+
+            if (sbClient) {
+                await sbClient.from('professionals').upsert({ pro_code: proCode, role, studio_name: studioName, prefix });
+            }
+
+            document.getElementById('sa-prefix').value = '';
+            document.getElementById('sa-name').value = '';
+            document.getElementById('sa-code').value = '';
+            renderSuperAdmin();
+            alert(`✅ Licenza attivata! Il professionista può ora entrare con il codice: ${proCode} e i suoi clienti avranno sigla ${prefix}-XXXX.`);
+        }
+
+        // =========================================================================
+        // 7. EDITOR COMPLETO NUTRIZIONISTA (GIORNO PER GIORNO, PIATTI, GRAMMATURE)
+        // =========================================================================
+        function getMyClients(role, proCode) {
+            return Object.values(masterState.users).filter(u => {
+                if (role === 'nutri') return u.nutriCode === proCode;
+                if (role === 'pt') return u.ptCode === proCode;
+                return false;
+            });
+        }
+
         function renderAdminNutri() {
+            const pro = masterState.professionals[masterState.activeProCode];
+            document.getElementById('nutri-studio-badge').textContent = `${pro.studioName} (${pro.proCode})`;
+            document.getElementById('nutri-prefix-label').textContent = `Sigla: ${pro.prefix}-XXXX`;
+
+            const myClients = getMyClients('nutri', pro.proCode);
             const list = document.getElementById('nutri-patient-list');
             list.innerHTML = '';
-            Object.values(masterState.users).forEach(u => {
+
+            if (myClients.length === 0) {
+                list.innerHTML = `<div class="col-span-2 p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun paziente ancora associato al tuo studio (${pro.prefix}). Clicca il bottone verde qui sotto per creare il primo paziente!</div>`;
+                document.getElementById('nutri-editor-box').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('nutri-editor-box').classList.remove('hidden');
+            if (!myClients.find(c => c.code === masterState.adminSelectedCode)) {
+                masterState.adminSelectedCode = myClients[0].code;
+            }
+
+            myClients.forEach(u => {
                 const isSel = u.code === masterState.adminSelectedCode;
                 const btn = document.createElement('button');
                 btn.onclick = () => { masterState.adminSelectedCode = u.code; renderAdminNutri(); };
-                btn.className = `p-3 rounded-2xl border text-left transition ${isSel ? 'bg-emerald-800 text-white border-emerald-800 font-extrabold' : 'bg-stone-50 text-stone-800 border-stone-200 font-bold'}`;
+                btn.className = `p-3 rounded-2xl border text-left transition ${isSel ? 'bg-emerald-800 text-white border-emerald-800 font-extrabold shadow-sm' : 'bg-stone-50 text-stone-800 border-stone-200 font-bold'}`;
                 btn.innerHTML = `<span class="block text-[10px] opacity-80">${u.code}</span><span class="text-sm truncate block">${u.name}</span>`;
                 list.appendChild(btn);
             });
@@ -1377,90 +1471,360 @@
             const selUser = masterState.users[masterState.adminSelectedCode];
             document.getElementById('nutri-editing-badge').textContent = `ID: ${selUser.code}`;
             document.getElementById('adm-nutri-name').value = selUser.name;
-            document.getElementById('adm-nutri-kcal').value = selUser.weekData[0].kcal;
-            document.getElementById('adm-nutri-c').value = selUser.weekData[0].c;
-            document.getElementById('adm-nutri-p').value = selUser.weekData[0].p;
-            document.getElementById('adm-nutri-g').value = selUser.weekData[0].g;
             document.getElementById('adm-nutri-water').value = selUser.waterTarget || 3.0;
+            document.getElementById('adm-nutri-bio').value = selUser.bio || '';
+
+            // Renderizza selettore dei 7 giorni (Lun - Dom)
+            const dayTabs = document.getElementById('adm-nutri-day-tabs');
+            dayTabs.innerHTML = '';
+            selUser.weekData.forEach((d, idx) => {
+                const isDaySel = idx === masterState.adminNutriDayIdx;
+                const b = document.createElement('button');
+                b.onclick = () => { masterState.adminNutriDayIdx = idx; renderAdminNutri(); };
+                b.className = `py-2.5 rounded-xl text-xs font-extrabold border transition ${isDaySel ? 'bg-emerald-800 text-white border-emerald-800' : 'bg-stone-50 text-stone-600 border-stone-200'}`;
+                b.textContent = d.short;
+                dayTabs.appendChild(b);
+            });
+
+            const activeDay = selUser.weekData[masterState.adminNutriDayIdx];
+            document.getElementById('adm-day-kcal').value = activeDay.kcal;
+            document.getElementById('adm-day-c').value = activeDay.c;
+            document.getElementById('adm-day-p').value = activeDay.p;
+            document.getElementById('adm-day-g').value = activeDay.g;
+            document.getElementById('adm-day-workout').checked = !!activeDay.workout;
+            document.getElementById('adm-day-workout-note').value = activeDay.workoutNote || '';
+
+            // Renderizza Editor di ogni singolo pasto del giorno selezionato
+            const mealsList = document.getElementById('adm-nutri-meals-list');
+            mealsList.innerHTML = '';
+
+            activeDay.meals.forEach((meal, mIdx) => {
+                const card = document.createElement('div');
+                card.className = 'soft-card rounded-3xl p-5 space-y-3 border-l-4 border-emerald-700';
+
+                const ingInputsHtml = meal.ingredients.map((ing, iIdx) => `
+                    <div class="flex items-center space-x-1.5">
+                        <input type="text" value="${ing.item}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'item', this.value)" placeholder="Alimento (es. Pasta integrale)" class="flex-1 min-w-0 bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs font-bold text-stone-900">
+                        <input type="number" value="${ing.qty}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'qty', this.value)" placeholder="Q.tà" class="w-16 bg-white border border-stone-200 rounded-xl px-2 py-2 text-xs font-extrabold text-center text-stone-900">
+                        <input type="text" value="${ing.unit || 'g'}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'unit', this.value)" placeholder="g/ml" class="w-12 bg-white border border-stone-200 rounded-xl px-1.5 py-2 text-xs font-bold text-center text-stone-500">
+                        <button onclick="removeAdminMealIng(${mIdx}, ${iIdx})" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center gap-2">
+                        <div class="flex items-center space-x-2 flex-1">
+                            <input type="text" value="${meal.time}" onchange="updateAdminMealField(${mIdx}, 'time', this.value)" class="w-16 bg-emerald-50 border border-emerald-200 rounded-lg px-2 py-1 text-xs font-extrabold text-emerald-900 text-center">
+                            <input type="text" value="${meal.type}" onchange="updateAdminMealField(${mIdx}, 'type', this.value)" class="flex-1 bg-stone-50 border border-stone-200 rounded-lg px-2.5 py-1 text-xs font-extrabold uppercase text-stone-700">
+                        </div>
+                        <button onclick="deleteAdminMeal(${mIdx})" class="text-xs font-bold text-rose-600 px-2 py-1 rounded-lg bg-rose-50">Elimina Pasto</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2 text-xs">
+                        <div>
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Nome Piatto / Ricetta</label>
+                            <input type="text" value="${meal.title}" onchange="updateAdminMealField(${mIdx}, 'title', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-sm text-stone-900 mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Macro del Pasto</label>
+                            <input type="text" value="${meal.macros}" onchange="updateAdminMealField(${mIdx}, 'macros', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-1.5 font-semibold text-emerald-800 mt-0.5">
+                        </div>
+                    </div>
+
+                    <!-- Ingredienti e Grammature del Pasto -->
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/70 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-extrabold uppercase text-stone-500">Ingredienti & Grammature</span>
+                            <button onclick="addAdminMealIng(${mIdx})" class="text-[11px] font-extrabold text-emerald-800">+ Aggiungi Alimento</button>
+                        </div>
+                        <div class="space-y-2">${ingInputsHtml}</div>
+                    </div>
+
+                    <!-- Procedimento / Ricetta Passo-Passo -->
+                    <div>
+                        <label class="font-bold text-stone-400 text-[10px] uppercase block mb-1">Ricetta / Preparazione Passo-Passo (1 passaggio per riga)</label>
+                        <textarea rows="3" onchange="updateAdminMealSteps(${mIdx}, this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-700 leading-relaxed">${(meal.steps || []).join('\n')}</textarea>
+                    </div>
+                `;
+                mealsList.appendChild(card);
+            });
         }
 
-        function createNewPatientCode() {
-            const randNum = Math.floor(1000 + Math.random() * 9000);
-            const newCode = `FN-${randNum}`;
-            const patientName = prompt('Inserisci nome o riferimento del nuovo paziente (il login avverrà solo tramite il codice ' + newCode + '):');
-            if (!patientName) return;
-
-            masterState.users[newCode] = {
-                code: newCode,
-                name: patientName,
-                bio: 'Profilo personalizzato creato dallo Studio',
-                startWeight: 75.0,
-                waterTarget: 3.0,
-                weekData: buildSyncedWeekPlan(true),
-                workoutProgram: buildWorkoutProgram(true),
-                completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
-                pantry: JSON.parse(JSON.stringify(defaultPantry)),
-                weights: [{ date: 'Inizio', val: 75.0 }],
-                prepDone: {}, nsvDone: {}, workoutLogs: {}, workoutHistory: {}
-            };
-            masterState.adminSelectedCode = newCode;
-            saveState();
-            renderAdminNutri();
-            alert(`✅ Nuovo profilo creato! Comunica al paziente il suo Codice Univoco: ${newCode}`);
-        }
-
-        function saveAdminNutrition() {
+        function updateClientBasicInfo() {
             const selUser = masterState.users[masterState.adminSelectedCode];
             selUser.name = document.getElementById('adm-nutri-name').value.trim() || selUser.name;
-            const kcal = document.getElementById('adm-nutri-kcal').value.trim();
-            const c = document.getElementById('adm-nutri-c').value.trim();
-            const p = document.getElementById('adm-nutri-p').value.trim();
-            const g = document.getElementById('adm-nutri-g').value.trim();
             selUser.waterTarget = parseFloat(document.getElementById('adm-nutri-water').value) || 3.0;
-
-            selUser.weekData.forEach(d => {
-                d.kcal = kcal; d.c = c; d.p = p; d.g = g;
-            });
-            saveState();
-            renderAdminNutri();
-            alert(`✅ Parametri nutrizionali aggiornati per il codice ${selUser.code}!`);
+            selUser.bio = document.getElementById('adm-nutri-bio').value.trim();
+            saveState(selUser.code);
         }
 
+        function updateDayMacros() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeDay = selUser.weekData[masterState.adminNutriDayIdx];
+            activeDay.kcal = document.getElementById('adm-day-kcal').value.trim();
+            activeDay.c = document.getElementById('adm-day-c').value.trim();
+            activeDay.p = document.getElementById('adm-day-p').value.trim();
+            activeDay.g = document.getElementById('adm-day-g').value.trim();
+            activeDay.workout = document.getElementById('adm-day-workout').checked;
+            activeDay.workoutNote = document.getElementById('adm-day-workout-note').value.trim();
+            saveState(selUser.code);
+        }
+
+        function updateAdminMealField(mIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx][field] = val;
+            saveState(selUser.code);
+        }
+
+        function updateAdminMealIng(mIdx, iIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ing = selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients[iIdx];
+            ing[field] = field === 'qty' ? (parseFloat(val) || 0) : val;
+            saveState(selUser.code);
+        }
+
+        function addAdminMealIng(mIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients.push({
+                qty: 100, unit: 'g', item: 'Nuovo ingrediente', pId: 'c3'
+            });
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function removeAdminMealIng(mIdx, iIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients.splice(iIdx, 1);
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function updateAdminMealSteps(mIdx, text) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].steps = text.split('\n').map(s => s.trim()).filter(Boolean);
+            saveState(selUser.code);
+        }
+
+        function addNewMealToDay() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeDay = selUser.weekData[masterState.adminNutriDayIdx];
+            activeDay.meals.push({
+                id: `${activeDay.id}-${Date.now()}`,
+                time: '13:00',
+                type: 'Nuovo Pasto',
+                swapCat: 'lunch',
+                timer: 10,
+                title: 'Nuovo Piatto Personalizzato',
+                macros: '50g C • 30g P • 10g G',
+                ingredients: [{ qty: 80, unit: 'g', item: 'Ingrediente 1', pId: 'c3' }],
+                steps: ['Descrivi qui i passaggi della preparazione.']
+            });
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function deleteAdminMeal(mIdx) {
+            if (!confirm('Eliminare questo pasto dalla giornata?')) return;
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals.splice(mIdx, 1);
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function copyDayToAllWeek() {
+            if (!confirm('Vuoi copiare i pasti di questo giorno su tutti gli altri giorni della settimana di questo paziente?')) return;
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const sourceDay = selUser.weekData[masterState.adminNutriDayIdx];
+            selUser.weekData.forEach((d, idx) => {
+                if (idx === masterState.adminNutriDayIdx) return;
+                d.kcal = sourceDay.kcal; d.c = sourceDay.c; d.p = sourceDay.p; d.g = sourceDay.g;
+                d.meals = JSON.parse(JSON.stringify(sourceDay.meals)).map((m, i) => ({ ...m, id: `${d.id}-copy-${i}-${Date.now()}` }));
+            });
+            saveState(selUser.code);
+            alert('✅ Giorno copiato su tutta la settimana!');
+        }
+
+        // =========================================================================
+        // 8. EDITOR COMPLETO PERSONAL TRAINER (SCHEDE A/B/C, ESERCIZI, SERIE, KG)
+        // =========================================================================
         function renderAdminPt() {
+            const pro = masterState.professionals[masterState.activeProCode];
+            document.getElementById('pt-studio-badge').textContent = `${pro.studioName} (${pro.proCode})`;
+            document.getElementById('pt-prefix-label').textContent = `Sigla: ${pro.prefix}-XXXX`;
+
+            const myClients = getMyClients('pt', pro.proCode);
             const list = document.getElementById('pt-athlete-list');
             list.innerHTML = '';
-            Object.values(masterState.users).forEach(u => {
+
+            if (myClients.length === 0) {
+                list.innerHTML = `<div class="col-span-2 p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun atleta associato al tuo club (${pro.prefix}). Clicca il bottone arancione qui sotto per creare il primo codice atleta!</div>`;
+                document.getElementById('pt-editor-box').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('pt-editor-box').classList.remove('hidden');
+            if (!myClients.find(c => c.code === masterState.adminSelectedCode)) {
+                masterState.adminSelectedCode = myClients[0].code;
+            }
+
+            myClients.forEach(u => {
                 const isSel = u.code === masterState.adminSelectedCode;
                 const btn = document.createElement('button');
                 btn.onclick = () => { masterState.adminSelectedCode = u.code; renderAdminPt(); };
-                btn.className = `p-3 rounded-2xl border text-left transition ${isSel ? 'bg-amber-600 text-white border-amber-600 font-extrabold' : 'bg-stone-50 text-stone-800 border-stone-200 font-bold'}`;
+                btn.className = `p-3 rounded-2xl border text-left transition ${isSel ? 'bg-amber-600 text-white border-amber-600 font-extrabold shadow-sm' : 'bg-stone-50 text-stone-800 border-stone-200 font-bold'}`;
                 btn.innerHTML = `<span class="block text-[10px] opacity-80">${u.code}</span><span class="text-sm truncate block">${u.name}</span>`;
                 list.appendChild(btn);
             });
-            document.getElementById('pt-editing-badge').textContent = `ID: ${masterState.adminSelectedCode}`;
+
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            document.getElementById('pt-editing-badge').textContent = `ID: ${selUser.code}`;
+
+            const dayTabs = document.getElementById('adm-pt-day-tabs');
+            dayTabs.innerHTML = '';
+            selUser.workoutProgram.forEach((wo, idx) => {
+                const isWoSel = idx === masterState.adminPtDayIdx;
+                const b = document.createElement('button');
+                b.onclick = () => { masterState.adminPtDayIdx = idx; renderAdminPt(); };
+                b.className = `py-2.5 px-2 rounded-xl text-xs font-extrabold border transition ${isWoSel ? 'bg-amber-600 text-white border-amber-600' : 'bg-stone-50 text-stone-600 border-stone-200'}`;
+                b.innerHTML = `<span class="block text-[10px] opacity-80">${wo.dayLabel}</span><span>${wo.shortTitle}</span>`;
+                dayTabs.appendChild(b);
+            });
+
+            const activeWo = selUser.workoutProgram[masterState.adminPtDayIdx];
+            document.getElementById('adm-wo-daylabel').value = activeWo.dayLabel;
+            document.getElementById('adm-wo-title').value = activeWo.title;
+            document.getElementById('adm-wo-subtitle').value = activeWo.subtitle;
+
+            const exList = document.getElementById('adm-pt-exercises-list');
+            exList.innerHTML = '';
+
+            activeWo.exercises.forEach((ex, exIdx) => {
+                const setsHtml = (ex.defaultSets || []).map((s, sIdx) => `
+                    <div class="grid grid-cols-10 gap-1.5 items-center text-xs">
+                        <span class="col-span-2 font-extrabold text-stone-500">Serie ${sIdx + 1}</span>
+                        <select onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'type', this.value)" class="col-span-2 bg-white border border-stone-200 rounded-lg py-1.5 px-1 font-bold text-center">
+                            <option value="W" ${s.type === 'W' ? 'selected' : ''}>W (Risc)</option>
+                            <option value="N" ${s.type === 'N' ? 'selected' : ''}>N (Norm)</option>
+                            <option value="D" ${s.type === 'D' ? 'selected' : ''}>D (Drop)</option>
+                        </select>
+                        <input type="number" step="0.5" value="${s.kg}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'kg', this.value)" placeholder="Kg" class="col-span-3 bg-white border border-stone-200 rounded-lg py-1.5 px-2 font-extrabold text-center">
+                        <input type="number" value="${s.reps}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'reps', this.value)" placeholder="Reps" class="col-span-2 bg-white border border-stone-200 rounded-lg py-1.5 px-2 font-extrabold text-center">
+                        <button onclick="removeAdminExSet(${exIdx}, ${sIdx})" class="col-span-1 text-rose-500 flex justify-center"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `).join('');
+
+                const card = document.createElement('div');
+                card.className = 'soft-card rounded-3xl p-5 space-y-3 border-l-4 border-amber-500';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-extrabold uppercase text-amber-800">Esercizio ${exIdx + 1}</span>
+                        <button onclick="deleteAdminExercise(${exIdx})" class="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg">Elimina</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="col-span-2">
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Nome Esercizio / Macchinario</label>
+                            <input type="text" value="${ex.name}" onchange="updateAdminExField(${exIdx}, 'name', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-sm text-stone-900 mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Muscolo Target</label>
+                            <input type="text" value="${ex.primaryMuscle}" onchange="updateAdminExField(${exIdx}, 'primaryMuscle', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-bold text-stone-900 mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Recupero (Secondi)</label>
+                            <input type="number" value="${ex.rest}" onchange="updateAdminExField(${exIdx}, 'rest', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900 mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Simulazione 3D Interna</label>
+                            <select onchange="updateAdminExField(${exIdx}, 'animType', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-bold text-stone-900 mt-0.5">
+                                <option value="push" ${ex.animType === 'push' ? 'selected' : ''}>Spinta (Petto/Spalle/Tric)</option>
+                                <option value="pull" ${ex.animType === 'pull' ? 'selected' : ''}>Tirata (Dorso/Bicipiti)</option>
+                                <option value="legs" ${ex.animType === 'legs' ? 'selected' : ''}>Gambe (Pressa/Estensioni)</option>
+                                <option value="hip" ${ex.animType === 'hip' ? 'selected' : ''}>Glutei & Core (Hip Thrust)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">TUT (Cadenza)</label>
+                            <input type="text" value="${ex.tut || '2-0-1-1'}" onchange="updateAdminExField(${exIdx}, 'tut', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-bold text-stone-900 mt-0.5">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="font-bold text-stone-400 text-[10px] uppercase">Note Tecniche per l'Atleta</label>
+                            <input type="text" value="${ex.note}" onchange="updateAdminExField(${exIdx}, 'note', this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-medium text-stone-700 mt-0.5">
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/70 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-extrabold uppercase text-stone-500">Serie Programmate (Tipo • Kg • Reps)</span>
+                            <button onclick="addAdminExSet(${exIdx})" class="text-[11px] font-extrabold text-amber-800">+ Aggiungi Serie</button>
+                        </div>
+                        <div class="space-y-1.5">${setsHtml}</div>
+                    </div>
+                `;
+                exList.appendChild(card);
+            });
         }
 
-        function addExerciseFromAdmin() {
+        function updateWorkoutDayHeader() {
             const selUser = masterState.users[masterState.adminSelectedCode];
-            const dayIdx = parseInt(document.getElementById('adm-pt-day').value);
-            const name = document.getElementById('adm-pt-exname').value.trim();
-            const muscle = document.getElementById('adm-pt-muscle').value.trim() || 'Multiarticolare';
-            const rest = parseInt(document.getElementById('adm-pt-rest').value) || 90;
-            const note = document.getElementById('adm-pt-note').value.trim() || 'Esecuzione controllata.';
+            const activeWo = selUser.workoutProgram[masterState.adminPtDayIdx];
+            activeWo.dayLabel = document.getElementById('adm-wo-daylabel').value.trim();
+            activeWo.title = document.getElementById('adm-wo-title').value.trim();
+            activeWo.subtitle = document.getElementById('adm-wo-subtitle').value.trim();
+            saveState(selUser.code);
+        }
 
-            if (!name) return alert('Inserisci il nome dell\'esercizio.');
+        function updateAdminExField(exIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            ex[field] = field === 'rest' ? (parseInt(val) || 60) : val;
+            saveState(selUser.code);
+        }
 
-            const newExId = 'ex-custom-' + Date.now();
-            selUser.workoutProgram[dayIdx].exercises.push({
-                id: newExId,
-                name: name,
-                primaryMuscle: muscle,
+        function updateAdminExSet(exIdx, sIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            ex.defaultSets[sIdx][field] = (field === 'kg' || field === 'reps') ? (parseFloat(val) || 0) : val;
+            // Aggiorna anche i log attivi dell'atleta
+            if (selUser.workoutLogs && selUser.workoutLogs[ex.id] && selUser.workoutLogs[ex.id][sIdx]) {
+                selUser.workoutLogs[ex.id][sIdx][field] = ex.defaultSets[sIdx][field];
+            }
+            saveState(selUser.code);
+        }
+
+        function addAdminExSet(exIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            const last = ex.defaultSets[ex.defaultSets.length - 1] || { type: 'N', kg: 20, reps: 10 };
+            ex.defaultSets.push({ ...last });
+            delete selUser.workoutLogs[ex.id]; // rigenera con la nuova serie
+            saveState(selUser.code);
+            renderAdminPt();
+        }
+
+        function removeAdminExSet(exIdx, sIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            if (ex.defaultSets.length > 1) {
+                ex.defaultSets.splice(sIdx, 1);
+                delete selUser.workoutLogs[ex.id];
+                saveState(selUser.code);
+                renderAdminPt();
+            }
+        }
+
+        function addNewExerciseToWorkoutDay() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeWo = selUser.workoutProgram[masterState.adminPtDayIdx];
+            activeWo.exercises.push({
+                id: 'ex-' + Date.now(),
+                name: 'Nuovo Esercizio',
+                primaryMuscle: 'Muscolo Target',
                 secondaryMuscle: 'Sinergici',
-                muscleGroup: 'legs',
+                animType: 'push',
                 tut: '2-0-1-1',
-                rest: rest,
-                videoQuery: encodeURIComponent(name + ' esecuzione palestra'),
-                note: note,
+                rest: 90,
+                note: 'Esecuzione controllata e fluida.',
                 defaultSets: [
                     { type: 'N', kg: 20, reps: 10 },
                     { type: 'N', kg: 20, reps: 10 },
@@ -1468,14 +1832,65 @@
                 ],
                 defaultHistory: []
             });
+            saveState(selUser.code);
+            renderAdminPt();
+        }
 
-            document.getElementById('adm-pt-exname').value = '';
-            saveState();
-            alert(`🏋️‍♂️ Esercizio "${name}" aggiunto alla scheda dell'atleta ${selUser.code}!`);
+        function deleteAdminExercise(exIdx) {
+            if (!confirm('Vuoi rimuovere questo esercizio dalla scheda?')) return;
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.workoutProgram[masterState.adminPtDayIdx].exercises.splice(exIdx, 1);
+            saveState(selUser.code);
+            renderAdminPt();
+        }
+
+        function createNewClientForPro(role) {
+            const pro = masterState.professionals[masterState.activeProCode];
+            const randNum = Math.floor(1000 + Math.random() * 9000);
+            const newCode = `${pro.prefix}-${randNum}`;
+            const clientName = prompt(`Generazione nuovo Codice Cliente con la tua sigla (${newCode}).\nInserisci il nome del cliente:`);
+            if (!clientName) return;
+
+            masterState.users[newCode] = {
+                code: newCode,
+                name: clientName.trim(),
+                bio: `Profilo seguito da ${pro.studioName}`,
+                ptCode: role === 'pt' ? pro.proCode : null,
+                nutriCode: role === 'nutri' ? pro.proCode : null,
+                startWeight: 70.0,
+                waterTarget: 3.0,
+                weekData: buildSyncedWeekPlan(true),
+                workoutProgram: buildWorkoutProgram(true),
+                completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
+                pantry: JSON.parse(JSON.stringify(defaultPantry)),
+                weights: [{ date: 'Inizio', val: 70.0 }],
+                prepDone: {}, nsvDone: {}, workoutLogs: {}, workoutHistory: {}
+            };
+            masterState.adminSelectedCode = newCode;
+            saveState(newCode);
+            if (role === 'nutri') renderAdminNutri(); else renderAdminPt();
+            alert(`✅ Creato! Il codice personale esclusivo per ${clientName} è: ${newCode}`);
+        }
+
+        function linkExistingClientToPro(role) {
+            const pro = masterState.professionals[masterState.activeProCode];
+            const existingCode = prompt('Inserisci il Codice ID che il cliente possiede già (es. KNX-8492) per associarlo anche al tuo studio:');
+            if (!existingCode) return;
+            const clean = existingCode.trim().toUpperCase();
+            const targetUser = masterState.users[clean];
+            if (!targetUser) return alert('Codice cliente non trovato.');
+
+            if (role === 'nutri') targetUser.nutriCode = pro.proCode;
+            if (role === 'pt') targetUser.ptCode = pro.proCode;
+
+            masterState.adminSelectedCode = clean;
+            saveState(clean);
+            if (role === 'nutri') renderAdminNutri(); else renderAdminPt();
+            alert(`🔗 Cliente ${clean} (${targetUser.name}) collegato al tuo studio!`);
         }
 
         // =========================================================================
-        // MODULO B: ALLENAMENTO ATLETA
+        // 9. MODULO B: ALLENAMENTO ATLETA
         // =========================================================================
         function ensureExerciseState(ex) {
             const u = currentUser();
@@ -1490,24 +1905,6 @@
             if (!u.workoutHistory[ex.id]) {
                 u.workoutHistory[ex.id] = ex.defaultHistory || [];
             }
-        }
-
-        function getMuscleSvgDiagram(group) {
-            const hl = '#d97706';
-            const base = '#e7e5e4';
-            return `
-                <svg viewBox="0 0 120 140" class="w-24 h-28 mx-auto shrink-0">
-                    <circle cx="60" cy="20" r="11" fill="#d6d3d1"/>
-                    <rect x="24" y="34" width="16" height="14" rx="6" fill="${group === 'shoulders' ? hl : base}" class="${group === 'shoulders' ? 'muscle-active' : ''}"/>
-                    <rect x="80" y="34" width="16" height="14" rx="6" fill="${group === 'shoulders' ? hl : base}" class="${group === 'shoulders' ? 'muscle-active' : ''}"/>
-                    <rect x="41" y="34" width="38" height="22" rx="5" fill="${(group === 'chest' || group === 'back') ? hl : base}" class="${(group === 'chest' || group === 'back') ? 'muscle-active' : ''}"/>
-                    <rect x="22" y="50" width="13" height="28" rx="5" fill="${group === 'arms' ? hl : base}" class="${group === 'arms' ? 'muscle-active' : ''}"/>
-                    <rect x="85" y="50" width="13" height="28" rx="5" fill="${group === 'arms' ? hl : base}" class="${group === 'arms' ? 'muscle-active' : ''}"/>
-                    <rect x="44" y="58" width="32" height="24" rx="4" fill="${group === 'core' ? hl : base}" class="${group === 'core' ? 'muscle-active' : ''}"/>
-                    <rect x="42" y="85" width="16" height="46" rx="6" fill="${group === 'legs' ? hl : base}" class="${group === 'legs' ? 'muscle-active' : ''}"/>
-                    <rect x="62" y="85" width="16" height="46" rx="6" fill="${group === 'legs' ? hl : base}" class="${group === 'legs' ? 'muscle-active' : ''}"/>
-                </svg>
-            `;
         }
 
         function renderWorkout() {
@@ -1603,7 +2000,7 @@
                         <div class="min-w-0">
                             <div class="flex items-center space-x-2">
                                 <span class="text-[11px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900">${ex.primaryMuscle}</span>
-                                <span class="text-[11px] font-bold text-stone-400">TUT ${ex.tut}</span>
+                                <span class="text-[11px] font-bold text-stone-400">TUT ${ex.tut || '2-0-1-1'}</span>
                             </div>
                             <h3 class="text-lg font-extrabold text-stone-950 mt-1.5 leading-snug">${ex.name}</h3>
                         </div>
@@ -1613,13 +2010,13 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="toggleExBio('${ex.id}')" class="py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
+                        <button onclick="toggleExBio('${ex.id}')" class="py-2.5 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
                             isBioOpen ? 'bg-stone-900 text-white border-stone-900' : 'bg-stone-50 text-stone-700 border-stone-200'
                         }">
-                            <i class="fa-solid fa-person-rays text-amber-500"></i>
-                            <span>Simulazione 3D/Video</span>
+                            <i class="fa-solid fa-cube text-amber-500"></i>
+                            <span>Simulazione 3D</span>
                         </button>
-                        <button onclick="toggleExHistory('${ex.id}')" class="py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
+                        <button onclick="toggleExHistory('${ex.id}')" class="py-2.5 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
                             isHistoryOpen ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200'
                         }">
                             <i class="fa-solid fa-clock-rotate-left"></i>
@@ -1627,19 +2024,11 @@
                         </button>
                     </div>
 
-                    <div class="${isBioOpen ? 'block' : 'hidden'} p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
-                        <div class="flex items-center space-x-3">
-                            ${getMuscleSvgDiagram(ex.muscleGroup)}
-                            <div class="space-y-1.5 text-xs">
-                                <div><strong class="text-stone-900">Target Primario:</strong> <span class="text-amber-800 font-bold">${ex.primaryMuscle}</span></div>
-                                <div><strong class="text-stone-900">Sinergici:</strong> <span class="text-stone-600">${ex.secondaryMuscle}</span></div>
-                                <p class="text-stone-600 leading-relaxed pt-1">${ex.note}</p>
-                            </div>
+                    <div class="${isBioOpen ? 'block' : 'hidden'} space-y-2">
+                        ${getInternalBiomechanicsSimulator(ex.animType || 'legs', ex.primaryMuscle)}
+                        <div class="p-3 rounded-xl bg-stone-50 border border-stone-200 text-xs text-stone-600">
+                            <strong class="text-stone-900">Indicazione del Coach:</strong> ${ex.note}
                         </div>
-                        <a href="https://www.youtube.com/results?search_query=${ex.videoQuery}" target="_blank" class="w-full py-2.5 rounded-xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2">
-                            <i class="fa-brands fa-youtube text-rose-500 text-sm"></i>
-                            <span>Guarda Video-Simulazione Esecuzione</span>
-                        </a>
                     </div>
 
                     <div class="${isHistoryOpen ? 'block' : 'hidden'} p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200">
@@ -1707,24 +2096,11 @@
         function removeLastSetFromExercise(exId) {
             const u = currentUser();
             const list = u.workoutLogs[exId];
-            if (list.length > 1) {
-                list.pop();
-                saveState();
-                renderWorkout();
-            }
+            if (list.length > 1) { list.pop(); saveState(); renderWorkout(); }
         }
 
-        function toggleExHistory(exId) {
-            openExHistory[exId] = !openExHistory[exId];
-            if (openExHistory[exId]) openExBio[exId] = false;
-            renderWorkout();
-        }
-
-        function toggleExBio(exId) {
-            openExBio[exId] = !openExBio[exId];
-            if (openExBio[exId]) openExHistory[exId] = false;
-            renderWorkout();
-        }
+        function toggleExHistory(exId) { openExHistory[exId] = !openExHistory[exId]; if (openExHistory[exId]) openExBio[exId] = false; renderWorkout(); }
+        function toggleExBio(exId) { openExBio[exId] = !openExBio[exId]; if (openExBio[exId]) openExHistory[exId] = false; renderWorkout(); }
 
         function finishAndSaveWorkout() {
             const u = currentUser();
@@ -1746,7 +2122,7 @@
         }
 
         // =========================================================================
-        // MODULO A: NUTRIZIONE
+        // 10. MODULO A: NUTRIZIONE PAZIENTE
         // =========================================================================
         function getActiveMealData(meal) {
             const u = currentUser();
@@ -1854,7 +2230,7 @@
                     </li>
                 `).join('');
 
-                const stepsHtml = meal.steps.map((s, idx) => `
+                const stepsHtml = (meal.steps || []).map((s, idx) => `
                     <div class="flex items-start space-x-3 mb-3 last:mb-0">
                         <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-900 font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
                         <p class="text-base text-stone-700 leading-relaxed font-medium">${s}</p>
@@ -2160,7 +2536,7 @@
             const u = currentUser();
             const totalMeals = u.weekData.reduce((acc, d) => acc + d.meals.length, 0);
             const doneMeals = Object.values(u.completedMeals).filter(Boolean).length;
-            const pct = Math.round((doneMeals / totalMeals) * 100);
+            const pct = totalMeals > 0 ? Math.round((doneMeals / totalMeals) * 100) : 0;
             const badge = document.getElementById('adherence-badge');
             if (badge) badge.textContent = `Costanza: ${pct}%`;
             return pct;
