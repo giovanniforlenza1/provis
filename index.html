@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Fit & Nutri Hub">
+    <meta name="apple-mobile-web-app-title" content="KÌNESI">
     <meta name="theme-color" content="#FAF8F5">
-    <title>Fit & Nutri — Pastel Wellness Hub</title>
+    <title>KÌNESI — Nutrition & Movement Hub</title>
+
+    <!-- FAVICON & APPLE TOUCH ICON VETTORIALE UFFICIALE "KÌNESI" -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='32' fill='%23FAF8F5'/%3E%3Crect x='6' y='6' width='108' height='108' rx='26' fill='none' stroke='%23E5E0D8' stroke-width='3'/%3E%3Cpath d='M36 82 C36 50 62 34 86 34 C86 58 70 82 36 82 Z' fill='%233B6E5C'/%3E%3Ccircle cx='78' cy='76' r='16' fill='%23C86D51'/%3E%3Cpath d='M36 82 L68 50' stroke='%23FAF8F5' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23FAF8F5'/%3E%3Cpath d='M34 84 C34 48 62 32 88 32 C88 58 70 84 34 84 Z' fill='%233B6E5C'/%3E%3Ccircle cx='80' cy='78' r='17' fill='%23C86D51'/%3E%3Cpath d='M34 84 L68 50' stroke='%23FAF8F5' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -22,10 +27,6 @@
             --bg-soft: #F2EFE9;
             --text-main: #2A2826;
             --text-muted: #78736D;
-            --accent-bg: #E5E0D8;
-            --accent-border: #D5CFC4;
-            --accent-strong: #4A443F;
-            --accent-text: #3B3632;
         }
 
         /* PALETTE 2: NUTRIZIONE (PASTEL SAGE & SOFT MATCHA) */
@@ -34,22 +35,14 @@
             --bg-soft: #E5EFE8;
             --text-main: #1F332B;
             --text-muted: #617A6F;
-            --accent-bg: #D5E8DC;
-            --accent-border: #BCE0CA;
-            --accent-strong: #3B6E5C;
-            --accent-text: #274D3F;
         }
 
-        /* PALETTE 3: PALESTRA (PASTEL TERRACOTTA & WARM PEACH - CHIARA ED ENERGICA) */
+        /* PALETTE 3: PALESTRA (PASTEL TERRACOTTA & WARM PEACH) */
         body.theme-gym {
             --bg-main: #FDF7F4;
             --bg-soft: #F9EBE4;
             --text-main: #36241E;
             --text-muted: #876B61;
-            --accent-bg: #F6D8CE;
-            --accent-border: #EBC0B1;
-            --accent-strong: #C86D51;
-            --accent-text: #7A3B28;
         }
 
         html, body {
@@ -130,7 +123,7 @@
         </div>
     </div>
 
-    <!-- MODALE CALCOLATORE DISCHI BILANCIERE (PLATE CALCULATOR) -->
+    <!-- MODALE CALCOLATORE DISCHI BILANCIERE -->
     <div id="plate-modal" class="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-5">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4 shadow-xl border border-stone-100">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
@@ -164,17 +157,24 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- SCHERMATA 0: LOGIN GENERALE (PALETTE 1: PORCELAIN & OAT)   -->
+    <!-- SCHERMATA 0: LOGIN UFFICIALE "KÌNESI"                      -->
     <!-- ========================================================== -->
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12">
         <div class="max-w-md mx-auto w-full space-y-6">
-            <div class="text-center space-y-2">
-                <div class="w-16 h-16 rounded-3xl bg-[#E5E0D8] text-[#3B3632] flex items-center justify-center mx-auto shadow-sm text-2xl border border-[#D5CFC4]">
-                    <i class="fa-solid fa-seedling"></i>
+            <div class="text-center space-y-2.5">
+                <!-- LOGO UFFICIALE VETTORIALE KÌNESI -->
+                <div class="w-20 h-20 rounded-[26px] bg-white flex items-center justify-center mx-auto shadow-md border border-[#E5E0D8] p-3">
+                    <svg viewBox="0 0 120 120" class="w-full h-full">
+                        <path d="M24 92 C24 44 58 22 94 22 C94 58 72 92 24 92 Z" fill="#3B6E5C"/>
+                        <circle cx="82" cy="80" r="20" fill="#C86D51"/>
+                        <path d="M24 92 L68 48" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+                    </svg>
                 </div>
-                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-[#78736D] bg-[#F2EFE9] px-3.5 py-1 rounded-full border border-[#E5E0D8]">Wellness & Performance Hub</span>
-                <h1 class="text-3xl font-extrabold text-[#2A2826]">Benvenuto</h1>
-                <p class="text-sm text-[#78736D] leading-relaxed">
+                <div class="pt-1">
+                    <h1 class="text-3xl font-extrabold tracking-tight text-[#2A2826]">KÌNESI</h1>
+                    <span class="inline-block text-[11px] font-extrabold uppercase tracking-widest text-[#78736D] mt-0.5">Nutrition & Movement Hub</span>
+                </div>
+                <p class="text-sm text-[#78736D] leading-relaxed pt-1">
                     Inserisci il tuo <strong>Codice Personale Unico</strong> per aprire il tuo spazio Nutrizione e Allenamento.
                 </p>
             </div>
@@ -182,12 +182,12 @@
             <div class="pastel-card rounded-3xl p-6 md:p-8 space-y-4">
                 <div>
                     <label class="block text-xs font-extrabold uppercase tracking-wider text-[#78736D] mb-2">Codice Identificativo</label>
-                    <input type="text" id="login-code-input" onkeydown="if(event.key==='Enter') handleLogin()" placeholder="Es. ID-0000" class="w-full bg-[#FAF8F5] border-2 border-[#E5E0D8] rounded-2xl px-4 py-3.5 text-lg font-extrabold text-[#2A2826] uppercase text-center tracking-widest focus:outline-none focus:border-[#4A443F]">
+                    <input type="text" id="login-code-input" onkeydown="if(event.key==='Enter') handleLogin()" placeholder="Es. ID-8492" class="w-full bg-[#FAF8F5] border-2 border-[#E5E0D8] rounded-2xl px-4 py-3.5 text-lg font-extrabold text-[#2A2826] uppercase text-center tracking-widest focus:outline-none focus:border-[#3B6E5C]">
                     <p id="login-error" class="text-xs font-bold text-rose-500 text-center mt-2 hidden">Codice non riconosciuto. Verifica con il tuo professionista.</p>
                 </div>
 
-                <button onclick="handleLogin()" class="w-full bg-[#4A443F] hover:bg-[#3B3632] text-white font-extrabold py-4 rounded-2xl text-base shadow-sm active:scale-98 transition">
-                    Accedi all'Hub
+                <button type="button" onclick="handleLogin()" id="login-btn" class="w-full bg-[#2A2826] hover:bg-[#3B3632] text-white font-extrabold py-4 rounded-2xl text-base shadow-sm active:scale-98 transition cursor-pointer">
+                    Accedi a KÌNESI
                 </button>
             </div>
 
@@ -203,7 +203,7 @@
     <section id="screen-super-admin" class="app-container px-5 space-y-6 hidden">
         <header class="flex justify-between items-start border-b border-stone-200 pb-4">
             <div>
-                <span class="text-xs font-extrabold uppercase tracking-wider text-[#3B3632] bg-[#E5E0D8] px-2.5 py-1 rounded-lg">Console Proprietario</span>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#3B3632] bg-[#E5E0D8] px-2.5 py-1 rounded-lg">KÌNESI Master Console</span>
                 <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-1.5">Gestione Licenze Studi</h1>
                 <p class="text-xs text-stone-500">Attiva nuovi codici per Nutrizionisti e Personal Trainer.</p>
             </div>
@@ -253,7 +253,7 @@
     </section>
 
     <!-- ========================================================== -->
-    <!-- PORTALE 1: AREA NUTRIZIONISTA (PALETTE VERDE SALVIA PASTELLO)-->
+    <!-- PORTALE 1: AREA NUTRIZIONISTA (PALETTE VERDE SALVIA)       -->
     <!-- ========================================================== -->
     <section id="screen-admin-nutri" class="app-container px-5 space-y-5 hidden">
         <header class="flex justify-between items-start border-b border-[#BCE0CA] pb-4">
@@ -418,7 +418,6 @@
     <!-- ========================================================== -->
     <section id="screen-hub" class="app-container min-h-screen flex flex-col justify-between px-5 py-6 hidden">
         <div class="space-y-5">
-            <!-- Header Utente -->
             <div class="flex justify-between items-center">
                 <div>
                     <span class="text-xs font-extrabold uppercase tracking-wider text-[#4A443F] bg-[#E5E0D8] px-3 py-1 rounded-xl" id="hub-user-code">ID</span>
@@ -431,7 +430,7 @@
 
             <p class="text-sm text-[#78736D] font-medium" id="hub-user-bio"></p>
 
-            <!-- RIEPILOGO STATO DI OGGI (ISPIRATO A GRANDI APP WELLNESS) -->
+            <!-- RIEPILOGO STATO DI OGGI -->
             <div class="pastel-card rounded-3xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-extrabold uppercase tracking-wider text-[#78736D]">Il Tuo Punto di Oggi</span>
@@ -453,10 +452,8 @@
                 </div>
             </div>
 
-            <!-- LE DUE GRANDI AREE DELL'HUB CON LE LORO PALETTE DISTINTE -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-                
-                <!-- CARD NUTRIZIONE (PALETTE VERDE SALVIA PASTELLO) -->
+                <!-- CARD NUTRIZIONE -->
                 <div onclick="openModule('nutrition')" class="bg-[#F3F7F4] border-2 border-[#BCE0CA] rounded-3xl p-6 cursor-pointer active:scale-98 transition shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="flex items-start justify-between">
@@ -476,7 +473,7 @@
                     </div>
                 </div>
 
-                <!-- CARD ALLENAMENTO (PALETTE PESCA/TERRACOTTA PASTELLO CHIARA) -->
+                <!-- CARD ALLENAMENTO -->
                 <div onclick="openModule('workout')" class="bg-[#FDF7F4] border-2 border-[#EBC0B1] rounded-3xl p-6 cursor-pointer active:scale-98 transition shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="flex items-start justify-between">
@@ -499,16 +496,14 @@
         </div>
 
         <div class="text-center text-xs text-[#78736D] font-semibold pt-8">
-            Fit & Nutri Hub • Pastel Edition
+            KÌNESI • Nutrition & Movement Hub
         </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- MODULO B: PALESTRA CON SWIPE ORIZZONTALE (PALETTE PASTEL TERRACOTTA)     -->
+    <!-- MODULO B: PALESTRA CON SWIPE ORIZZONTALE (PALETTE PASTEL TERRACOTTA)      -->
     <!-- ========================================================================= -->
     <div id="module-workout" class="app-container hidden">
-        
-        <!-- Header Palestra -->
         <header class="px-5 mb-3 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
@@ -518,7 +513,7 @@
                 <h1 class="text-2xl font-extrabold text-[#36241E] mt-0.5 truncate" id="wo-title">Scheda A</h1>
             </div>
             <div class="flex items-center space-x-2 shrink-0">
-                <button onclick="openPlateModal()" class="h-10 px-3 rounded-2xl bg-[#F6D8CE] text-[#7A3B28] text-xs font-extrabold flex items-center space-x-1.5 active:scale-95 transition" title="Calcolatore Dischi Bilanciere">
+                <button onclick="openPlateModal()" class="h-10 px-3 rounded-2xl bg-[#F6D8CE] text-[#7A3B28] text-xs font-extrabold flex items-center space-x-1.5 active:scale-95 transition">
                     <i class="fa-solid fa-scale-balanced"></i>
                     <span>Dischi</span>
                 </button>
@@ -530,10 +525,8 @@
         </header>
 
         <main class="px-5 space-y-3.5">
-            <!-- 1. SELETTORE GIORNATA A / B / C -->
             <div class="grid grid-cols-3 gap-2" id="workout-day-selector"></div>
 
-            <!-- 2. BARRA AVANZAMENTO ESERCIZI A SEGMENTI + NAVIGAZIONE FRECCE -->
             <div class="pastel-card rounded-3xl p-4 space-y-2.5 border border-[#EBC0B1]/60">
                 <div class="flex justify-between items-center">
                     <button onclick="goToSlide(currentExerciseSlide - 1)" id="btn-prev-ex" class="w-8 h-8 rounded-xl bg-[#F9EBE4] text-[#7A3B28] flex items-center justify-center disabled:opacity-30">
@@ -547,17 +540,12 @@
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
                 </div>
-                <!-- Segmenti stile Instagram Stories per capire a che punto sei -->
                 <div class="flex space-x-1.5" id="workout-story-segments"></div>
             </div>
 
-            <!-- 3. CAROSELLO ORIZZONTALE FULL-SCREEN (1 ESERCIZIO PER SCHERMATA) -->
-            <div id="exercises-carousel" class="workout-carousel no-scrollbar" onscroll="handleCarouselScroll()">
-                <!-- Generato via JS: ogni esercizio è una slide a tutta larghezza + 1 slide finale di completamento -->
-            </div>
+            <div id="exercises-carousel" class="workout-carousel no-scrollbar" onscroll="handleCarouselScroll()"></div>
         </main>
 
-        <!-- Barra inferiore palestra -->
         <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3">
             <div class="max-w-3xl mx-auto flex justify-between items-center gap-2.5">
                 <button onclick="startTimer(1.5, 'Recupero 90s')" class="flex-1 py-3 rounded-2xl bg-[#F6D8CE] text-[#7A3B28] font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
@@ -809,7 +797,7 @@
 
     <script>
         // =========================================================================
-        // 1. SUPABASE CLOUD CONFIGURATO
+        // 1. SUPABASE CLOUD CONFIGURATO (CON TIMEOUT ANTI-BLOCCO)
         // =========================================================================
         const SUPABASE_URL = 'https://ltzujfpwibiugredvpjl.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0enVqZnB3aWJpdWdyZWR2cGpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNDA4MTQsImV4cCI6MjEwNzYxNjgxNH0.SuM4fC0c56UJpf0n1j8eZjbchbkOCIQf2zjtbaEz3do';
@@ -819,7 +807,13 @@
             try { sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) {}
         }
 
-        // Gestore automatico delle 3 Palette Pastello
+        function withTimeout(promise, ms = 1200) {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+            ]);
+        }
+
         function setThemePalette(mode) {
             document.body.classList.remove('theme-nutri', 'theme-gym');
             if (mode === 'nutri') document.body.classList.add('theme-nutri');
@@ -846,7 +840,7 @@
         }
 
         // =========================================================================
-        // 2. CALCOLATORE DISCHI BILANCIERE (UTILITY SALA PESI)
+        // 2. CALCOLATORE DISCHI BILANCIERE
         // =========================================================================
         function openPlateModal(defaultWeight = 60) {
             document.getElementById('plate-target-kg').value = defaultWeight;
@@ -1160,17 +1154,25 @@
             }
         };
 
-        let masterState = JSON.parse(localStorage.getItem('fitNutriPastel_v14')) || {
-            activeCode: null,
-            activeProCode: null,
-            adminSelectedCode: 'ID-8492',
-            adminNutriDayIdx: 0,
-            adminPtDayIdx: 0,
-            professionals: initialProfessionals,
-            users: initialUsers
-        };
+        let masterState = null;
+        try {
+            masterState = JSON.parse(localStorage.getItem('kinesiPastel_v15'));
+        } catch (e) {}
+
+        if (!masterState) {
+            masterState = {
+                activeCode: null,
+                activeProCode: null,
+                adminSelectedCode: 'ID-8492',
+                adminNutriDayIdx: 0,
+                adminPtDayIdx: 0,
+                professionals: initialProfessionals,
+                users: initialUsers
+            };
+        }
 
         if (!masterState.professionals) masterState.professionals = initialProfessionals;
+        if (!masterState.users) masterState.users = initialUsers;
         if (!masterState.users['ID-8492']) masterState.users['ID-8492'] = initialUsers['ID-8492'];
         if (!masterState.users['ID-3105']) masterState.users['ID-3105'] = initialUsers['ID-3105'];
 
@@ -1191,7 +1193,9 @@
         }
 
         async function saveState(targetClientCode = null) {
-            localStorage.setItem('fitNutriPastel_v14', JSON.stringify(masterState));
+            try {
+                localStorage.setItem('kinesiPastel_v15', JSON.stringify(masterState));
+            } catch (e) {}
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
                 updateMissingBadge();
                 updateAdherence();
@@ -1200,9 +1204,9 @@
             if (sbClient && codeToSync && masterState.users[codeToSync]) {
                 const u = masterState.users[codeToSync];
                 try {
-                    await sbClient.from('clients').upsert({
+                    await withTimeout(sbClient.from('clients').upsert({
                         client_code: u.code, name: u.name, nutri_code: u.nutriCode, pt_code: u.ptCode, profile_data: u, updated_at: new Date().toISOString()
-                    });
+                    }));
                 } catch (e) {}
             }
         }
@@ -1213,32 +1217,43 @@
         }
 
         // =========================================================================
-        // 5. NAVIGAZIONE & CAMBIO AUTOMATICO DELLE 3 PALETTE PASTELLO
+        // 5. NAVIGAZIONE & LOGIN BLINDATO (ZERO BLOCCHI)
         // =========================================================================
         function hideAllScreens() {
             ['screen-login', 'screen-super-admin', 'screen-hub', 'screen-admin-nutri', 'screen-admin-pt', 'module-nutrition', 'module-workout'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
             });
         }
 
         async function checkAuthOnLoad() {
             setThemePalette('neutral');
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
+                loadUserHub(masterState.activeCode);
                 if (sbClient) {
                     try {
-                        const { data } = await sbClient.from('clients').select('*').eq('client_code', masterState.activeCode).maybeSingle();
-                        if (data && data.profile_data) masterState.users[masterState.activeCode] = data.profile_data;
+                        const { data } = await withTimeout(sbClient.from('clients').select('*').eq('client_code', masterState.activeCode).maybeSingle());
+                        if (data && data.profile_data) {
+                            masterState.users[masterState.activeCode] = data.profile_data;
+                            loadUserHub(masterState.activeCode);
+                        }
                     } catch (e) {}
                 }
-                loadUserHub(masterState.activeCode);
             }
         }
 
         async function handleLogin() {
-            let raw = document.getElementById('login-code-input').value.trim().toUpperCase();
+            const inputEl = document.getElementById('login-code-input');
+            let raw = (inputEl ? inputEl.value : '').trim().toUpperCase();
             document.getElementById('login-error').classList.add('hidden');
 
-            if (raw === '8492' || raw === 'KNX-8492' || raw === 'FN-8492') raw = 'ID-8492';
+            if (!raw) {
+                document.getElementById('login-error').classList.remove('hidden');
+                return;
+            }
+
+            // Accetta tutte le varianti dei vostri codici per comodità immediata
+            if (raw === '8492' || raw === 'KNX-8492' || raw === 'FN-8492' || raw === 'GIOVANNI') raw = 'ID-8492';
             if (raw === '3105' || raw === 'KNX-3105' || raw === 'FN-3105') raw = 'ID-3105';
 
             if (raw === 'ADMIN-MASTER') {
@@ -1249,31 +1264,17 @@
                 return;
             }
 
-            if (sbClient) {
-                try {
-                    const { data: proData } = await sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle();
-                    if (proData) masterState.professionals[raw] = { proCode: proData.pro_code, role: proData.role, studioName: proData.studio_name };
-                    const { data: cliData } = await sbClient.from('clients').select('*').eq('client_code', raw).maybeSingle();
-                    if (cliData && cliData.profile_data) masterState.users[raw] = cliData.profile_data;
-                } catch (e) {}
+            // Se il codice è già presente localmente, entra SUBITO senza aspettare la rete!
+            if (masterState.users[raw]) {
+                masterState.activeCode = raw;
+                saveState();
+                loadUserHub(raw);
+                return;
             }
 
             if (masterState.professionals[raw]) {
                 const pro = masterState.professionals[raw];
                 masterState.activeProCode = raw;
-
-                if (sbClient) {
-                    try {
-                        const col = pro.role === 'nutri' ? 'nutri_code' : 'pt_code';
-                        const { data: myCloudClients } = await sbClient.from('clients').select('*').eq(col, raw);
-                        if (myCloudClients) {
-                            myCloudClients.forEach(row => {
-                                if (row.profile_data) masterState.users[row.client_code] = row.profile_data;
-                            });
-                        }
-                    } catch (e) {}
-                }
-
                 hideAllScreens();
                 if (pro.role === 'nutri') {
                     setThemePalette('nutri');
@@ -1287,11 +1288,23 @@
                 return;
             }
 
-            if (masterState.users[raw]) {
-                masterState.activeCode = raw;
-                saveState();
-                loadUserHub(raw);
-                return;
+            // Se è un codice nuovo creato sul Cloud da un altro dispositivo, lo cerca su Supabase con timeout rapido
+            if (sbClient) {
+                try {
+                    const { data: proData } = await withTimeout(sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle());
+                    if (proData) {
+                        masterState.professionals[raw] = { proCode: proData.pro_code, role: proData.role, studioName: proData.studio_name };
+                        return handleLogin();
+                    }
+                    const { data: cliData } = await withTimeout(sbClient.from('clients').select('*').eq('client_code', raw).maybeSingle());
+                    if (cliData && cliData.profile_data) {
+                        masterState.users[raw] = cliData.profile_data;
+                        masterState.activeCode = raw;
+                        saveState();
+                        loadUserHub(raw);
+                        return;
+                    }
+                } catch (e) {}
             }
 
             document.getElementById('login-error').classList.remove('hidden');
@@ -1307,7 +1320,6 @@
             document.getElementById('hub-user-bio').textContent = u.bio;
             document.getElementById('hub-kcal-badge').textContent = `${u.weekData[0].kcal} / die`;
 
-            // Popola statistiche live dell'Hub
             const todayObj = u.weekData[currentDayIndex];
             document.getElementById('hub-today-name').textContent = todayObj.name;
             const doneM = todayObj.meals.filter(m => u.completedMeals[m.id] || u.offPlanMeals[m.id]).length;
@@ -1353,7 +1365,7 @@
         }
 
         // =========================================================================
-        // 6. MODULO B: ALLENAMENTO FULL-SCREEN SWIPE ORIZZONTALE (SENZA 3D)
+        // 6. MODULO B: ALLENAMENTO FULL-SCREEN SWIPE ORIZZONTALE
         // =========================================================================
         function ensureExerciseState(ex) {
             const u = currentUser();
@@ -1392,9 +1404,8 @@
             document.getElementById('wo-title').textContent = `${currentWo.shortTitle} — ${currentWo.title}`;
 
             let totalVolumeKg = 0;
-            const totalSlides = currentWo.exercises.length + 1; // +1 per la card finale di completamento giornata
+            const totalSlides = currentWo.exercises.length + 1;
 
-            // Renderizza segmenti superiori (stile storie)
             const segContainer = document.getElementById('workout-story-segments');
             segContainer.innerHTML = '';
             currentWo.exercises.forEach((ex, idx) => {
@@ -1408,7 +1419,6 @@
                 }`;
                 segContainer.appendChild(seg);
             });
-            // Segmento finale trofeo
             const finalSeg = document.createElement('div');
             finalSeg.onclick = () => goToSlide(currentWo.exercises.length);
             finalSeg.className = `h-2 w-6 rounded-full cursor-pointer transition-all ${currentExerciseSlide === currentWo.exercises.length ? 'bg-[#C86D51]' : 'bg-[#F6D8CE]'}`;
@@ -1478,8 +1488,6 @@
                 slide.className = 'workout-slide';
                 slide.innerHTML = `
                     <div class="pastel-card rounded-3xl p-5 space-y-4 border-2 ${allExSetsDone ? 'border-[#BCE0CA]' : 'border-[#EBC0B1]/80'}">
-                        
-                        <!-- Header Card Esercizio -->
                         <div class="flex justify-between items-start gap-2">
                             <div class="min-w-0">
                                 <div class="flex items-center flex-wrap gap-1.5">
@@ -1494,7 +1502,6 @@
                             </span>
                         </div>
 
-                        <!-- Box Tecnico Pulito (Senza 3D rozzo) + Nota Personale Sedile/Panca -->
                         <div class="p-3.5 rounded-2xl bg-[#FDF7F4] border border-[#EBC0B1]/70 space-y-2 text-xs">
                             <div class="flex items-start space-x-2 text-[#36241E] leading-relaxed">
                                 <i class="fa-solid fa-bullseye text-[#C86D51] mt-0.5 shrink-0"></i>
@@ -1506,7 +1513,6 @@
                             </div>
                         </div>
 
-                        <!-- Barra Utilità: Storico Carichi & Calcolatore Dischi -->
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="toggleExHistory('${ex.id}')" class="py-2.5 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
                                 isHistoryOpen ? 'bg-[#C86D51] text-white border-[#C86D51]' : 'bg-[#F9EBE4] text-[#7A3B28] border-[#EBC0B1]'
@@ -1525,7 +1531,6 @@
                             ${historyDropdownHtml}
                         </div>
 
-                        <!-- Intestazione Tabella Serie -->
                         <div class="grid grid-cols-12 gap-1.5 px-2 pt-1 text-[10px] font-extrabold uppercase tracking-wider text-[#876B61]">
                             <div class="col-span-2">Serie</div>
                             <div class="col-span-3 text-center">Precedente</div>
@@ -1534,10 +1539,8 @@
                             <div class="col-span-2 text-right">Fatto</div>
                         </div>
 
-                        <!-- Righe Serie -->
                         <div class="space-y-2">${rowsHtml}</div>
 
-                        <!-- Bottoni Aggiungi/Rimuovi Serie + Swipe al prossimo -->
                         <div class="flex justify-between items-center pt-2 border-t border-stone-100">
                             <div class="flex space-x-2">
                                 <button onclick="addSetToExercise('${ex.id}')" class="text-xs font-extrabold text-[#7A3B28] bg-[#F9EBE4] px-3 py-1.5 rounded-xl border border-[#EBC0B1]">
@@ -1559,7 +1562,6 @@
                 carousel.appendChild(slide);
             });
 
-            // SLIDE FINALE DI COMPLETAMENTO GIORNATA
             const endSlide = document.createElement('div');
             endSlide.className = 'workout-slide';
             endSlide.innerHTML = `
@@ -1607,6 +1609,7 @@
             const u = currentUser();
             const maxIdx = u.workoutProgram[currentWorkoutIndex].exercises.length;
             currentExerciseSlide = Math.max(0, Math.min(maxIdx, idx));
+            renderWorkout();
             const carousel = document.getElementById('exercises-carousel');
             if (carousel && carousel.children[currentExerciseSlide]) {
                 carousel.scrollTo({
@@ -1614,7 +1617,6 @@
                     behavior: 'smooth'
                 });
             }
-            renderWorkout();
         }
 
         function handleCarouselScroll() {
@@ -1653,12 +1655,10 @@
             saveState();
             renderWorkout();
 
-            // Avvia timer recupero
             if (setObj.done && restSeconds > 0) {
                 startTimer(restSeconds / 60, `Recupero S${setIdx + 1}: ${exName}`);
             }
 
-            // Se l'atleta ha spuntato TUTTE le serie di questo esercizio, scorre da solo al prossimo esercizio!
             const allDoneNow = u.workoutLogs[exId].every(s => s.done);
             if (setObj.done && allDoneNow) {
                 setTimeout(() => {
@@ -1687,4 +1687,1055 @@
         function finishAndSaveWorkout() {
             const u = currentUser();
             const currentWo = u.workoutProgram[currentWorkoutIndex];
-            const todayStr = new Date().toLocaleDateString('it-IT', { day: '
+            const todayStr = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
+
+            currentWo.exercises.forEach(ex => {
+                const logs = u.workoutLogs[ex.id] || [];
+                const formattedSets = logs.map(s => `${s.kg}kg x ${s.reps}`);
+                if (!u.workoutHistory[ex.id]) u.workoutHistory[ex.id] = [];
+                u.workoutHistory[ex.id].unshift({ date: `Oggi (${todayStr})`, sets: formattedSets });
+                logs.forEach(s => { s.done = false; });
+            });
+
+            saveState();
+            stopTimer();
+            alert('🏆 Allenamento salvato nello Storico del tuo profilo Cloud!');
+            backToHub();
+        }
+
+        // =========================================================================
+        // 7. CONSOLE SUPER-ADMIN & PORTALI PROFESSIONISTI (NUTRI + PT)
+        // =========================================================================
+        function renderSuperAdmin() {
+            const list = document.getElementById('sa-pro-list');
+            list.innerHTML = Object.values(masterState.professionals).map(p => `
+                <div class="py-3 flex justify-between items-center">
+                    <div>
+                        <span class="font-extrabold text-stone-900">${p.studioName}</span>
+                        <span class="block text-stone-500">Ruolo: ${p.role === 'nutri' ? 'Biologo Nutrizionista' : 'PT / Palestra'}</span>
+                    </div>
+                    <span class="bg-stone-100 border border-stone-200 px-3 py-1 rounded-xl font-mono font-extrabold text-[#3B6E5C]">${p.proCode}</span>
+                </div>
+            `).join('');
+        }
+
+        async function createNewProfessional() {
+            const role = document.getElementById('sa-role').value;
+            const studioName = document.getElementById('sa-name').value.trim();
+            const proCode = document.getElementById('sa-code').value.trim().toUpperCase();
+
+            if (!studioName || !proCode) return alert('Compila nome studio e codice di accesso.');
+
+            masterState.professionals[proCode] = { proCode, role, studioName };
+            saveState();
+
+            if (sbClient) {
+                try { await sbClient.from('professionals').upsert({ pro_code: proCode, role, studio_name: studioName, prefix: 'ID' }); } catch (e) {}
+            }
+
+            document.getElementById('sa-name').value = '';
+            document.getElementById('sa-code').value = '';
+            renderSuperAdmin();
+            alert(`✅ Professionista attivato! Codice riservato: ${proCode}`);
+        }
+
+        function getMyClients(role, proCode) {
+            return Object.values(masterState.users).filter(u => {
+                if (role === 'nutri') return u.nutriCode === proCode;
+                if (role === 'pt') return u.ptCode === proCode;
+                return false;
+            });
+        }
+
+        function renderAdminNutri() {
+            const pro = masterState.professionals[masterState.activeProCode];
+            document.getElementById('nutri-studio-badge').textContent = `${pro.studioName} (${pro.proCode})`;
+
+            const myClients = getMyClients('nutri', pro.proCode);
+            const list = document.getElementById('nutri-patient-list');
+            list.innerHTML = '';
+
+            if (myClients.length === 0) {
+                list.innerHTML = `<div class="col-span-full p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun paziente ancora associato al tuo studio. Clicca il bottone verde qui sotto per creare il primo paziente!</div>`;
+                document.getElementById('nutri-editor-box').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('nutri-editor-box').classList.remove('hidden');
+            if (!myClients.find(c => c.code === masterState.adminSelectedCode)) {
+                masterState.adminSelectedCode = myClients[0].code;
+            }
+
+            myClients.forEach(u => {
+                const isSel = u.code === masterState.adminSelectedCode;
+                const btn = document.createElement('button');
+                btn.onclick = () => { masterState.adminSelectedCode = u.code; renderAdminNutri(); };
+                btn.className = `p-3 rounded-2xl border text-left transition ${isSel ? 'bg-[#3B6E5C] text-white border-[#3B6E5C] font-extrabold shadow-sm' : 'bg-white text-[#1F332B] border-[#BCE0CA] font-bold'}`;
+                btn.innerHTML = `<span class="block text-[10px] opacity-80">${u.code}</span><span class="text-sm truncate block">${u.name}</span>`;
+                list.appendChild(btn);
+            });
+
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            document.getElementById('nutri-editing-badge').textContent = `CODICE UNICO: ${selUser.code}`;
+            document.getElementById('adm-nutri-name').value = selUser.name;
+            document.getElementById('adm-nutri-water').value = selUser.waterTarget || 3.0;
+            document.getElementById('adm-nutri-bio').value = selUser.bio || '';
+
+            const dayTabs = document.getElementById('adm-nutri-day-tabs');
+            dayTabs.innerHTML = '';
+            selUser.weekData.forEach((d, idx) => {
+                const isDaySel = idx === masterState.adminNutriDayIdx;
+                const b = document.createElement('button');
+                b.onclick = () => { masterState.adminNutriDayIdx = idx; renderAdminNutri(); };
+                b.className = `py-2.5 rounded-xl text-xs font-extrabold border transition ${isDaySel ? 'bg-[#3B6E5C] text-white border-[#3B6E5C]' : 'bg-[#F3F7F4] text-[#617A6F] border-[#BCE0CA]'}`;
+                b.textContent = d.short;
+                dayTabs.appendChild(b);
+            });
+
+            const activeDay = selUser.weekData[masterState.adminNutriDayIdx];
+            document.getElementById('adm-day-kcal').value = activeDay.kcal;
+            document.getElementById('adm-day-c').value = activeDay.c;
+            document.getElementById('adm-day-p').value = activeDay.p;
+            document.getElementById('adm-day-g').value = activeDay.g;
+            document.getElementById('adm-day-workout').checked = !!activeDay.workout;
+            document.getElementById('adm-day-workout-note').value = activeDay.workoutNote || '';
+
+            const mealsList = document.getElementById('adm-nutri-meals-list');
+            mealsList.innerHTML = '';
+
+            activeDay.meals.forEach((meal, mIdx) => {
+                const card = document.createElement('div');
+                card.className = 'pastel-card rounded-3xl p-5 space-y-3 border-l-4 border-[#3B6E5C]';
+
+                const ingInputsHtml = meal.ingredients.map((ing, iIdx) => `
+                    <div class="flex items-center space-x-1.5">
+                        <input type="text" value="${ing.item}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'item', this.value)" class="flex-1 min-w-0 bg-white border border-[#BCE0CA] rounded-xl px-3 py-2 text-xs font-bold text-[#1F332B]">
+                        <input type="number" value="${ing.qty}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'qty', this.value)" class="w-16 bg-white border border-[#BCE0CA] rounded-xl px-2 py-2 text-xs font-extrabold text-center text-[#1F332B]">
+                        <input type="text" value="${ing.unit || 'g'}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'unit', this.value)" class="w-12 bg-white border border-[#BCE0CA] rounded-xl px-1.5 py-2 text-xs font-bold text-center text-[#617A6F]">
+                        <button onclick="removeAdminMealIng(${mIdx}, ${iIdx})" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center gap-2">
+                        <div class="flex items-center space-x-2 flex-1">
+                            <input type="text" value="${meal.time}" onchange="updateAdminMealField(${mIdx}, 'time', this.value)" class="w-16 bg-[#D5E8DC] rounded-lg px-2 py-1 text-xs font-extrabold text-[#274D3F] text-center">
+                            <input type="text" value="${meal.type}" onchange="updateAdminMealField(${mIdx}, 'type', this.value)" class="flex-1 bg-[#F3F7F4] border border-[#BCE0CA] rounded-lg px-2.5 py-1 text-xs font-extrabold uppercase text-[#1F332B]">
+                        </div>
+                        <button onclick="deleteAdminMeal(${mIdx})" class="text-xs font-bold text-rose-600 px-2 py-1 rounded-lg bg-rose-50">Elimina</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2 text-xs">
+                        <div>
+                            <label class="font-bold text-[#617A6F] text-[10px] uppercase">Nome Piatto / Ricetta</label>
+                            <input type="text" value="${meal.title}" onchange="updateAdminMealField(${mIdx}, 'title', this.value)" class="w-full bg-[#F3F7F4] border border-[#BCE0CA] rounded-xl px-3 py-2 font-extrabold text-sm text-[#1F332B] mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-[#617A6F] text-[10px] uppercase">Macro del Pasto</label>
+                            <input type="text" value="${meal.macros}" onchange="updateAdminMealField(${mIdx}, 'macros', this.value)" class="w-full bg-[#F3F7F4] border border-[#BCE0CA] rounded-xl px-3 py-1.5 font-semibold text-[#3B6E5C] mt-0.5">
+                        </div>
+                    </div>
+
+                    <div class="bg-[#F3F7F4] p-3 rounded-2xl border border-[#BCE0CA] space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-extrabold uppercase text-[#617A6F]">Ingredienti & Grammature</span>
+                            <button onclick="addAdminMealIng(${mIdx})" class="text-[11px] font-extrabold text-[#3B6E5C]">+ Aggiungi Alimento</button>
+                        </div>
+                        <div class="space-y-2">${ingInputsHtml}</div>
+                    </div>
+
+                    <div>
+                        <label class="font-bold text-[#617A6F] text-[10px] uppercase block mb-1">Ricetta Passo-Passo (1 passaggio per riga)</label>
+                        <textarea rows="3" onchange="updateAdminMealSteps(${mIdx}, this.value)" class="w-full bg-[#F3F7F4] border border-[#BCE0CA] rounded-xl p-2.5 text-xs text-[#1F332B] leading-relaxed">${(meal.steps || []).join('\n')}</textarea>
+                    </div>
+                `;
+                mealsList.appendChild(card);
+            });
+        }
+
+        function updateClientBasicInfo() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.name = document.getElementById('adm-nutri-name').value.trim() || selUser.name;
+            selUser.waterTarget = parseFloat(document.getElementById('adm-nutri-water').value) || 3.0;
+            selUser.bio = document.getElementById('adm-nutri-bio').value.trim();
+            saveState(selUser.code);
+        }
+
+        function updateDayMacros() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeDay = selUser.weekData[masterState.adminNutriDayIdx];
+            activeDay.kcal = document.getElementById('adm-day-kcal').value.trim();
+            activeDay.c = document.getElementById('adm-day-c').value.trim();
+            activeDay.p = document.getElementById('adm-day-p').value.trim();
+            activeDay.g = document.getElementById('adm-day-g').value.trim();
+            activeDay.workout = document.getElementById('adm-day-workout').checked;
+            activeDay.workoutNote = document.getElementById('adm-day-workout-note').value.trim();
+            saveState(selUser.code);
+        }
+
+        function updateAdminMealField(mIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx][field] = val;
+            saveState(selUser.code);
+        }
+
+        function updateAdminMealIng(mIdx, iIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ing = selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients[iIdx];
+            ing[field] = field === 'qty' ? (parseFloat(val) || 0) : val;
+            saveState(selUser.code);
+        }
+
+        function addAdminMealIng(mIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients.push({
+                qty: 100, unit: 'g', item: 'Nuovo ingrediente', pId: 'c3'
+            });
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function removeAdminMealIng(mIdx, iIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients.splice(iIdx, 1);
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function updateAdminMealSteps(mIdx, text) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].steps = text.split('\n').map(s => s.trim()).filter(Boolean);
+            saveState(selUser.code);
+        }
+
+        function addNewMealToDay() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeDay = selUser.weekData[masterState.adminNutriDayIdx];
+            activeDay.meals.push({
+                id: `${activeDay.id}-${Date.now()}`,
+                time: '13:00',
+                type: 'Nuovo Pasto',
+                swapCat: 'lunch',
+                timer: 10,
+                title: 'Nuovo Piatto Personalizzato',
+                macros: '50g C • 30g P • 10g G',
+                ingredients: [{ qty: 80, unit: 'g', item: 'Ingrediente 1', pId: 'c3' }],
+                steps: ['Descrivi qui i passaggi della preparazione.']
+            });
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function deleteAdminMeal(mIdx) {
+            if (!confirm('Eliminare questo pasto dalla giornata?')) return;
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.weekData[masterState.adminNutriDayIdx].meals.splice(mIdx, 1);
+            saveState(selUser.code);
+            renderAdminNutri();
+        }
+
+        function copyDayToAllWeek() {
+            if (!confirm('Vuoi copiare i pasti di questo giorno su tutti gli altri giorni della settimana?')) return;
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const sourceDay = selUser.weekData[masterState.adminNutriDayIdx];
+            selUser.weekData.forEach((d, idx) => {
+                if (idx === masterState.adminNutriDayIdx) return;
+                d.kcal = sourceDay.kcal; d.c = sourceDay.c; d.p = sourceDay.p; d.g = sourceDay.g;
+                d.meals = JSON.parse(JSON.stringify(sourceDay.meals)).map((m, i) => ({ ...m, id: `${d.id}-copy-${i}-${Date.now()}` }));
+            });
+            saveState(selUser.code);
+            alert('✅ Giorno copiato su tutta la settimana!');
+        }
+
+        function renderAdminPt() {
+            const pro = masterState.professionals[masterState.activeProCode];
+            document.getElementById('pt-studio-badge').textContent = `${pro.studioName} (${pro.proCode})`;
+
+            const myClients = getMyClients('pt', pro.proCode);
+            const list = document.getElementById('pt-athlete-list');
+            list.innerHTML = '';
+
+            if (myClients.length === 0) {
+                list.innerHTML = `<div class="col-span-full p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun atleta associato al tuo club. Clicca il bottone qui sotto per generare un nuovo codice unico!</div>`;
+                document.getElementById('pt-editor-box').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('pt-editor-box').classList.remove('hidden');
+            if (!myClients.find(c => c.code === masterState.adminSelectedCode)) {
+                masterState.adminSelectedCode = myClients[0].code;
+            }
+
+            myClients.forEach(u => {
+                const isSel = u.code === masterState.adminSelectedCode;
+                const btn = document.createElement('button');
+                btn.onclick = () => { masterState.adminSelectedCode = u.code; renderAdminPt(); };
+                btn.className = `p-3 rounded-2xl border text-left transition ${isSel ? 'bg-[#C86D51] text-white border-[#C86D51] font-extrabold shadow-sm' : 'bg-white text-[#36241E] border-[#EBC0B1] font-bold'}`;
+                btn.innerHTML = `<span class="block text-[10px] opacity-80">${u.code}</span><span class="text-sm truncate block">${u.name}</span>`;
+                list.appendChild(btn);
+            });
+
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            document.getElementById('pt-editing-badge').textContent = `CODICE UNICO: ${selUser.code}`;
+
+            const dayTabs = document.getElementById('adm-pt-day-tabs');
+            dayTabs.innerHTML = '';
+            selUser.workoutProgram.forEach((wo, idx) => {
+                const isWoSel = idx === masterState.adminPtDayIdx;
+                const b = document.createElement('button');
+                b.onclick = () => { masterState.adminPtDayIdx = idx; renderAdminPt(); };
+                b.className = `py-2.5 px-2 rounded-xl text-xs font-extrabold border transition ${isWoSel ? 'bg-[#C86D51] text-white border-[#C86D51]' : 'bg-[#FDF7F4] text-[#876B61] border-[#EBC0B1]'}`;
+                b.innerHTML = `<span class="block text-[10px] opacity-80">${wo.dayLabel}</span><span>${wo.shortTitle}</span>`;
+                dayTabs.appendChild(b);
+            });
+
+            const activeWo = selUser.workoutProgram[masterState.adminPtDayIdx];
+            document.getElementById('adm-wo-daylabel').value = activeWo.dayLabel;
+            document.getElementById('adm-wo-title').value = activeWo.title;
+            document.getElementById('adm-wo-subtitle').value = activeWo.subtitle;
+
+            const exList = document.getElementById('adm-pt-exercises-list');
+            exList.innerHTML = '';
+
+            activeWo.exercises.forEach((ex, exIdx) => {
+                const setsHtml = (ex.defaultSets || []).map((s, sIdx) => `
+                    <div class="grid grid-cols-10 gap-1.5 items-center text-xs">
+                        <span class="col-span-2 font-extrabold text-[#876B61]">Serie ${sIdx + 1}</span>
+                        <select onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'type', this.value)" class="col-span-2 bg-white border border-[#EBC0B1] rounded-lg py-1.5 px-1 font-bold text-center">
+                            <option value="W" ${s.type === 'W' ? 'selected' : ''}>W (Risc)</option>
+                            <option value="N" ${s.type === 'N' ? 'selected' : ''}>N (Norm)</option>
+                            <option value="D" ${s.type === 'D' ? 'selected' : ''}>D (Drop)</option>
+                        </select>
+                        <input type="number" step="0.5" value="${s.kg}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'kg', this.value)" class="col-span-3 bg-white border border-[#EBC0B1] rounded-lg py-1.5 px-2 font-extrabold text-center">
+                        <input type="number" value="${s.reps}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'reps', this.value)" class="col-span-2 bg-white border border-[#EBC0B1] rounded-lg py-1.5 px-2 font-extrabold text-center">
+                        <button onclick="removeAdminExSet(${exIdx}, ${sIdx})" class="col-span-1 text-rose-500 flex justify-center"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `).join('');
+
+                const card = document.createElement('div');
+                card.className = 'pastel-card rounded-3xl p-5 space-y-3 border-l-4 border-[#C86D51]';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-extrabold uppercase text-[#7A3B28]">Slide Esercizio ${exIdx + 1}</span>
+                        <button onclick="deleteAdminExercise(${exIdx})" class="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-lg">Elimina</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="col-span-2">
+                            <label class="font-bold text-[#876B61] text-[10px] uppercase">Nome Esercizio</label>
+                            <input type="text" value="${ex.name}" onchange="updateAdminExField(${exIdx}, 'name', this.value)" class="w-full bg-[#FDF7F4] border border-[#EBC0B1] rounded-xl px-3 py-2 font-extrabold text-sm text-[#36241E] mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-[#876B61] text-[10px] uppercase">Muscolo Target</label>
+                            <input type="text" value="${ex.primaryMuscle}" onchange="updateAdminExField(${exIdx}, 'primaryMuscle', this.value)" class="w-full bg-[#FDF7F4] border border-[#EBC0B1] rounded-xl px-3 py-2 font-bold text-[#36241E] mt-0.5">
+                        </div>
+                        <div>
+                            <label class="font-bold text-[#876B61] text-[10px] uppercase">Recupero (s)</label>
+                            <input type="number" value="${ex.rest}" onchange="updateAdminExField(${exIdx}, 'rest', this.value)" class="w-full bg-[#FDF7F4] border border-[#EBC0B1] rounded-xl px-3 py-2 font-extrabold text-[#36241E] mt-0.5">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="font-bold text-[#876B61] text-[10px] uppercase">Focus Tecnico per l'Atleta</label>
+                            <input type="text" value="${ex.note}" onchange="updateAdminExField(${exIdx}, 'note', this.value)" class="w-full bg-[#FDF7F4] border border-[#EBC0B1] rounded-xl px-3 py-2 font-medium text-[#36241E] mt-0.5">
+                        </div>
+                    </div>
+
+                    <div class="bg-[#FDF7F4] p-3 rounded-2xl border border-[#EBC0B1] space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-extrabold uppercase text-[#876B61]">Serie (Tipo • Kg • Reps)</span>
+                            <button onclick="addAdminExSet(${exIdx})" class="text-[11px] font-extrabold text-[#C86D51]">+ Aggiungi Serie</button>
+                        </div>
+                        <div class="space-y-1.5">${setsHtml}</div>
+                    </div>
+                `;
+                exList.appendChild(card);
+            });
+        }
+
+        function updateWorkoutDayHeader() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeWo = selUser.workoutProgram[masterState.adminPtDayIdx];
+            activeWo.dayLabel = document.getElementById('adm-wo-daylabel').value.trim();
+            activeWo.title = document.getElementById('adm-wo-title').value.trim();
+            activeWo.subtitle = document.getElementById('adm-wo-subtitle').value.trim();
+            saveState(selUser.code);
+        }
+
+        function updateAdminExField(exIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            ex[field] = field === 'rest' ? (parseInt(val) || 60) : val;
+            saveState(selUser.code);
+        }
+
+        function updateAdminExSet(exIdx, sIdx, field, val) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            ex.defaultSets[sIdx][field] = (field === 'kg' || field === 'reps') ? (parseFloat(val) || 0) : val;
+            if (selUser.workoutLogs && selUser.workoutLogs[ex.id] && selUser.workoutLogs[ex.id][sIdx]) {
+                selUser.workoutLogs[ex.id][sIdx][field] = ex.defaultSets[sIdx][field];
+            }
+            saveState(selUser.code);
+        }
+
+        function addAdminExSet(exIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            const last = ex.defaultSets[ex.defaultSets.length - 1] || { type: 'N', kg: 20, reps: 10 };
+            ex.defaultSets.push({ ...last });
+            delete selUser.workoutLogs[ex.id];
+            saveState(selUser.code);
+            renderAdminPt();
+        }
+
+        function removeAdminExSet(exIdx, sIdx) {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
+            if (ex.defaultSets.length > 1) {
+                ex.defaultSets.splice(sIdx, 1);
+                delete selUser.workoutLogs[ex.id];
+                saveState(selUser.code);
+                renderAdminPt();
+            }
+        }
+
+        function addNewExerciseToWorkoutDay() {
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            const activeWo = selUser.workoutProgram[masterState.adminPtDayIdx];
+            activeWo.exercises.push({
+                id: 'ex-' + Date.now(),
+                name: 'Nuovo Esercizio',
+                primaryMuscle: 'Muscolo Target',
+                secondaryMuscle: 'Sinergici',
+                tut: '2-0-1-1',
+                rest: 90,
+                note: 'Esecuzione controllata e fluida.',
+                defaultSets: [{ type: 'N', kg: 20, reps: 10 }, { type: 'N', kg: 20, reps: 10 }, { type: 'N', kg: 20, reps: 10 }],
+                defaultHistory: []
+            });
+            saveState(selUser.code);
+            renderAdminPt();
+        }
+
+        function deleteAdminExercise(exIdx) {
+            if (!confirm('Rimuovere questo esercizio dalla scheda?')) return;
+            const selUser = masterState.users[masterState.adminSelectedCode];
+            selUser.workoutProgram[masterState.adminPtDayIdx].exercises.splice(exIdx, 1);
+            saveState(selUser.code);
+            renderAdminPt();
+        }
+
+        function createNewClientForPro(role) {
+            const pro = masterState.professionals[masterState.activeProCode];
+            const randNum = Math.floor(1000 + Math.random() * 9000);
+            const newCode = `ID-${randNum}`;
+            const clientName = prompt(`Generazione Codice Unico Cliente (${newCode}).\nInserisci il nome del cliente:`);
+            if (!clientName) return;
+
+            masterState.users[newCode] = {
+                code: newCode,
+                name: clientName.trim(),
+                bio: `Profilo seguito da ${pro.studioName}`,
+                ptCode: role === 'pt' ? pro.proCode : null,
+                nutriCode: role === 'nutri' ? pro.proCode : null,
+                startWeight: 70.0,
+                waterTarget: 3.0,
+                weekData: buildSyncedWeekPlan(true),
+                workoutProgram: buildWorkoutProgram(true),
+                completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
+                pantry: JSON.parse(JSON.stringify(defaultPantry)),
+                weights: [{ date: 'Inizio', val: 70.0 }],
+                prepDone: {}, nsvDone: {}, workoutLogs: {}, workoutHistory: {}, exercisePinNotes: {}
+            };
+            masterState.adminSelectedCode = newCode;
+            saveState(newCode);
+            if (role === 'nutri') renderAdminNutri(); else renderAdminPt();
+            alert(`✅ Creato! Il Codice Unico per ${clientName} è: ${newCode}`);
+        }
+
+        async function linkExistingClientToPro(role) {
+            const pro = masterState.professionals[masterState.activeProCode];
+            const existingCode = prompt('Inserisci il Codice Unico che il cliente possiede già (es. ID-8492):');
+            if (!existingCode) return;
+            let clean = existingCode.trim().toUpperCase();
+            if (clean === '8492') clean = 'ID-8492';
+            if (clean === '3105') clean = 'ID-3105';
+
+            const targetUser = masterState.users[clean];
+            if (!targetUser) return alert('Codice cliente non trovato.');
+
+            if (role === 'nutri') targetUser.nutriCode = pro.proCode;
+            if (role === 'pt') targetUser.ptCode = pro.proCode;
+
+            masterState.adminSelectedCode = clean;
+            saveState(clean);
+            if (role === 'nutri') renderAdminNutri(); else renderAdminPt();
+            alert(`🔗 Codice ${clean} (${targetUser.name}) collegato al tuo studio!`);
+        }
+
+        // =========================================================================
+        // 8. MODULO A: NUTRIZIONE PAZIENTE & UTILITÀ
+        // =========================================================================
+        function getActiveMealData(meal) {
+            const u = currentUser();
+            const swapIdx = u.swappedMeals[meal.id];
+            if (swapIdx !== undefined && interactiveSwaps[meal.swapCat] && interactiveSwaps[meal.swapCat][swapIdx]) {
+                const swapped = interactiveSwaps[meal.swapCat][swapIdx];
+                return { ...meal, ...swapped, isSwapped: true };
+            }
+            return { ...meal, isSwapped: false };
+        }
+
+        function renderDaySelector() {
+            const u = currentUser();
+            const container = document.getElementById('day-selector');
+            container.innerHTML = '';
+
+            u.weekData.forEach((day, idx) => {
+                const isSelected = idx === currentDayIndex;
+                const btn = document.createElement('button');
+                btn.onclick = () => { currentDayIndex = idx; renderPlan(); };
+                btn.className = `py-3 rounded-2xl flex flex-col items-center justify-center transition ${
+                    isSelected ? 'bg-[#3B6E5C] text-white font-extrabold shadow-sm' : 'bg-white text-[#617A6F] border border-[#BCE0CA] font-bold'
+                }`;
+                btn.innerHTML = `
+                    <span class="text-xs">${day.short}</span>
+                    <span class="mt-1.5 w-2 h-2 rounded-full ${
+                        day.workout ? (isSelected ? 'bg-[#F6D8CE]' : 'bg-[#C86D51]') : (isSelected ? 'bg-[#BCE0CA]' : 'bg-stone-200')
+                    }"></span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderPlan() {
+            const u = currentUser();
+            renderDaySelector();
+            const day = u.weekData[currentDayIndex];
+            document.getElementById('current-date-label').textContent = `${day.name} • ${u.code}`;
+
+            const banner = document.getElementById('workout-banner');
+            if (day.workout) {
+                banner.classList.remove('hidden');
+                document.getElementById('workout-desc').textContent = day.workoutNote;
+            } else {
+                banner.classList.add('hidden');
+            }
+
+            document.getElementById('macro-kcal').textContent = day.kcal;
+            document.getElementById('macro-c').textContent = day.c;
+            document.getElementById('macro-p').textContent = day.p;
+            document.getElementById('macro-g').textContent = day.g;
+
+            const doneCount = day.meals.filter(m => u.completedMeals[m.id] || u.offPlanMeals[m.id]).length;
+            document.getElementById('meals-progress-text').textContent = `${doneCount} di ${day.meals.length} completati`;
+
+            const wTarget = u.waterTarget || 3.5;
+            document.getElementById('water-target-label').textContent = `Acqua (${wTarget.toFixed(1)}L)`;
+            const waterToday = u.water[day.id] || 0;
+            document.getElementById('water-val').textContent = `${waterToday.toFixed(2)} L`;
+            document.getElementById('water-bar').style.width = `${Math.min(100, (waterToday / wTarget) * 100)}%`;
+
+            const mealsContainer = document.getElementById('meals-container');
+            mealsContainer.innerHTML = '';
+
+            const nextMealId = (day.meals.find(m => !u.completedMeals[m.id] && !u.offPlanMeals[m.id]) || {}).id;
+
+            day.meals.forEach(rawMeal => {
+                const meal = getActiveMealData(rawMeal);
+                const isDone = !!u.completedMeals[meal.id];
+                const isOffPlan = !!u.offPlanMeals[meal.id];
+                const isNext = meal.id === nextMealId;
+                const isExpandedAnyway = !!expandedDoneMeals[meal.id];
+
+                if ((isDone || isOffPlan) && !isExpandedAnyway) {
+                    const compactBar = document.createElement('div');
+                    compactBar.className = 'w-full bg-[#E5EFE8] border border-[#BCE0CA] rounded-2xl px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden';
+                    compactBar.innerHTML = `
+                        <div onclick="toggleExpandDone('${meal.id}')" class="flex items-center space-x-3 min-w-0 flex-1 cursor-pointer">
+                            <span class="w-7 h-7 rounded-xl bg-[#3B6E5C] text-white flex items-center justify-center text-xs shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                            <div class="min-w-0 flex-1">
+                                <span class="text-[11px] font-extrabold uppercase text-[#617A6F] block truncate">${meal.time} • ${meal.type}</span>
+                                <span class="text-sm font-bold text-[#1F332B] line-through block truncate">${isOffPlan ? '🍕 Pasto Libero' : meal.title}</span>
+                            </div>
+                        </div>
+                        <button onclick="uncheckMeal('${meal.id}')" class="w-9 h-9 rounded-xl bg-white text-rose-500 border border-[#BCE0CA] flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-rotate-left text-xs"></i>
+                        </button>
+                    `;
+                    mealsContainer.appendChild(compactBar);
+                    return;
+                }
+
+                const isRecipeOpen = !!openRecipes[meal.id];
+                const isSwapOpen = !!openSwaps[meal.id];
+
+                const card = document.createElement('div');
+                card.className = `pastel-card rounded-3xl p-5 transition-all overflow-hidden ${isNext ? 'ring-2 ring-[#3B6E5C]/30' : ''}`;
+                
+                const ingRows = meal.ingredients.map(ing => `
+                    <li class="flex justify-between items-center py-2.5 border-b border-[#BCE0CA]/40 last:border-none gap-2">
+                        <span class="text-base text-[#1F332B] font-semibold min-w-0 break-words">${ing.item}</span>
+                        <span class="text-base font-extrabold text-[#274D3F] bg-white border border-[#BCE0CA] px-3 py-1 rounded-xl shrink-0 shadow-sm">${ing.qty}${ing.unit || ''}</span>
+                    </li>
+                `).join('');
+
+                const stepsHtml = (meal.steps || []).map((s, idx) => `
+                    <div class="flex items-start space-x-3 mb-3 last:mb-0">
+                        <span class="w-6 h-6 rounded-full bg-[#D5E8DC] text-[#274D3F] font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
+                        <p class="text-base text-[#1F332B] leading-relaxed font-medium">${s}</p>
+                    </div>
+                `).join('');
+
+                const alternatives = interactiveSwaps[meal.swapCat] || [];
+                const swapsHtml = alternatives.map((alt, idx) => `
+                    <div onclick="applyMealSwap('${meal.id}', ${idx})" class="p-3.5 rounded-2xl bg-white border border-[#BCE0CA] flex justify-between items-center gap-2 cursor-pointer shadow-sm">
+                        <div class="min-w-0 flex-1">
+                            <div class="text-sm font-extrabold text-[#1F332B] leading-snug">${alt.title}</div>
+                            <div class="text-xs font-bold text-[#3B6E5C] mt-1">${alt.macros}</div>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-xl bg-[#3B6E5C] text-white font-extrabold text-xs shrink-0">Scegli</span>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center flex-wrap gap-1.5">
+                                <span class="text-sm font-extrabold text-[#274D3F] bg-[#D5E8DC] px-3 py-1 rounded-xl">${meal.time}</span>
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-[#617A6F]">${meal.type}</span>
+                                ${isNext ? '<span class="text-xs font-extrabold uppercase bg-[#F6D8CE] text-[#7A3B28] px-2.5 py-1 rounded-lg">Adesso</span>' : ''}
+                                ${(isDone || isOffPlan) ? `<button onclick="toggleExpandDone('${meal.id}')" class="text-xs font-bold text-[#617A6F] underline">Chiudi</button>` : ''}
+                            </div>
+                            <h3 class="text-xl font-extrabold text-[#1F332B] mt-2.5 leading-snug break-words">${meal.title}</h3>
+                            <p class="text-sm font-semibold text-[#617A6F] mt-1">${meal.macros}</p>
+                        </div>
+                        <button onclick="toggleMeal('${meal.id}')" class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition shrink-0 ${
+                            isDone ? 'bg-[#3B6E5C] border-[#3B6E5C] text-white shadow-sm' : 'bg-[#F3F7F4] border-[#BCE0CA] text-stone-300'
+                        }">
+                            <i class="fa-solid fa-check text-xl"></i>
+                        </button>
+                    </div>
+
+                    <ul class="mt-4 bg-[#F3F7F4] rounded-2xl px-4 py-1.5 border border-[#BCE0CA]/60">${ingRows}</ul>
+
+                    <div class="mt-4 grid grid-cols-2 gap-2.5">
+                        <button onclick="toggleRecipe('${meal.id}')" class="py-3 px-3 rounded-2xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
+                            isRecipeOpen ? 'bg-[#3B6E5C] text-white border-[#3B6E5C]' : 'bg-[#E5EFE8] text-[#274D3F] border-[#BCE0CA]'
+                        }">
+                            <i class="fa-solid fa-fire-burner"></i>
+                            <span>Ricetta</span>
+                        </button>
+                        <button onclick="toggleSwap('${meal.id}')" class="py-3 px-3 rounded-2xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
+                            isSwapOpen ? 'bg-[#C86D51] text-white border-[#C86D51]' : 'bg-[#FDF7F4] text-[#7A3B28] border-[#EBC0B1]'
+                        }">
+                            <i class="fa-solid fa-repeat"></i>
+                            <span>Cambia Piatto</span>
+                        </button>
+                    </div>
+
+                    <div class="${isRecipeOpen ? 'block' : 'hidden'} mt-4 pt-4 border-t border-[#BCE0CA]/60">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-[#274D3F]">Procedimento:</span>
+                            ${meal.timer > 0 ? `
+                                <button onclick="startTimer(${meal.timer}, '${meal.title.replace(/'/g, "\\'")}')" class="bg-[#3B6E5C] text-white text-xs font-extrabold px-3.5 py-2 rounded-xl flex items-center space-x-2">
+                                    <i class="fa-solid fa-hourglass-start"></i>
+                                    <span>Timer ${meal.timer} min</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                        ${stepsHtml}
+                    </div>
+
+                    <div class="${isSwapOpen ? 'block' : 'hidden'} mt-4 p-4 rounded-2xl bg-[#FDF7F4] border border-[#EBC0B1] space-y-2.5">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-[#7A3B28]">Alternative equivalenti:</span>
+                            ${meal.isSwapped ? `<button onclick="resetMealSwap('${meal.id}')" class="text-xs font-extrabold text-rose-600 underline">Originale</button>` : ''}
+                        </div>
+                        ${swapsHtml}
+                        
+                        <div class="pt-2 border-t border-[#EBC0B1]">
+                            <button onclick="toggleOffPlan('${meal.id}')" class="w-full py-2.5 px-3 rounded-xl bg-white border border-[#EBC0B1] text-[#7A3B28] text-xs font-extrabold flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-pizza-slice text-[#C86D51]"></i>
+                                <span>Oggi mangio fuori / Pasto libero</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                mealsContainer.appendChild(card);
+            });
+        }
+
+        function toggleExpandDone(mealId) { expandedDoneMeals[mealId] = !expandedDoneMeals[mealId]; renderPlan(); }
+        function uncheckMeal(mealId) {
+            const u = currentUser();
+            delete u.completedMeals[mealId];
+            delete u.offPlanMeals[mealId];
+            delete expandedDoneMeals[mealId];
+            saveState();
+            renderPlan();
+        }
+        function applyMealSwap(mealId, swapIdx) {
+            const u = currentUser();
+            u.swappedMeals[mealId] = swapIdx;
+            openSwaps[mealId] = false;
+            saveState();
+            renderPlan();
+        }
+        function resetMealSwap(mealId) {
+            const u = currentUser();
+            delete u.swappedMeals[mealId];
+            openSwaps[mealId] = false;
+            saveState();
+            renderPlan();
+        }
+        function toggleOffPlan(mealId) {
+            const u = currentUser();
+            u.offPlanMeals[mealId] = !u.offPlanMeals[mealId];
+            openSwaps[mealId] = false;
+            saveState();
+            renderPlan();
+        }
+        function toggleRecipe(mealId) { openRecipes[mealId] = !openRecipes[mealId]; if (openRecipes[mealId]) openSwaps[mealId] = false; renderPlan(); }
+        function toggleSwap(mealId) { openSwaps[mealId] = !openSwaps[mealId]; if (openSwaps[mealId]) openRecipes[mealId] = false; renderPlan(); }
+        function toggleMeal(mealId) {
+            const u = currentUser();
+            u.completedMeals[mealId] = !u.completedMeals[mealId];
+            expandedDoneMeals[mealId] = false;
+            saveState();
+            renderPlan();
+        }
+        function updateWater(amount) {
+            const u = currentUser();
+            const dayId = u.weekData[currentDayIndex].id;
+            const current = u.water[dayId] || 0;
+            u.water[dayId] = Math.max(0, Math.min(5, current + amount));
+            saveState();
+            renderPlan();
+        }
+
+        // SPESA
+        function setShopRange(days) {
+            shopRangeDays = days;
+            document.getElementById('range-3').className = days === 3 ? 'py-2 px-3 rounded-xl text-xs font-extrabold bg-[#3B6E5C] text-white shadow-sm transition' : 'py-2 px-3 rounded-xl text-xs font-bold bg-white text-[#274D3F] border border-[#BCE0CA] transition';
+            document.getElementById('range-7').className = days === 7 ? 'py-2 px-3 rounded-xl text-xs font-extrabold bg-[#3B6E5C] text-white shadow-sm transition' : 'py-2 px-3 rounded-xl text-xs font-bold bg-white text-[#274D3F] border border-[#BCE0CA] transition';
+            renderPantry();
+        }
+
+        function calculateNeededQuantities() {
+            const u = currentUser();
+            const totals = {};
+            for (let i = 0; i < shopRangeDays; i++) {
+                const dIdx = (currentDayIndex + i) % 7;
+                const day = u.weekData[dIdx];
+                day.meals.forEach(rawMeal => {
+                    if (i === 0 && (u.completedMeals[rawMeal.id] || u.offPlanMeals[rawMeal.id])) return;
+                    const meal = getActiveMealData(rawMeal);
+                    meal.ingredients.forEach(ing => {
+                        if (!ing.pId || typeof ing.qty !== 'number' || ing.qty <= 0) return;
+                        if (!totals[ing.pId]) totals[ing.pId] = { qty: 0, unit: ing.unit || 'g' };
+                        totals[ing.pId].qty += ing.qty;
+                    });
+                });
+            }
+            return totals;
+        }
+
+        function setPantryFilter(filter) {
+            currentPantryFilter = filter;
+            ['missing', 'home', 'all'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                btn.className = f === filter ? 'py-2 text-xs font-extrabold rounded-xl bg-white text-[#1F332B] shadow-sm transition' : 'py-2 text-xs font-semibold rounded-xl text-[#617A6F] transition';
+            });
+            renderPantry();
+        }
+
+        function renderPantry() {
+            const u = currentUser();
+            const container = document.getElementById('pantry-container');
+            container.innerHTML = '';
+            const neededTotals = calculateNeededQuantities();
+            const categories = [...new Set(u.pantry.map(i => i.cat))];
+
+            categories.forEach(cat => {
+                const items = u.pantry.filter(i => {
+                    if (i.cat !== cat) return false;
+                    if (currentPantryFilter === 'missing') return !i.inStock;
+                    if (currentPantryFilter === 'home') return i.inStock;
+                    return true;
+                });
+
+                if (items.length === 0) return;
+
+                const section = document.createElement('div');
+                section.className = 'pastel-card rounded-3xl p-5';
+                
+                const itemsHtml = items.map(item => {
+                    const need = neededTotals[item.id];
+                    let needBadge = '';
+                    if (need && need.qty > 0) {
+                        let packHint = item.packSize ? ` (${Math.ceil(need.qty / item.packSize)} ${item.packName})` : '';
+                        needBadge = `<span class="block text-xs font-bold text-[#3B6E5C] mt-0.5">Servono: ${need.qty}${need.unit}${packHint}</span>`;
+                    }
+
+                    return `
+                        <div onclick="togglePantryItem('${item.id}')" class="flex items-center justify-between py-3.5 border-b border-stone-100 last:border-none cursor-pointer gap-2">
+                            <div class="flex items-start space-x-3 min-w-0 flex-1">
+                                <div class="w-6 h-6 rounded-lg flex items-center justify-center border-2 mt-0.5 shrink-0 ${
+                                    item.inStock ? 'bg-[#3B6E5C] border-[#3B6E5C] text-white' : 'bg-white border-[#BCE0CA]'
+                                }">
+                                    ${item.inStock ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <span class="text-base font-semibold block truncate ${item.inStock ? 'text-stone-400 line-through' : 'text-[#1F332B]'}">${item.name}</span>
+                                    ${!item.inStock ? needBadge : ''}
+                                </div>
+                            </div>
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg shrink-0 ${item.inStock ? 'bg-[#D5E8DC] text-[#274D3F]' : 'bg-[#F6D8CE] text-[#7A3B28]'}">
+                                ${item.inStock ? 'In casa' : 'Compra'}
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+
+                section.innerHTML = `<h3 class="text-xs font-extrabold uppercase tracking-wider text-[#617A6F] mb-2">${cat}</h3><div>${itemsHtml}</div>`;
+                container.appendChild(section);
+            });
+        }
+
+        function togglePantryItem(id) {
+            const u = currentUser();
+            const item = u.pantry.find(i => i.id === id);
+            if (item) { item.inStock = !item.inStock; saveState(); renderPantry(); }
+        }
+
+        function addCustomItem() {
+            const u = currentUser();
+            const input = document.getElementById('custom-item-input');
+            const name = input.value.trim();
+            if (!name) return;
+            u.pantry.unshift({ id: 'c-' + Date.now(), name, cat: 'Extra', inStock: false });
+            input.value = '';
+            saveState();
+            renderPantry();
+        }
+
+        function shareShoppingListWhatsApp() {
+            const u = currentUser();
+            const missing = u.pantry.filter(i => !i.inStock);
+            const neededTotals = calculateNeededQuantities();
+            if (missing.length === 0) return alert('Hai già tutto in casa!');
+            const lines = missing.map(i => {
+                const need = neededTotals[i.id];
+                const qtyStr = (need && need.qty > 0) ? ` (${need.qty}${need.unit})` : '';
+                return `• ${i.name}${qtyStr}`;
+            });
+            window.open(`https://wa.me/?text=${encodeURIComponent(`🛒 *SPESA KÌNESI - ${u.name.toUpperCase()} (${shopRangeDays} GIORNI):*\n\n` + lines.join('\n'))}`, '_blank');
+        }
+
+        function updateMissingBadge() {
+            const u = currentUser();
+            const count = u.pantry.filter(i => !i.inStock).length;
+            const badge = document.getElementById('missing-badge');
+            if (badge) { badge.textContent = count; badge.classList.toggle('hidden', count === 0); }
+        }
+
+        // GUIDA & PREP
+        function setGuideSubTab(sub) {
+            ['out', 'prep', 'sos'].forEach(s => {
+                document.getElementById(`guide-section-${s}`).classList.toggle('hidden', s !== sub);
+                document.getElementById(`gsub-${s}`).className = s === sub ? 'py-2.5 text-xs font-extrabold rounded-xl bg-white text-[#1F332B] shadow-sm transition' : 'py-2.5 text-xs font-bold rounded-xl text-[#617A6F] transition';
+            });
+            if (sub === 'prep') renderPrepChecklist();
+        }
+
+        function renderPrepChecklist() {
+            const u = currentUser();
+            const container = document.getElementById('prep-checklist');
+            if (!u.prepDone) u.prepDone = {};
+            container.innerHTML = mealPrepSteps.map(step => {
+                const done = !!u.prepDone[step.id];
+                return `
+                    <div onclick="togglePrepStep('${step.id}')" class="p-4 rounded-2xl border transition cursor-pointer flex items-start space-x-3.5 ${
+                        done ? 'bg-[#F3F7F4] border-[#BCE0CA] opacity-60' : 'bg-white border-[#BCE0CA]'
+                    }">
+                        <div class="w-6 h-6 rounded-lg flex items-center justify-center border-2 mt-0.5 shrink-0 ${
+                            done ? 'bg-[#3B6E5C] border-[#3B6E5C] text-white' : 'border-[#BCE0CA]'
+                        }">
+                            ${done ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-base font-extrabold text-[#1F332B] ${done ? 'line-through' : ''}">${step.title}</h4>
+                            <p class="text-sm text-[#617A6F] mt-1 leading-relaxed">${step.desc}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function togglePrepStep(id) {
+            const u = currentUser();
+            if (!u.prepDone) u.prepDone = {};
+            u.prepDone[id] = !u.prepDone[id];
+            saveState();
+            renderPrepChecklist();
+        }
+
+        // PROGRESSI
+        function updateAdherence() {
+            const u = currentUser();
+            const totalMeals = u.weekData.reduce((acc, d) => acc + d.meals.length, 0);
+            const doneMeals = Object.values(u.completedMeals).filter(Boolean).length;
+            const pct = totalMeals > 0 ? Math.round((doneMeals / totalMeals) * 100) : 0;
+            const badge = document.getElementById('adherence-badge');
+            if (badge) badge.textContent = `Costanza: ${pct}%`;
+            return pct;
+        }
+
+        function renderWeightChart(list) {
+            const container = document.getElementById('weight-chart-container');
+            if (list.length < 2) {
+                container.innerHTML = `<span class="text-xs text-[#617A6F] font-semibold text-center">Registra il prossimo peso per vedere il grafico</span>`;
+                return;
+            }
+            const vals = list.map(w => w.val);
+            const minW = Math.min(...vals) - 1;
+            const maxW = Math.max(...vals) + 1;
+            const width = 280;
+            const height = 80;
+            const points = list.map((w, idx) => {
+                const x = (idx / (list.length - 1)) * (width - 24) + 12;
+                const y = height - ((w.val - minW) / (maxW - minW || 1)) * (height - 20) - 10;
+                return `${x},${y}`;
+            }).join(' ');
+            container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible"><polyline fill="none" stroke="#3B6E5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${points}" /></svg>`;
+        }
+
+        function renderWeights() {
+            const u = currentUser();
+            updateAdherence();
+            const list = u.weights || [{ date: 'Inizio', val: u.startWeight }];
+            const latest = list[list.length - 1].val;
+            const diff = (latest - u.startWeight).toFixed(1);
+
+            document.getElementById('start-weight-display').textContent = `${u.startWeight.toFixed(1)} kg`;
+            document.getElementById('current-weight-display').textContent = `${latest.toFixed(1)} kg`;
+            document.getElementById('diff-weight-display').textContent = `${diff > 0 ? '+' : ''}${diff} kg`;
+
+            renderWeightChart(list);
+
+            if (!u.nsvDone) u.nsvDone = {};
+            document.getElementById('nsv-container').innerHTML = nonScaleVictoriesList.map(n => {
+                const done = !!u.nsvDone[n.id];
+                return `
+                    <div onclick="toggleNsv('${n.id}')" class="p-3.5 rounded-2xl border flex items-center justify-between cursor-pointer gap-2 transition ${
+                        done ? 'bg-[#D5E8DC] border-[#BCE0CA] text-[#1F332B] font-bold' : 'bg-[#F3F7F4] border-[#BCE0CA]/60 text-[#617A6F] font-medium'
+                    }">
+                        <span class="text-sm min-w-0">${n.label}</span>
+                        <div class="w-6 h-6 rounded-lg flex items-center justify-center border-2 shrink-0 ${
+                            done ? 'bg-[#3B6E5C] border-[#3B6E5C] text-white' : 'bg-white border-[#BCE0CA]'
+                        }">
+                            ${done ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('weight-history').innerHTML = [...list].reverse().map(w => `
+                <div class="py-2.5 flex justify-between items-center">
+                    <span class="text-[#617A6F] font-semibold">${w.date}</span>
+                    <span class="font-extrabold text-[#1F332B] text-base">${w.val.toFixed(1)} kg</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleNsv(id) {
+            const u = currentUser();
+            if (!u.nsvDone) u.nsvDone = {};
+            u.nsvDone[id] = !u.nsvDone[id];
+            saveState();
+            renderWeights();
+        }
+
+        function addWeightEntry() {
+            const u = currentUser();
+            const wInput = document.getElementById('weight-input');
+            const val = parseFloat(wInput.value);
+            if (!val || val < 35 || val > 220) return;
+            const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
+            u.weights.push({ date: today, val });
+            wInput.value = '';
+            saveState();
+            renderWeights();
+        }
+
+        // TIMER IN BASSO
+        function updateTimerText() {
+            const display = document.getElementById('timer-display');
+            const m = String(Math.floor(timerSecondsLeft / 60)).padStart(2, '0');
+            const s = String(timerSecondsLeft % 60).padStart(2, '0');
+            display.textContent = `${m}:${s}`;
+        }
+
+        function startTimer(minutes, label) {
+            if (timerInterval) clearInterval(timerInterval);
+            timerSecondsLeft = Math.round(minutes * 60);
+            const widget = document.getElementById('timer-widget');
+            document.getElementById('timer-label').textContent = label;
+            widget.classList.remove('hidden');
+            updateTimerText();
+
+            timerInterval = setInterval(() => {
+                timerSecondsLeft--;
+                updateTimerText();
+                if (timerSecondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    widget.classList.add('hidden');
+                    alert(`⏰ Tempo terminato!`);
+                }
+            }, 1000);
+        }
+
+        function adjustTimer(deltaSeconds) {
+            timerSecondsLeft = Math.max(0, timerSecondsLeft + deltaSeconds);
+            updateTimerText();
+        }
+
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('timer-widget').classList.add('hidden');
+        }
+
+        function resetProgress() {
+            const u = currentUser();
+            if (confirm('Vuoi azzerare i pasti spuntati e l\'acqua del tuo profilo per iniziare una nuova settimana?')) {
+                u.completedMeals = {};
+                u.offPlanMeals = {};
+                u.water = {};
+                u.prepDone = {};
+                expandedDoneMeals = {};
+                saveState();
+                renderPlan();
+            }
+        }
+
+        function switchTab(tab) {
+            ['plan', 'pantry', 'guide', 'weight'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab);
+                const btn = document.getElementById(`tab-${t}`);
+                btn.className = t === tab 
+                    ? 'flex flex-col items-center space-y-1 text-[#3B6E5C] py-1 rounded-2xl transition relative'
+                    : 'flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition relative';
+            });
+            if (tab === 'plan') renderPlan();
+            if (tab === 'pantry') renderPantry();
+            if (tab === 'guide') renderPrepChecklist();
+            if (tab === 'weight') renderWeights();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        checkAuthOnLoad();
+    </script>
+</body>
+</html>
