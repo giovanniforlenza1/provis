@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Fit & Nutri Hub">
-    <title>Fit & Nutri Hub — Giovanni</title>
+    <meta name="apple-mobile-web-app-title" content="Fit & Nutri Pro">
+    <title>Fit & Nutri Pro — Giovanni</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -17,7 +17,6 @@
             --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
-        /* BLOCCO TOTALE DELLO SCORRIMENTO ORIZZONTALE SU IPHONE */
         html, body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #F4F3EE;
@@ -34,7 +33,7 @@
 
         .app-padding {
             padding-top: calc(var(--safe-top) + 14px);
-            padding-bottom: calc(var(--safe-bottom) + 105px);
+            padding-bottom: calc(var(--safe-bottom) + 165px);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -53,54 +52,72 @@
             border: 1px solid rgba(24, 28, 25, 0.07);
             box-shadow: 0 8px 28px -6px rgba(24, 28, 25, 0.05);
         }
+
+        /* Animazione simulatore biomeccanico */
+        @keyframes pulseMuscle {
+            0%, 100% { opacity: 0.45; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.04); }
+        }
+        .muscle-active {
+            animation: pulseMuscle 1.8s infinite ease-in-out;
+            transform-origin: center;
+        }
     </style>
 </head>
 <body class="min-h-screen antialiased">
 
-    <!-- WIDGET TIMER FLOTTANTE (CUCINA & RECUPERO SERIE PALESTRA) -->
-    <div id="timer-widget" class="fixed top-4 left-4 right-4 bg-stone-900 text-white rounded-3xl px-5 py-4 shadow-2xl z-50 hidden flex items-center justify-between border border-stone-700">
-        <div class="flex items-center space-x-3.5 min-w-0 pr-2">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center animate-pulse shrink-0">
-                <i class="fa-solid fa-stopwatch text-lg"></i>
+    <!-- ========================================================== -->
+    <!-- WIDGET TIMER IN BASSO (A PORTATA DI POLLICE - THUMB ZONE!) -->
+    <!-- ========================================================== -->
+    <div id="timer-widget" class="fixed left-3 right-3 bg-stone-900 text-white rounded-3xl p-4 shadow-2xl z-50 hidden border border-stone-700" style="bottom: calc(var(--safe-bottom) + 78px);">
+        <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-3 min-w-0">
+                <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-stopwatch text-xl animate-spin" style="animation-duration: 6s;"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 block truncate" id="timer-label">Recupero Serie</span>
+                    <span class="text-2xl font-extrabold font-mono text-white leading-none" id="timer-display">01:30</span>
+                </div>
             </div>
-            <div class="min-w-0">
-                <span class="text-xs font-bold uppercase tracking-wider text-stone-400 block truncate" id="timer-label">Timer Attivo</span>
-                <span class="text-2xl font-extrabold font-mono text-white" id="timer-display">00:00</span>
+            <div class="flex items-center space-x-1.5 shrink-0">
+                <button onclick="adjustTimer(-15)" class="h-11 px-3 rounded-2xl bg-stone-800 border border-stone-700 text-stone-200 text-xs font-extrabold active:scale-90 transition">-15s</button>
+                <button onclick="adjustTimer(15)" class="h-11 px-3 rounded-2xl bg-stone-800 border border-stone-700 text-stone-200 text-xs font-extrabold active:scale-90 transition">+15s</button>
+                <button onclick="stopTimer()" class="h-11 px-4 rounded-2xl bg-rose-500 text-white text-xs font-extrabold active:scale-95 transition shadow-md">Salta</button>
             </div>
         </div>
-        <button onclick="stopTimer()" class="px-4 py-2 rounded-2xl bg-rose-500 text-white text-sm font-extrabold shrink-0">Ferma</button>
     </div>
 
     <!-- ========================================== -->
-    <!-- SCHERMATA 0: LOGIN CON CODICE PAZIENTE/ATLETA -->
+    <!-- SCHERMATA 0: LOGIN CON CODICE              -->
     <!-- ========================================== -->
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-[#F4F3EE]">
         <div class="max-w-sm mx-auto w-full space-y-6">
             <div class="text-center space-y-2">
                 <div class="w-16 h-16 rounded-3xl bg-emerald-800 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-900/20 text-2xl">
-                    <i class="fa-solid fa-leaf"></i>
+                    <i class="fa-solid fa-dumbbell"></i>
                 </div>
-                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Portale Pazienti & Atleti</span>
-                <h1 class="text-3xl font-extrabold text-stone-900">Accedi al tuo Piano</h1>
+                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Performance & Nutrition Suite</span>
+                <h1 class="text-3xl font-extrabold text-stone-900">Accedi al Club</h1>
                 <p class="text-sm text-stone-500 leading-relaxed">
-                    Inserisci il codice personale fornito dal tuo Nutrizionista o Personal Trainer.
+                    Inserisci il codice atleta/paziente fornito dal tuo Club o Nutrizionista.
                 </p>
             </div>
 
             <div class="soft-card rounded-3xl p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Personale o Username</label>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Personale</label>
                     <input type="text" id="login-code-input" placeholder="Es. GIOVANNI" class="w-full bg-stone-50 border-2 border-stone-200 rounded-2xl px-4 py-3.5 text-lg font-extrabold text-stone-900 uppercase text-center tracking-widest focus:outline-none focus:border-emerald-700">
-                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice non valido. Riprova (Usa: GIOVANNI)</p>
+                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice non valido. Usa: GIOVANNI</p>
                 </div>
 
                 <button onclick="handleLogin()" class="w-full bg-emerald-800 text-white font-extrabold py-4 rounded-2xl text-base shadow-md active:scale-98 transition">
-                    Entra nel Portale
+                    Entra nell'App
                 </button>
 
                 <div class="pt-3 border-t border-stone-100 text-center">
                     <button onclick="quickLogin('GIOVANNI')" class="text-xs font-bold text-emerald-800 underline">
-                        Accesso Rapido Demo: Profilo Giovanni Forlenza
+                        Accesso Rapido Demo: Giovanni Forlenza
                     </button>
                 </div>
             </div>
@@ -108,13 +125,13 @@
     </section>
 
     <!-- ========================================== -->
-    <!-- SCHERMATA 1: HUB DI SCELTA (DIETA vs ALLENAMENTO) -->
+    <!-- SCHERMATA 1: HUB DI SCELTA                 -->
     <!-- ========================================== -->
     <section id="screen-hub" class="min-h-screen flex flex-col justify-between px-5 py-10 hidden" style="padding-top: calc(var(--safe-top) + 20px);">
         <div class="space-y-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">Profilo Attivo</span>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">Profilo Verificato</span>
                     <h1 class="text-3xl font-extrabold text-stone-900 mt-0.5">Ciao Giovanni 👋</h1>
                 </div>
                 <button onclick="logout()" class="px-3.5 py-2 rounded-2xl bg-white border border-stone-200 text-stone-600 text-xs font-bold shadow-sm">
@@ -122,9 +139,25 @@
                 </button>
             </div>
 
-            <p class="text-base text-stone-600 font-medium">Cosa vuoi consultare adesso?</p>
+            <!-- CARD 1: SCHEDA ALLENAMENTO PRO (IN EVIDENZA PER DEMO PALESTRA) -->
+            <div onclick="openModule('workout')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-amber-500/30 relative overflow-hidden">
+                <div class="flex items-start justify-between">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-dumbbell"></i>
+                    </div>
+                    <span class="bg-amber-100 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-xl">Pro Tracker 3.0</span>
+                </div>
+                <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Scheda Allenamento</h2>
+                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
+                    Tracking carichi per singola serie (Kg + Reps), storico sessioni precedenti, focus biomeccanico e recupero smart.
+                </p>
+                <div class="mt-5 flex items-center text-sm font-extrabold text-amber-800">
+                    <span>Inizia Allenamento</span>
+                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                </div>
+            </div>
 
-            <!-- CARD 1: NUTRIZIONE -->
+            <!-- CARD 2: NUTRIZIONE -->
             <div onclick="openModule('nutrition')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-transparent hover:border-emerald-700/30 relative overflow-hidden">
                 <div class="flex items-start justify-between">
                     <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-2xl shrink-0">
@@ -141,37 +174,95 @@
                     <i class="fa-solid fa-arrow-right ml-2"></i>
                 </div>
             </div>
-
-            <!-- CARD 2: SCHEDA ALLENAMENTO -->
-            <div onclick="openModule('workout')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-transparent hover:border-amber-500/40 relative overflow-hidden">
-                <div class="flex items-start justify-between">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0">
-                        <i class="fa-solid fa-dumbbell"></i>
-                    </div>
-                    <span class="bg-amber-50 text-amber-900 border border-amber-200 text-xs font-extrabold px-3 py-1 rounded-xl">Mar • Gio • Sab</span>
-                </div>
-                <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Scheda Allenamento</h2>
-                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Programma sala pesi con serie, ripetizioni, tracciamento dei carichi (Kg), note tecniche e timer di recupero automatico.
-                </p>
-                <div class="mt-5 flex items-center text-sm font-extrabold text-amber-800">
-                    <span>Apri Scheda Palestra</span>
-                    <i class="fa-solid fa-arrow-right ml-2"></i>
-                </div>
-            </div>
         </div>
 
         <div class="text-center text-xs text-stone-400 font-semibold pt-8">
-            Fit & Nutri Hub Pro • Sincronizzato su iPhone
+            Pro Gym & Nutrition Suite • White-Label Ready
         </div>
     </section>
+
+    <!-- ========================================================= -->
+    <!-- MODULO B: SCHEDA ALLENAMENTO PROFESSIONALE (STILE HEVY)   -->
+    <!-- ========================================================= -->
+    <div id="module-workout" class="app-padding hidden">
+        
+        <header class="px-5 mb-4 flex justify-between items-center">
+            <div class="min-w-0 pr-2">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 truncate">Club Performance</span>
+                </div>
+                <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate">Sala Pesi Pro</h1>
+            </div>
+            <div class="flex items-center space-x-2 shrink-0">
+                <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span>Hub</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="px-5 space-y-4">
+            <!-- SELETTORE WORKOUT A / B / C -->
+            <div class="grid grid-cols-3 gap-2" id="workout-day-selector"></div>
+
+            <!-- DASHBOARD METRICHE ALLENAMENTO (VOLUME KG + PROGRESSO) -->
+            <div class="soft-card rounded-3xl p-5 space-y-3">
+                <div class="flex justify-between items-start gap-2">
+                    <div class="min-w-0">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800" id="wo-subtitle">Martedì • Ore 07:00</span>
+                        <h2 class="text-xl font-extrabold text-stone-900 mt-0.5 truncate" id="wo-title">Scheda A — Spinta & Upper</h2>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-900 text-xs font-extrabold px-2.5 py-1 rounded-xl shrink-0" id="wo-progress">0%</span>
+                </div>
+
+                <!-- STATISTICHE LIVE SESSIONE (VOLUME TOTALE SOLLEVATO) -->
+                <div class="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-center">
+                    <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
+                        <span class="block text-[10px] font-bold uppercase text-stone-400">Volume Oggi</span>
+                        <span class="text-sm font-extrabold text-stone-900" id="wo-volume">0 kg</span>
+                    </div>
+                    <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
+                        <span class="block text-[10px] font-bold uppercase text-stone-400">Serie Fatte</span>
+                        <span class="text-sm font-extrabold text-emerald-800" id="wo-sets-count">0 / 18</span>
+                    </div>
+                    <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
+                        <span class="block text-[10px] font-bold uppercase text-stone-400">Intensità</span>
+                        <span class="text-sm font-extrabold text-amber-800">RPE 8.5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LISTA ESERCIZI CON TABELLA SERIE PER SERIE -->
+            <div id="exercises-container" class="space-y-4"></div>
+
+            <!-- BOTTONE FINE ALLENAMENTO E SALVATAGGIO NELLO STORICO -->
+            <div class="pt-2 pb-4">
+                <button onclick="finishAndSaveWorkout()" class="w-full py-4 rounded-3xl bg-emerald-800 text-white font-extrabold text-base shadow-lg shadow-emerald-900/20 flex items-center justify-center space-x-2 active:scale-98 transition">
+                    <i class="fa-solid fa-flag-checkered"></i>
+                    <span>Concludi e Salva Carichi nello Storico</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- BARRA INFERIORE ALLENAMENTO -->
+        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3 flex justify-between items-center">
+            <button onclick="startTimer(1.5, 'Recupero Libero 90s')" class="flex-1 mr-2 py-3 rounded-2xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+                <i class="fa-solid fa-stopwatch text-amber-400"></i>
+                <span>Timer 90s</span>
+            </button>
+            <button onclick="openModule('nutrition')" class="flex-1 ml-2 py-3 rounded-2xl bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Vai alla Dieta</span>
+            </button>
+        </nav>
+    </div>
 
     <!-- ========================================== -->
     <!-- MODULO A: NUTRIZIONE COMPLETA              -->
     <!-- ========================================== -->
     <div id="module-nutrition" class="app-padding hidden">
         
-        <!-- HEADER NUTRIZIONE -->
         <header class="px-5 mb-5 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
@@ -210,7 +301,6 @@
                 </button>
             </div>
 
-            <!-- DASHBOARD GIORNALIERA -->
             <div class="soft-card rounded-3xl p-5 space-y-4">
                 <div class="flex justify-between items-center gap-2">
                     <div class="min-w-0">
@@ -234,7 +324,6 @@
                     </div>
                 </div>
 
-                <!-- BARRA ACQUA -->
                 <div class="pt-4 border-t border-stone-100 flex items-center justify-between gap-3">
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between text-sm font-bold mb-1.5">
@@ -307,11 +396,11 @@
                 </div>
                 <div class="soft-card rounded-3xl p-5 space-y-2">
                     <h3 class="text-lg font-extrabold text-stone-900">🍕 In Pizzeria</h3>
-                    <p class="text-sm text-stone-600 leading-relaxed">Scegli Marinara o Margherita con aggiunta di <strong>Bresaola o Prosciutto Crudo</strong> a crudo: le proteine frenano il picco glicemico della pizza. Non pesarti il giorno dopo (è solo ritenzione d'acqua del sale).</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Scegli Marinara o Margherita con aggiunta di <strong>Bresaola o Prosciutto Crudo</strong> a fine cottura: le proteine frenano il picco glicemico della pizza.</p>
                 </div>
                 <div class="soft-card rounded-3xl p-5 space-y-2">
                     <h3 class="text-lg font-extrabold text-stone-900">🥪 Pranzo Veloce al Bar</h3>
-                    <p class="text-sm text-stone-600 leading-relaxed">Panino integrale (togliendo un po' di mollica) con Bresaola o Fesa di tacchino e pomodori, oppure Insalatona con Tonno e 1 pacchetto di crackers.</p>
+                    <p class="text-sm text-stone-600 leading-relaxed">Panino integrale (togliendo un po' di mollica) con Bresaola o Fesa di tacchino e pomodori, oppure Insalatona con Tonno e crackers.</p>
                 </div>
             </div>
 
@@ -327,7 +416,7 @@
                     </div>
                     <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
                         <strong class="block font-extrabold mb-1">2. Cibi "Zero Calorie" Croccanti</strong>
-                        Finocchi crudi, carote, sedano o cetrioli: puoi mangiarne a volontà per scaricare la tensione nervosa.
+                        Finocchi crudi, carote, sedano o cetrioli a volontà per scaricare la tensione nervosa.
                     </div>
                     <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
                         <strong class="block font-extrabold mb-1">3. Spezza-Fame Proteico</strong>
@@ -403,97 +492,203 @@
         </nav>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODULO B: SCHEDA ALLENAMENTO PALESTRA      -->
-    <!-- ========================================== -->
-    <div id="module-workout" class="app-padding hidden">
-        
-        <header class="px-5 mb-5 flex justify-between items-center">
-            <div class="min-w-0 pr-2">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 truncate">Programma Sala Pesi</span>
-                </div>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate">Scheda Allenamento</h1>
-            </div>
-            <div class="flex items-center space-x-2 shrink-0">
-                <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
-                    <i class="fa-solid fa-table-cells-large"></i>
-                    <span>Hub</span>
-                </button>
-                <button onclick="resetWorkoutSets()" class="w-11 h-11 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center text-stone-500 shadow-sm active:scale-95 transition" title="Azzera serie">
-                    <i class="fa-solid fa-rotate-right text-sm"></i>
-                </button>
-            </div>
-        </header>
-
-        <main class="px-5 space-y-5">
-            <!-- SELETTORE WORKOUT A / B / C -->
-            <div class="grid grid-cols-3 gap-2" id="workout-day-selector"></div>
-
-            <!-- INFO SCHEDA DEL GIORNO -->
-            <div class="soft-card rounded-3xl p-5 flex justify-between items-center">
-                <div class="min-w-0 pr-2">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800" id="wo-subtitle">Martedì • Ore 07:00</span>
-                    <h2 class="text-xl font-extrabold text-stone-900 mt-0.5 truncate" id="wo-title">Scheda A — Spinta & Upper</h2>
-                    <p class="text-xs text-stone-500 mt-1" id="wo-focus">Tocca il numero della serie appena la finisci per far partire il recupero.</p>
-                </div>
-                <div class="bg-amber-50 border border-amber-200 px-3 py-2 rounded-2xl text-center shrink-0">
-                    <span class="block text-[10px] font-bold uppercase text-amber-800">Completamento</span>
-                    <span class="text-base font-extrabold text-amber-950" id="wo-progress">0%</span>
-                </div>
-            </div>
-
-            <!-- LISTA ESERCIZI -->
-            <div id="exercises-container" class="space-y-4"></div>
-        </main>
-
-        <!-- BARRA INFERIORE RAPIDA ALLENAMENTO -->
-        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3 flex justify-between items-center">
-            <button onclick="startTimer(1.5, 'Recupero 90 Secondi')" class="flex-1 mr-2 py-3 rounded-2xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
-                <i class="fa-solid fa-stopwatch text-amber-400"></i>
-                <span>Recupero 90s</span>
-            </button>
-            <button onclick="openModule('nutrition')" class="flex-1 ml-2 py-3 rounded-2xl bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
-                <i class="fa-solid fa-utensils"></i>
-                <span>Vai ai Pasti</span>
-            </button>
-        </nav>
-    </div>
-
     <script>
-        // ==========================================
-        // DATABASE SCHEDA DI ALLENAMENTO (3 GIORNI: MAR, GIO, SAB)
-        // ==========================================
+        // =========================================================================
+        // PROGRAMMA PALESTRA PROFESSIONALE (ISPIRATO A HEVY / STRONG / TRUECOACH)
+        // =========================================================================
         const workoutProgram = [
             {
                 id: 'wo-a',
                 dayLabel: 'Martedì',
                 shortTitle: 'Scheda A',
                 title: 'Upper Body & Spinta',
-                subtitle: 'Martedì • Ore 07:00 • Durata: 55 min',
+                subtitle: 'Martedì • Ore 07:00 • Ipertrofia & Metabolico',
                 exercises: [
-                    { id: 'ex-a1', name: 'Riscaldamento Tapis Roulant / Ellittica', sets: 1, reps: '5 min', rest: 60, note: 'Camminata in pendenza leggera per attivare la circolazione.' },
-                    { id: 'ex-a2', name: 'Chest Press (o Panca Piana Manubri)', sets: 4, reps: '10-12', rest: 90, note: 'Scapole bene addotte contro lo schienale, discesa controllata di 2 secondi.' },
-                    { id: 'ex-a3', name: 'Lat Machine Avanti Presa Larga', sets: 4, reps: '10-12', rest: 90, note: 'Porta la sbarra al petto alto tirando coi gomiti verso il basso.' },
-                    { id: 'ex-a4', name: 'Shoulder Press con Manubri (o Macchina)', sets: 3, reps: '10', rest: 90, note: 'Schiena ben appoggiata, non inarcare la zona lombare.' },
-                    { id: 'ex-a5', name: 'Alzate Laterali con Manubri', sets: 3, reps: '12-15', rest: 60, note: 'Movimento fluido senza slanci, gomiti leggermente flessi.' },
-                    { id: 'ex-a6', name: 'Pushdown Tricipiti ai Cavi (Corda)', sets: 3, reps: '12', rest: 60, note: 'Gomiti fermi lungo i fianchi, apri la corda in basso.' }
+                    {
+                        id: 'ex-a1',
+                        name: 'Chest Press Orizzontale (o Panca Manubri)',
+                        primaryMuscle: 'Gran Pettorale',
+                        secondaryMuscle: 'Deltoide Ant. • Tricipiti',
+                        muscleGroup: 'chest',
+                        tut: '2-0-1-0',
+                        rest: 90,
+                        videoQuery: 'Chest+Press+esecuzione+corretta+palestra',
+                        note: 'Adduci e abbassa le scapole contro lo schienale. Scendi controllato in 2 secondi ed espira spingendo.',
+                        defaultSets: [
+                            { type: 'W', kg: 35, reps: 12 },
+                            { type: 'N', kg: 50, reps: 10 },
+                            { type: 'N', kg: 55, reps: 10 },
+                            { type: 'N', kg: 55, reps: 8 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['35kg x 12', '47.5kg x 10', '50kg x 10', '50kg x 9'] },
+                            { date: '2 Settimane fa', sets: ['30kg x 12', '45kg x 10', '45kg x 10', '45kg x 8'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-a2',
+                        name: 'Lat Machine Avanti Presa Prona',
+                        primaryMuscle: 'Gran Dorsale',
+                        secondaryMuscle: 'Bicipiti • Romboidi',
+                        muscleGroup: 'back',
+                        tut: '2-1-1-1',
+                        rest: 90,
+                        videoQuery: 'Lat+Machine+avanti+esecuzione+corretta',
+                        note: 'Petto alto verso il soffitto, tira la sbarra verso la clavicola spingendo i gomiti in basso.',
+                        defaultSets: [
+                            { type: 'W', kg: 40, reps: 12 },
+                            { type: 'N', kg: 55, reps: 10 },
+                            { type: 'N', kg: 60, reps: 10 },
+                            { type: 'D', kg: 45, reps: 12 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['40kg x 12', '52.5kg x 10', '55kg x 10', '45kg x 12'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-a3',
+                        name: 'Shoulder Press con Manubri Seduto',
+                        primaryMuscle: 'Deltoidi',
+                        secondaryMuscle: 'Tricipiti • Trapezio',
+                        muscleGroup: 'shoulders',
+                        tut: '2-0-1-0',
+                        rest: 90,
+                        videoQuery: 'Shoulder+Press+manubri+esecuzione',
+                        note: 'Gomiti leggermente chiusi in avanti (piano scapolare) per proteggere la cuffia dei rotatori.',
+                        defaultSets: [
+                            { type: 'N', kg: 16, reps: 10 },
+                            { type: 'N', kg: 18, reps: 10 },
+                            { type: 'N', kg: 18, reps: 8 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['14kg x 10', '16kg x 10', '16kg x 9'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-a4',
+                        name: 'Alzate Laterali con Manubri',
+                        primaryMuscle: 'Deltoide Laterale',
+                        secondaryMuscle: 'Trapezio Sup.',
+                        muscleGroup: 'shoulders',
+                        tut: '2-1-1-1',
+                        rest: 60,
+                        videoQuery: 'Alzate+laterali+manubri+tecnica',
+                        note: 'Pensa di spingere i manubri lontano verso le pareti laterali, fermandoti ad altezza spalle.',
+                        defaultSets: [
+                            { type: 'N', kg: 8, reps: 15 },
+                            { type: 'N', kg: 10, reps: 12 },
+                            { type: 'D', kg: 8, reps: 15 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['8kg x 15', '8kg x 12', '6kg x 15'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-a5',
+                        name: 'Pushdown Tricipiti ai Cavi con Corda',
+                        primaryMuscle: 'Tricipite Brachiale',
+                        secondaryMuscle: 'Anconeo',
+                        muscleGroup: 'arms',
+                        tut: '2-0-1-2',
+                        rest: 60,
+                        videoQuery: 'Pushdown+corda+tricipiti+esecuzione',
+                        note: 'Gomiti incollati ai fianchi. Apri la corda verso l\'esterno nel punto più basso per 1 secondo.',
+                        defaultSets: [
+                            { type: 'N', kg: 20, reps: 12 },
+                            { type: 'N', kg: 25, reps: 12 },
+                            { type: 'N', kg: 25, reps: 10 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['20kg x 12', '22.5kg x 12', '22.5kg x 10'] }
+                        ]
+                    }
                 ]
             },
             {
                 id: 'wo-b',
                 dayLabel: 'Giovedì',
                 shortTitle: 'Scheda B',
-                title: 'Gambe, Metabolico & Core',
-                subtitle: 'Giovedì • Ore 07:00 • Durata: 55 min',
+                title: 'Gambe, Glutei & Core',
+                subtitle: 'Giovedì • Ore 07:00 • Alto Consumo Calorico',
                 exercises: [
-                    { id: 'ex-b1', name: 'Mobilità Anche & Cyclette', sets: 1, reps: '5 min', rest: 60, note: 'Attivazione articolare leggera prima della pressa.' },
-                    { id: 'ex-b2', name: 'Leg Press 45° (Pressa Orizzontale)', sets: 4, reps: '12', rest: 120, note: 'Piedi larghezza spalle a metà pedana, spingi coi talloni senza bloccare le ginocchia.' },
-                    { id: 'ex-b3', name: 'Leg Curl Seduto o Sdraiato', sets: 4, reps: '12', rest: 90, note: 'Focus sui femorali, trattieni 1 secondo in massima contrazione.' },
-                    { id: 'ex-b4', name: 'Leg Extension', sets: 3, reps: '12-15', rest: 75, note: 'Movimento controllato per bruciare calorie e tonificare i quadricipiti.' },
-                    { id: 'ex-b5', name: 'Crunch Addominali + Plank', sets: 3, reps: '15 + 40"', rest: 60, note: 'Espira tutta l\'aria quando sali con le spalle.' },
-                    { id: 'ex-b6', name: 'Camminata Inclinata Finale (Brucia-Grassi)', sets: 1, reps: '10 min', rest: 0, note: 'Pendenza 6-8%, passo costante.' }
+                    {
+                        id: 'ex-b1',
+                        name: 'Leg Press 45° (Pressa Inclinata)',
+                        primaryMuscle: 'Quadricipiti • Glutei',
+                        secondaryMuscle: 'Femorali',
+                        muscleGroup: 'legs',
+                        tut: '3-0-1-0',
+                        rest: 120,
+                        videoQuery: 'Leg+Press+45+esecuzione+corretta',
+                        note: 'Piedi larghezza spalle a metà pedana. Non staccare mai il bacino dallo schienale e non bloccare le ginocchia.',
+                        defaultSets: [
+                            { type: 'W', kg: 80, reps: 15 },
+                            { type: 'N', kg: 110, reps: 12 },
+                            { type: 'N', kg: 130, reps: 10 },
+                            { type: 'N', kg: 140, reps: 10 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['80kg x 15', '110kg x 12', '120kg x 10', '130kg x 10'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-b2',
+                        name: 'Leg Curl Seduto (Ischiocrurali)',
+                        primaryMuscle: 'Bicipite Femorale',
+                        secondaryMuscle: 'Polpacci',
+                        muscleGroup: 'legs',
+                        tut: '2-0-1-1',
+                        rest: 90,
+                        videoQuery: 'Leg+Curl+seduto+esecuzione',
+                        note: 'Trattieni 1 secondo in massima chiusura sotto la seduta e risali lentamente.',
+                        defaultSets: [
+                            { type: 'N', kg: 45, reps: 12 },
+                            { type: 'N', kg: 50, reps: 12 },
+                            { type: 'N', kg: 55, reps: 10 },
+                            { type: 'N', kg: 50, reps: 12 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['45kg x 12', '50kg x 12', '50kg x 10', '45kg x 12'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-b3',
+                        name: 'Leg Extension',
+                        primaryMuscle: 'Retto Femorale (Quadricipite)',
+                        secondaryMuscle: 'Vasto Mediale',
+                        muscleGroup: 'legs',
+                        tut: '2-0-1-2',
+                        rest: 75,
+                        videoQuery: 'Leg+Extension+esecuzione+corretta',
+                        note: 'Fermati 2 secondi a gambe tese in alto sentendo la contrazione sui quadricipiti.',
+                        defaultSets: [
+                            { type: 'N', kg: 40, reps: 15 },
+                            { type: 'N', kg: 45, reps: 12 },
+                            { type: 'D', kg: 35, reps: 15 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['35kg x 15', '40kg x 12', '30kg x 15'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-b4',
+                        name: 'Crunch Addominali al Cavo / Macchina',
+                        primaryMuscle: 'Retto dell\'Addome',
+                        secondaryMuscle: 'Obliqui',
+                        muscleGroup: 'core',
+                        tut: '2-1-1-1',
+                        rest: 60,
+                        videoQuery: 'Crunch+addominali+esecuzione',
+                        note: 'Arrotola il busto avvicinando lo sterno al bacino ed espira tutta l\'aria.',
+                        defaultSets: [
+                            { type: 'N', kg: 30, reps: 15 },
+                            { type: 'N', kg: 35, reps: 15 },
+                            { type: 'N', kg: 35, reps: 15 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['30kg x 15', '30kg x 15', '35kg x 12'] }
+                        ]
+                    }
                 ]
             },
             {
@@ -501,20 +696,75 @@
                 dayLabel: 'Sabato',
                 shortTitle: 'Scheda C',
                 title: 'Dorso, Braccia & Full Body',
-                subtitle: 'Sabato • Ore 09:00 • Durata: 60 min',
+                subtitle: 'Sabato • Ore 09:00 • Volume & Definizione',
                 exercises: [
-                    { id: 'ex-c1', name: 'Pulley Basso con Triangolo', sets: 4, reps: '10-12', rest: 90, note: 'Schiena dritta, apri bene il petto quando porti il triangolo all\'addome.' },
-                    { id: 'ex-c2', name: 'Panca Inclinata 30° con Manubri', sets: 4, reps: '10', rest: 90, note: 'Focus sulla parte alta del petto e spalle.' },
-                    { id: 'ex-c3', name: 'Rematore con Manubrio su Panca', sets: 3, reps: '10 per lato', rest: 75, note: 'Tira il manubrio verso il fianco pensando di muovere il gomito.' },
-                    { id: 'ex-c4', name: 'Affondi Sul Posto (o Goblet Squat)', sets: 3, reps: '10', rest: 90, note: 'Ottimo esercizio metabolico che attiva grandi masse muscolari.' },
-                    { id: 'ex-c5', name: 'Curl Bicipiti con Manubri Alternato', sets: 4, reps: '12', rest: 60, note: 'Non dondolare con la schiena.' }
+                    {
+                        id: 'ex-c1',
+                        name: 'Pulley Basso con Triangolo',
+                        primaryMuscle: 'Centro Schiena • Dorsale',
+                        secondaryMuscle: 'Bicipiti • Deltoide Post.',
+                        muscleGroup: 'back',
+                        tut: '2-0-1-1',
+                        rest: 90,
+                        videoQuery: 'Pulley+basso+esecuzione+corretta',
+                        note: 'Schiena verticale e ferma, tira il triangolo all\'ombelico chiudendo le scapole.',
+                        defaultSets: [
+                            { type: 'W', kg: 40, reps: 12 },
+                            { type: 'N', kg: 55, reps: 10 },
+                            { type: 'N', kg: 60, reps: 10 },
+                            { type: 'N', kg: 60, reps: 10 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['40kg x 12', '50kg x 10', '55kg x 10', '55kg x 10'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-c2',
+                        name: 'Panca Inclinata 30° con Manubri',
+                        primaryMuscle: 'Pettorale Alto (Clavicolare)',
+                        secondaryMuscle: 'Deltoide Ant. • Tricipiti',
+                        muscleGroup: 'chest',
+                        tut: '2-1-1-0',
+                        rest: 90,
+                        videoQuery: 'Distensioni+panca+inclinata+manubri',
+                        note: 'Scendi bene allungando il pettorale con i manubri ai lati del petto.',
+                        defaultSets: [
+                            { type: 'N', kg: 20, reps: 10 },
+                            { type: 'N', kg: 22, reps: 10 },
+                            { type: 'N', kg: 24, reps: 8 },
+                            { type: 'N', kg: 20, reps: 10 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['18kg x 10', '20kg x 10', '22kg x 8', '20kg x 9'] }
+                        ]
+                    },
+                    {
+                        id: 'ex-c3',
+                        name: 'Curl Bicipiti con Manubri su Panca 60°',
+                        primaryMuscle: 'Bicipite Brachiale',
+                        secondaryMuscle: 'Avambracci',
+                        muscleGroup: 'arms',
+                        tut: '2-0-1-1',
+                        rest: 60,
+                        videoQuery: 'Curl+manubri+panca+inclinata',
+                        note: 'Braccia perpendicolari al pavimento, ruota il mignolo verso l\'esterno mentre sali.',
+                        defaultSets: [
+                            { type: 'N', kg: 10, reps: 12 },
+                            { type: 'N', kg: 12, reps: 10 },
+                            { type: 'N', kg: 12, reps: 10 },
+                            { type: 'D', kg: 8, reps: 12 }
+                        ],
+                        defaultHistory: [
+                            { date: 'Settimana Scorsa', sets: ['10kg x 12', '10kg x 12', '12kg x 8', '8kg x 12'] }
+                        ]
+                    }
                 ]
             }
         ];
 
-        // ==========================================
-        // DATABASE ALTERNATIVE E PIANO NUTRIZIONALE
-        // ==========================================
+        // =========================================================================
+        // PIANO ALIMENTARE E DISPENSA (INTATTI E SINCRONIZZATI)
+        // =========================================================================
         const interactiveSwaps = {
             breakfast: [
                 {
@@ -570,15 +820,6 @@
                         { qty: 20, unit: 'g', item: 'Gallette di riso o Pane segale', pId: 'c6' }
                     ],
                     steps: ['Spalma il Philadelphia sulle fette di bresaola, arrotola e accompagna con le gallette.']
-                },
-                {
-                    title: 'Yogurt Greco 0% e Noci',
-                    macros: '8g Carbo • 19g Prot • 10g Grassi', timer: 0,
-                    ingredients: [
-                        { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' },
-                        { qty: 15, unit: 'g', item: 'Noci o Mandorle', pId: 'g5' }
-                    ],
-                    steps: ['Unisci la frutta secca allo yogurt greco freddo.']
                 }
             ],
             lunch: [
@@ -602,16 +843,6 @@
                         { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }
                     ],
                     steps: ['Cuoci gli gnocchi 2 minuti in acqua bollente e saltali in padella con pomodorini, legumi e tonno.']
-                },
-                {
-                    title: 'Riso Basmati Tonno, Zucchine e Limone',
-                    macros: '64g Carbo • 34g Prot • 10g Grassi', timer: 10,
-                    ingredients: [
-                        { qty: 80, unit: 'g', item: 'Riso Basmati', pId: 'c4' },
-                        { qty: 110, unit: 'g', item: 'Tonno al naturale', pId: 'c9' },
-                        { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }
-                    ],
-                    steps: ['Bollisci il riso 10 min e uniscilo a zucchine saltate, tonno, olio e limone.']
                 }
             ],
             snack_pm: [
@@ -656,16 +887,6 @@
                         { qty: 250, unit: 'g', item: 'Zucchine', pId: 'v1' }
                     ],
                     steps: ['Metti pollo, ceci asciugati e zucchine in friggitrice ad aria o forno a 195°C per 16 minuti con paprika e olio.']
-                },
-                {
-                    title: 'Filetto di Orata in Padella con Cannellini',
-                    macros: '38g Carbo • 58g Prot • 14g Grassi', timer: 10,
-                    ingredients: [
-                        { qty: 230, unit: 'g', item: 'Filetto di Orata o Branzino', pId: 'p7' },
-                        { qty: 100, unit: 'g', item: 'Fagioli cannellini cotti', pId: 'c11' },
-                        { qty: 200, unit: 'g', item: 'Spinaci freschi', pId: 'v4' }
-                    ],
-                    steps: ['Cuoci il filetto in padella coperta per 10 min con pomodorini e capperi e accompagna coi cannellini.']
                 }
             ]
         };
@@ -1140,9 +1361,12 @@
         let openRecipes = {};
         let openSwaps = {};
         let expandedDoneMeals = {};
+        let openExHistory = {};
+        let openExBio = {};
         let timerInterval = null;
+        let timerSecondsLeft = 0;
 
-        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v8')) || {
+        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v9')) || {
             loggedInUser: null,
             completedMeals: {},
             offPlanMeals: {},
@@ -1152,12 +1376,12 @@
             weights: [{ date: 'Inizio', val: 110.0 }],
             prepDone: {},
             nsvDone: {},
-            workoutSetsDone: {},
-            workoutWeights: {}
+            workoutLogs: {},     // { 'ex-a1': [{ kg: 35, reps: 12, done: false }, ...] }
+            workoutHistory: {}   // { 'ex-a1': [{ date: '...', sets: ['35kg x 12', ...] }] }
         };
 
         function saveState() {
-            localStorage.setItem('nutriPlanGiovanni_v8', JSON.stringify(appState));
+            localStorage.setItem('nutriPlanGiovanni_v9', JSON.stringify(appState));
             updateMissingBadge();
             updateAdherence();
         }
@@ -1220,9 +1444,50 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ==========================================
-        // MODULO B: RENDER SCHEDA ALLENAMENTO
-        // ==========================================
+        // =========================================================================
+        // MODULO B: LOGICA ALLENAMENTO PROFESSIONALE SET-BY-SET + STORICO + BIOMECCANICA
+        // =========================================================================
+        function ensureExerciseState(ex) {
+            if (!appState.workoutLogs) appState.workoutLogs = {};
+            if (!appState.workoutHistory) appState.workoutHistory = {};
+
+            if (!appState.workoutLogs[ex.id]) {
+                appState.workoutLogs[ex.id] = ex.defaultSets.map(s => ({
+                    type: s.type || 'N',
+                    kg: s.kg,
+                    reps: s.reps,
+                    done: false
+                }));
+            }
+            if (!appState.workoutHistory[ex.id]) {
+                appState.workoutHistory[ex.id] = ex.defaultHistory || [];
+            }
+        }
+
+        function getMuscleSvgDiagram(group) {
+            const hl = '#d97706'; // Amber highlight
+            const base = '#e7e5e4';
+            return `
+                <svg viewBox="0 0 120 140" class="w-24 h-28 mx-auto shrink-0">
+                    <!-- Silhouette Anatomica -->
+                    <circle cx="60" cy="20" r="11" fill="#d6d3d1"/>
+                    <!-- Spalle -->
+                    <rect x="24" y="34" width="16" height="14" rx="6" fill="${group === 'shoulders' ? hl : base}" class="${group === 'shoulders' ? 'muscle-active' : ''}"/>
+                    <rect x="80" y="34" width="16" height="14" rx="6" fill="${group === 'shoulders' ? hl : base}" class="${group === 'shoulders' ? 'muscle-active' : ''}"/>
+                    <!-- Petto / Dorso Superiore -->
+                    <rect x="41" y="34" width="38" height="22" rx="5" fill="${(group === 'chest' || group === 'back') ? hl : base}" class="${(group === 'chest' || group === 'back') ? 'muscle-active' : ''}"/>
+                    <!-- Braccia -->
+                    <rect x="22" y="50" width="13" height="28" rx="5" fill="${group === 'arms' ? hl : base}" class="${group === 'arms' ? 'muscle-active' : ''}"/>
+                    <rect x="85" y="50" width="13" height="28" rx="5" fill="${group === 'arms' ? hl : base}" class="${group === 'arms' ? 'muscle-active' : ''}"/>
+                    <!-- Core / Addome -->
+                    <rect x="44" y="58" width="32" height="24" rx="4" fill="${group === 'core' ? hl : base}" class="${group === 'core' ? 'muscle-active' : ''}"/>
+                    <!-- Gambe -->
+                    <rect x="42" y="85" width="16" height="46" rx="6" fill="${group === 'legs' ? hl : base}" class="${group === 'legs' ? 'muscle-active' : ''}"/>
+                    <rect x="62" y="85" width="16" height="46" rx="6" fill="${group === 'legs' ? hl : base}" class="${group === 'legs' ? 'muscle-active' : ''}"/>
+                </svg>
+            `;
+        }
+
         function renderWorkout() {
             const selector = document.getElementById('workout-day-selector');
             selector.innerHTML = '';
@@ -1247,64 +1512,157 @@
             document.getElementById('wo-subtitle').textContent = currentWo.subtitle;
             document.getElementById('wo-title').textContent = `${currentWo.shortTitle} — ${currentWo.title}`;
 
-            if (!appState.workoutSetsDone) appState.workoutSetsDone = {};
-            if (!appState.workoutWeights) appState.workoutWeights = {};
-
             let totalSets = 0;
             let completedSets = 0;
+            let totalVolumeKg = 0;
 
             const container = document.getElementById('exercises-container');
             container.innerHTML = '';
 
             currentWo.exercises.forEach((ex, exIdx) => {
-                totalSets += ex.sets;
-                const savedKg = appState.workoutWeights[ex.id] || '';
+                ensureExerciseState(ex);
+                const setsLog = appState.workoutLogs[ex.id];
+                const historyList = appState.workoutHistory[ex.id] || [];
+                const lastSessionSets = historyList.length > 0 ? historyList[0].sets : [];
+                const isHistoryOpen = !!openExHistory[ex.id];
+                const isBioOpen = !!openExBio[ex.id];
 
-                let setsButtonsHtml = '';
-                for (let s = 1; s <= ex.sets; s++) {
-                    const setKey = `${ex.id}_s${s}`;
-                    const isSetDone = !!appState.workoutSetsDone[setKey];
-                    if (isSetDone) completedSets++;
+                let rowsHtml = '';
+                setsLog.forEach((sObj, sIdx) => {
+                    totalSets++;
+                    if (sObj.done) {
+                        completedSets++;
+                        totalVolumeKg += (parseFloat(sObj.kg) || 0) * (parseFloat(sObj.reps) || 0);
+                    }
+                    const prevStr = lastSessionSets[sIdx] || '—';
+                    const badgeColor = sObj.type === 'W' 
+                        ? 'bg-amber-100 text-amber-800' 
+                        : (sObj.type === 'D' ? 'bg-rose-100 text-rose-800' : 'bg-stone-200 text-stone-800');
 
-                    setsButtonsHtml += `
-                        <button onclick="toggleWorkoutSet('${setKey}', ${ex.rest}, '${ex.name.replace(/'/g, "\\'")}')" class="h-12 rounded-2xl font-extrabold text-sm border-2 flex items-center justify-center space-x-1.5 transition ${
-                            isSetDone 
-                                ? 'bg-emerald-700 border-emerald-700 text-white shadow-sm' 
-                                : 'bg-stone-50 border-stone-200 text-stone-700'
-                        }">
-                            <span>Serie ${s}</span>
-                            ${isSetDone ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
-                        </button>
+                    rowsHtml += `
+                        <div class="grid grid-cols-12 gap-1.5 items-center py-2 px-2 rounded-2xl transition ${sObj.done ? 'bg-emerald-50/90 border border-emerald-200/80' : 'bg-stone-50 border border-stone-200/50'}">
+                            <!-- Col 1: Numero Serie / Tipo -->
+                            <div class="col-span-2 flex items-center space-x-1">
+                                <span class="w-6 h-6 rounded-lg ${badgeColor} font-extrabold text-xs flex items-center justify-center">${sIdx + 1}</span>
+                                <span class="text-[10px] font-bold text-stone-400">${sObj.type}</span>
+                            </div>
+                            <!-- Col 2: Storico Precedente -->
+                            <div class="col-span-3 text-center">
+                                <span class="text-xs font-bold text-stone-400 block truncate">${prevStr}</span>
+                            </div>
+                            <!-- Col 3: Input Tastierino KG -->
+                            <div class="col-span-3">
+                                <input type="number" step="0.5" inputmode="decimal" value="${sObj.kg}" 
+                                    onchange="updateSetData('${ex.id}', ${sIdx}, 'kg', this.value)"
+                                    class="w-full h-10 bg-white border border-stone-300 rounded-xl text-center font-extrabold text-sm text-stone-900 focus:outline-none focus:border-amber-600">
+                            </div>
+                            <!-- Col 4: Input Tastierino REPS -->
+                            <div class="col-span-2">
+                                <input type="number" inputmode="numeric" value="${sObj.reps}" 
+                                    onchange="updateSetData('${ex.id}', ${sIdx}, 'reps', this.value)"
+                                    class="w-full h-10 bg-white border border-stone-300 rounded-xl text-center font-extrabold text-sm text-stone-900 focus:outline-none focus:border-amber-600">
+                            </div>
+                            <!-- Col 5: Check Spunta Serie + Avvio Recupero -->
+                            <div class="col-span-2 flex justify-end">
+                                <button onclick="toggleSetComplete('${ex.id}', ${sIdx}, ${ex.rest}, '${ex.name.replace(/'/g, "\\'")}')" 
+                                    class="w-10 h-10 rounded-xl flex items-center justify-center border-2 transition ${
+                                        sObj.done ? 'bg-emerald-700 border-emerald-700 text-white shadow-sm' : 'bg-white border-stone-300 text-stone-300'
+                                    }">
+                                    <i class="fa-solid fa-check text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
                     `;
-                }
+                });
+
+                const historyDropdownHtml = historyList.map(h => `
+                    <div class="py-2 border-b border-amber-200/60 last:border-none flex justify-between items-center gap-2 text-xs">
+                        <span class="font-extrabold text-amber-950 shrink-0">${h.date}</span>
+                        <div class="flex flex-wrap justify-end gap-1">
+                            ${h.sets.map((st, i) => `<span class="bg-white px-2 py-0.5 rounded-md border border-amber-200 font-bold text-stone-700">S${i+1}: ${st}</span>`).join('')}
+                        </div>
+                    </div>
+                `).join('');
 
                 const card = document.createElement('div');
-                card.className = 'soft-card rounded-3xl p-5 space-y-3.5';
+                card.className = 'soft-card rounded-3xl p-5 space-y-3.5 overflow-hidden';
                 card.innerHTML = `
+                    <!-- Intestazione Esercizio -->
                     <div class="flex justify-between items-start gap-2">
                         <div class="min-w-0">
-                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-700">Esercizio ${exIdx + 1}</span>
-                            <h3 class="text-lg font-extrabold text-stone-900 mt-0.5 leading-snug">${ex.name}</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[11px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-amber-100 text-amber-900">${ex.primaryMuscle}</span>
+                                <span class="text-[11px] font-bold text-stone-400">TUT ${ex.tut}</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-stone-950 mt-1.5 leading-snug">${ex.name}</h3>
                         </div>
-                        <span class="bg-stone-900 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl shrink-0">
-                            ${ex.sets} x ${ex.reps}
+                        <span class="bg-stone-100 text-stone-700 text-xs font-extrabold px-2.5 py-1.5 rounded-xl shrink-0">
+                            <i class="fa-regular fa-clock mr-1 text-amber-600"></i>${ex.rest}s
                         </span>
                     </div>
 
-                    <p class="text-xs text-stone-500 bg-stone-50 p-3 rounded-2xl border border-stone-100 leading-relaxed">
-                        <i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>${ex.note}
-                    </p>
-
-                    <div class="flex items-center justify-between pt-1">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-bold text-stone-500">Carico usato:</span>
-                            <input type="text" value="${savedKg}" onchange="saveExerciseWeight('${ex.id}', this.value)" placeholder="Es. 40 kg" class="w-24 bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-extrabold text-stone-900 text-center focus:outline-none focus:border-amber-600">
-                        </div>
-                        ${ex.rest > 0 ? `<span class="text-xs font-bold text-stone-400"><i class="fa-regular fa-clock mr-1"></i>Rec: ${ex.rest}s</span>` : ''}
+                    <!-- Pulsanti Simulazione Biomeccanica & Menu a Tendina Storico Carichi -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="toggleExBio('${ex.id}')" class="py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
+                            isBioOpen ? 'bg-stone-900 text-white border-stone-900' : 'bg-stone-50 text-stone-700 border-stone-200'
+                        }">
+                            <i class="fa-solid fa-person-rays text-amber-500"></i>
+                            <span>Simulazione 3D/Video</span>
+                        </button>
+                        <button onclick="toggleExHistory('${ex.id}')" class="py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center space-x-1.5 border transition ${
+                            isHistoryOpen ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-900 border-amber-200'
+                        }">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>Storico Carichi</span>
+                        </button>
                     </div>
 
-                    <div class="grid ${ex.sets === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-2 pt-1">
-                        ${setsButtonsHtml}
+                    <!-- Pannello Simulazione Biomeccanica & Video Esecuzione -->
+                    <div class="${isBioOpen ? 'block' : 'hidden'} p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
+                        <div class="flex items-center space-x-3">
+                            ${getMuscleSvgDiagram(ex.muscleGroup)}
+                            <div class="space-y-1.5 text-xs">
+                                <div><strong class="text-stone-900">Target Primario:</strong> <span class="text-amber-800 font-bold">${ex.primaryMuscle}</span></div>
+                                <div><strong class="text-stone-900">Sinergici:</strong> <span class="text-stone-600">${ex.secondaryMuscle}</span></div>
+                                <p class="text-stone-600 leading-relaxed pt-1">${ex.note}</p>
+                            </div>
+                        </div>
+                        <a href="https://www.youtube.com/results?search_query=${ex.videoQuery}" target="_blank" class="w-full py-2.5 rounded-xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-youtube text-rose-500 text-sm"></i>
+                            <span>Guarda Video-Simulazione Esecuzione</span>
+                        </a>
+                    </div>
+
+                    <!-- Menu a Tendina Storico Carichi delle Volte Scorse -->
+                    <div class="${isHistoryOpen ? 'block' : 'hidden'} p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200">
+                        <span class="block text-[10px] font-extrabold uppercase tracking-wider text-amber-900 mb-1.5">Pesi Sollevati nelle Sessioni Precedenti:</span>
+                        ${historyDropdownHtml}
+                    </div>
+
+                    <!-- Intestazione Tabella Serie -->
+                    <div class="grid grid-cols-12 gap-1.5 px-2 pt-1 text-[10px] font-extrabold uppercase tracking-wider text-stone-400">
+                        <div class="col-span-2">Serie</div>
+                        <div class="col-span-3 text-center">Precedente</div>
+                        <div class="col-span-3 text-center">Kg</div>
+                        <div class="col-span-2 text-center">Reps</div>
+                        <div class="col-span-2 text-right">Fatto</div>
+                    </div>
+
+                    <!-- Righe Serie Individuali -->
+                    <div class="space-y-2">
+                        ${rowsHtml}
+                    </div>
+
+                    <!-- Bottoni Aggiungi / Rimuovi Serie al Volo -->
+                    <div class="flex justify-between items-center pt-1">
+                        <button onclick="addSetToExercise('${ex.id}')" class="text-xs font-extrabold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                            + Aggiungi Serie
+                        </button>
+                        ${setsLog.length > 1 ? `
+                            <button onclick="removeLastSetFromExercise('${ex.id}')" class="text-xs font-bold text-stone-400 px-2 py-1">
+                                - Rimuovi ultima
+                            </button>
+                        ` : ''}
                     </div>
                 `;
                 container.appendChild(card);
@@ -1312,35 +1670,81 @@
 
             const pct = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
             document.getElementById('wo-progress').textContent = `${pct}%`;
+            document.getElementById('wo-sets-count').textContent = `${completedSets} / ${totalSets}`;
+            document.getElementById('wo-volume').textContent = `${totalVolumeKg.toLocaleString('it-IT')} kg`;
         }
 
-        function toggleWorkoutSet(setKey, restSeconds, exName) {
-            if (!appState.workoutSetsDone) appState.workoutSetsDone = {};
-            appState.workoutSetsDone[setKey] = !appState.workoutSetsDone[setKey];
+        function updateSetData(exId, setIdx, field, value) {
+            const num = parseFloat(value) || 0;
+            appState.workoutLogs[exId][setIdx][field] = num;
+            saveState();
+            renderWorkout();
+        }
+
+        function toggleSetComplete(exId, setIdx, restSeconds, exName) {
+            const setObj = appState.workoutLogs[exId][setIdx];
+            setObj.done = !setObj.done;
             saveState();
             renderWorkout();
 
-            if (appState.workoutSetsDone[setKey] && restSeconds > 0) {
-                startTimer(restSeconds / 60, `Recupero: ${exName}`);
+            if (setObj.done && restSeconds > 0) {
+                startTimer(restSeconds / 60, `Recupero S${setIdx + 1}: ${exName}`);
             }
         }
 
-        function saveExerciseWeight(exId, val) {
-            if (!appState.workoutWeights) appState.workoutWeights = {};
-            appState.workoutWeights[exId] = val;
+        function addSetToExercise(exId) {
+            const list = appState.workoutLogs[exId];
+            const last = list[list.length - 1] || { kg: 20, reps: 10 };
+            list.push({ type: 'N', kg: last.kg, reps: last.reps, done: false });
             saveState();
+            renderWorkout();
         }
 
-        function resetWorkoutSets() {
-            if (confirm('Vuoi azzerare le serie completate di oggi? (I pesi in Kg rimarranno salvati)')) {
-                appState.workoutSetsDone = {};
+        function removeLastSetFromExercise(exId) {
+            const list = appState.workoutLogs[exId];
+            if (list.length > 1) {
+                list.pop();
                 saveState();
                 renderWorkout();
             }
         }
 
+        function toggleExHistory(exId) {
+            openExHistory[exId] = !openExHistory[exId];
+            if (openExHistory[exId]) openExBio[exId] = false;
+            renderWorkout();
+        }
+
+        function toggleExBio(exId) {
+            openExBio[exId] = !openExBio[exId];
+            if (openExBio[exId]) openExHistory[exId] = false;
+            renderWorkout();
+        }
+
+        function finishAndSaveWorkout() {
+            const currentWo = workoutProgram[currentWorkoutIndex];
+            const todayStr = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
+
+            currentWo.exercises.forEach(ex => {
+                const logs = appState.workoutLogs[ex.id] || [];
+                const formattedSets = logs.map(s => `${s.kg}kg x ${s.reps}`);
+                if (!appState.workoutHistory[ex.id]) appState.workoutHistory[ex.id] = [];
+                appState.workoutHistory[ex.id].unshift({
+                    date: `Oggi (${todayStr})`,
+                    sets: formattedSets
+                });
+                // Azzera le spunte per la prossima settimana ma conserva i nuovi carichi!
+                logs.forEach(s => { s.done = false; });
+            });
+
+            saveState();
+            stopTimer();
+            alert('🏆 Allenamento salvato! I carichi di ogni serie sono stati registrati nello Storico e diventeranno il tuo nuovo riferimento per la prossima settimana.');
+            renderWorkout();
+        }
+
         // ==========================================
-        // MODULO A: RENDER NUTRIZIONE (CON FIX LAYOUT COMPACT BAR)
+        // MODULO A: NUTRIZIONE
         // ==========================================
         function getActiveMealData(meal) {
             const swapIdx = appState.swappedMeals[meal.id];
@@ -1413,7 +1817,6 @@
                 const isNext = meal.id === nextMealId;
                 const isExpandedAnyway = !!expandedDoneMeals[meal.id];
 
-                // BARRA COMPATTA CORRETTA (CON min-w-0 CHE IMPEDISCE LO DEBORDAMENTO LATERALE)
                 if ((isDone || isOffPlan) && !isExpandedAnyway) {
                     const compactBar = document.createElement('div');
                     compactBar.className = 'w-full bg-stone-200/75 border border-stone-300/80 rounded-2xl px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden';
@@ -1427,7 +1830,7 @@
                                 <span class="text-sm font-bold text-stone-700 line-through block truncate">${isOffPlan ? '🍕 Pasto Fuori Programma' : meal.title}</span>
                             </div>
                         </div>
-                        <button onclick="uncheckMeal('${meal.id}')" class="w-9 h-9 rounded-xl bg-white text-rose-600 border border-stone-200 flex items-center justify-center shrink-0 active:scale-90 transition" title="Annulla spunta">
+                        <button onclick="uncheckMeal('${meal.id}')" class="w-9 h-9 rounded-xl bg-white text-rose-600 border border-stone-200 flex items-center justify-center shrink-0 active:scale-90 transition">
                             <i class="fa-solid fa-rotate-left text-xs"></i>
                         </button>
                     `;
@@ -1860,31 +2263,38 @@
             renderWeights();
         }
 
-        // TIMER UNIVERSALE (CUCINA + PALESTRA)
+        // =========================================================================
+        // TIMER IN BASSO CON TASTI RAPIDI -15s / +15s / SALTA
+        // =========================================================================
+        function updateTimerText() {
+            const display = document.getElementById('timer-display');
+            const m = String(Math.floor(timerSecondsLeft / 60)).padStart(2, '0');
+            const s = String(timerSecondsLeft % 60).padStart(2, '0');
+            display.textContent = `${m}:${s}`;
+        }
+
         function startTimer(minutes, label) {
             if (timerInterval) clearInterval(timerInterval);
-            let secondsLeft = Math.round(minutes * 60);
+            timerSecondsLeft = Math.round(minutes * 60);
             const widget = document.getElementById('timer-widget');
-            const display = document.getElementById('timer-display');
             document.getElementById('timer-label').textContent = label;
             widget.classList.remove('hidden');
-
-            const updateDisplay = () => {
-                const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
-                const s = String(secondsLeft % 60).padStart(2, '0');
-                display.textContent = `${m}:${s}`;
-            };
-            updateDisplay();
+            updateTimerText();
 
             timerInterval = setInterval(() => {
-                secondsLeft--;
-                updateDisplay();
-                if (secondsLeft <= 0) {
+                timerSecondsLeft--;
+                updateTimerText();
+                if (timerSecondsLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`⏰ Tempo terminato: ${label}`);
                     widget.classList.add('hidden');
+                    alert(`⏰ Recupero terminato! Pronti per la prossima serie.`);
                 }
             }, 1000);
+        }
+
+        function adjustTimer(deltaSeconds) {
+            timerSecondsLeft = Math.max(0, timerSecondsLeft + deltaSeconds);
+            updateTimerText();
         }
 
         function stopTimer() {
