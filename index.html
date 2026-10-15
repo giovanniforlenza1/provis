@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="NutriPlan">
-    <title>NutriPlan — Giovanni</title>
+    <meta name="apple-mobile-web-app-title" content="Fit & Nutri Hub">
+    <title>Fit & Nutri Hub — Giovanni</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -17,12 +17,22 @@
             --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
-        body {
+        /* BLOCCO TOTALE DELLO SCORRIMENTO ORIZZONTALE SU IPHONE */
+        html, body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #F4F3EE;
             color: #181C19;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-padding {
             padding-top: calc(var(--safe-top) + 14px);
             padding-bottom: calc(var(--safe-bottom) + 105px);
         }
@@ -47,373 +57,463 @@
 </head>
 <body class="min-h-screen antialiased">
 
-    <!-- WIDGET TIMER FLOTTANTE -->
+    <!-- WIDGET TIMER FLOTTANTE (CUCINA & RECUPERO SERIE PALESTRA) -->
     <div id="timer-widget" class="fixed top-4 left-4 right-4 bg-stone-900 text-white rounded-3xl px-5 py-4 shadow-2xl z-50 hidden flex items-center justify-between border border-stone-700">
-        <div class="flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center animate-pulse">
+        <div class="flex items-center space-x-3.5 min-w-0 pr-2">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center animate-pulse shrink-0">
                 <i class="fa-solid fa-stopwatch text-lg"></i>
             </div>
-            <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-stone-400 block" id="timer-label">Timer Cottura</span>
+            <div class="min-w-0">
+                <span class="text-xs font-bold uppercase tracking-wider text-stone-400 block truncate" id="timer-label">Timer Attivo</span>
                 <span class="text-2xl font-extrabold font-mono text-white" id="timer-display">00:00</span>
             </div>
         </div>
-        <button onclick="stopTimer()" class="px-4 py-2 rounded-2xl bg-rose-500 text-white text-sm font-extrabold">Ferma</button>
+        <button onclick="stopTimer()" class="px-4 py-2 rounded-2xl bg-rose-500 text-white text-sm font-extrabold shrink-0">Ferma</button>
     </div>
 
-    <!-- HEADER PRINCIPALE -->
-    <header class="px-5 mb-5 flex justify-between items-center">
-        <div>
-            <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800" id="current-date-label">Piano Giornaliero</span>
+    <!-- ========================================== -->
+    <!-- SCHERMATA 0: LOGIN CON CODICE PAZIENTE/ATLETA -->
+    <!-- ========================================== -->
+    <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-[#F4F3EE]">
+        <div class="max-w-sm mx-auto w-full space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 rounded-3xl bg-emerald-800 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-900/20 text-2xl">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Portale Pazienti & Atleti</span>
+                <h1 class="text-3xl font-extrabold text-stone-900">Accedi al tuo Piano</h1>
+                <p class="text-sm text-stone-500 leading-relaxed">
+                    Inserisci il codice personale fornito dal tuo Nutrizionista o Personal Trainer.
+                </p>
             </div>
-            <h1 class="text-3xl font-extrabold text-stone-900 mt-1">Ciao Giovanni</h1>
+
+            <div class="soft-card rounded-3xl p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Personale o Username</label>
+                    <input type="text" id="login-code-input" placeholder="Es. GIOVANNI" class="w-full bg-stone-50 border-2 border-stone-200 rounded-2xl px-4 py-3.5 text-lg font-extrabold text-stone-900 uppercase text-center tracking-widest focus:outline-none focus:border-emerald-700">
+                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice non valido. Riprova (Usa: GIOVANNI)</p>
+                </div>
+
+                <button onclick="handleLogin()" class="w-full bg-emerald-800 text-white font-extrabold py-4 rounded-2xl text-base shadow-md active:scale-98 transition">
+                    Entra nel Portale
+                </button>
+
+                <div class="pt-3 border-t border-stone-100 text-center">
+                    <button onclick="quickLogin('GIOVANNI')" class="text-xs font-bold text-emerald-800 underline">
+                        Accesso Rapido Demo: Profilo Giovanni Forlenza
+                    </button>
+                </div>
+            </div>
         </div>
-        <button onclick="resetProgress()" class="w-11 h-11 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center text-stone-500 shadow-sm active:scale-95 transition" title="Ricomincia settimana">
-            <i class="fa-solid fa-rotate-right text-base"></i>
-        </button>
-    </header>
+    </section>
 
     <!-- ========================================== -->
-    <!-- PAGINA 1: OGGI (CON FOCUS MODE AUTOMATICO) -->
+    <!-- SCHERMATA 1: HUB DI SCELTA (DIETA vs ALLENAMENTO) -->
     <!-- ========================================== -->
-    <main id="view-plan" class="px-5 space-y-5">
-        
-        <!-- SELETTORE GIORNI -->
-        <div class="grid grid-cols-7 gap-1.5 py-1" id="day-selector"></div>
-
-        <!-- BANNER PALESTRA -->
-        <div id="workout-banner" class="hidden bg-amber-50 border-2 border-amber-200 rounded-3xl p-4 flex items-start space-x-3.5">
-            <div class="w-10 h-10 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-800 shrink-0 mt-0.5">
-                <i class="fa-solid fa-dumbbell text-base"></i>
-            </div>
-            <div>
-                <h3 class="text-sm font-extrabold uppercase tracking-wide text-amber-950">Giorno di Palestra</h3>
-                <p class="text-sm text-amber-900 font-medium mt-1 leading-snug" id="workout-desc"></p>
-            </div>
-        </div>
-
-        <!-- DASHBOARD GIORNALIERA -->
-        <div class="soft-card rounded-3xl p-5 space-y-4">
+    <section id="screen-hub" class="min-h-screen flex flex-col justify-between px-5 py-10 hidden" style="padding-top: calc(var(--safe-top) + 20px);">
+        <div class="space-y-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-stone-400">Obiettivo Oggi</span>
-                    <div class="text-3xl font-extrabold text-stone-900 mt-0.5" id="macro-kcal">1.960 Kcal</div>
-                    <span class="inline-block mt-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-3 py-1 rounded-xl" id="meals-progress-text">0 di 5 pasti completati</span>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">Profilo Attivo</span>
+                    <h1 class="text-3xl font-extrabold text-stone-900 mt-0.5">Ciao Giovanni 👋</h1>
                 </div>
-                <div class="flex space-x-2">
-                    <div class="px-3 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center min-w-[60px]">
-                        <span class="block text-[11px] font-bold text-stone-500 uppercase">Carbo</span>
-                        <span class="text-base font-extrabold text-stone-900" id="macro-c">175g</span>
-                    </div>
-                    <div class="px-3 py-2 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-center min-w-[60px]">
-                        <span class="block text-[11px] font-bold text-emerald-800 uppercase">Prot</span>
-                        <span class="text-base font-extrabold text-emerald-900" id="macro-p">158g</span>
-                    </div>
-                    <div class="px-3 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center min-w-[60px]">
-                        <span class="block text-[11px] font-bold text-stone-500 uppercase">Grassi</span>
-                        <span class="text-base font-extrabold text-stone-900" id="macro-g">68g</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BARRA ACQUA -->
-            <div class="pt-4 border-t border-stone-100 flex items-center justify-between">
-                <div class="flex-1 pr-4">
-                    <div class="flex justify-between text-sm font-bold mb-2">
-                        <span class="text-stone-700 flex items-center"><i class="fa-solid fa-droplet text-sky-500 mr-2"></i>Acqua (3.5L)</span>
-                        <span class="text-sky-600 font-extrabold text-base" id="water-val">0.00 L</span>
-                    </div>
-                    <div class="w-full h-3 bg-stone-100 rounded-full overflow-hidden">
-                        <div id="water-bar" class="bg-sky-500 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="flex space-x-2">
-                    <button onclick="updateWater(-0.25)" class="w-11 h-11 rounded-2xl bg-stone-100 text-stone-700 font-extrabold text-lg active:scale-90 transition">-</button>
-                    <button onclick="updateWater(0.25)" class="px-4 h-11 rounded-2xl bg-sky-600 text-white font-extrabold text-sm active:scale-95 transition shadow-sm">+250ml</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- LISTA PASTI (COMPATTA AUTOMATICAMENTE I PASTI FATTI) -->
-        <div id="meals-container" class="space-y-4"></div>
-    </main>
-
-    <!-- ========================================== -->
-    <!-- PAGINA 2: SPESA CON SOMMA GRAMMATURE       -->
-    <!-- ========================================== -->
-    <main id="view-pantry" class="px-5 space-y-4 hidden">
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl font-extrabold text-stone-900">Dispensa & Spesa</h2>
-                    <p class="text-sm text-stone-500 mt-0.5">Calcolo automatico delle quantità dal tuo piano.</p>
-                </div>
-                <button onclick="shareShoppingListWhatsApp()" class="bg-emerald-700 text-white text-sm font-extrabold px-4 py-3 rounded-2xl flex items-center space-x-2 shadow-sm active:scale-95 transition">
-                    <i class="fa-brands fa-whatsapp text-base"></i>
-                    <span>Invia</span>
+                <button onclick="logout()" class="px-3.5 py-2 rounded-2xl bg-white border border-stone-200 text-stone-600 text-xs font-bold shadow-sm">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i>Esci
                 </button>
             </div>
 
-            <!-- SELETTORE ORIZZONTE TEMPORALE SPESA -->
-            <div class="bg-emerald-50/90 border border-emerald-200 p-3 rounded-2xl">
-                <span class="block text-xs font-extrabold uppercase tracking-wider text-emerald-900 mb-2">
-                    <i class="fa-solid fa-calculator mr-1"></i>Calcola quantità da comprare per:
-                </span>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setShopRange(3)" id="range-3" class="py-2.5 px-3 rounded-xl text-xs font-extrabold bg-emerald-800 text-white shadow-sm transition">
-                        Prossimi 3 Giorni
-                    </button>
-                    <button onclick="setShopRange(7)" id="range-7" class="py-2.5 px-3 rounded-xl text-xs font-bold bg-white text-emerald-900 border border-emerald-200 transition">
-                        Tutta la Settimana (7 gg)
-                    </button>
+            <p class="text-base text-stone-600 font-medium">Cosa vuoi consultare adesso?</p>
+
+            <!-- CARD 1: NUTRIZIONE -->
+            <div onclick="openModule('nutrition')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-transparent hover:border-emerald-700/30 relative overflow-hidden">
+                <div class="flex items-start justify-between">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold px-3 py-1 rounded-xl">1.960 Kcal / die</span>
+                </div>
+                <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Piano Alimentare</h2>
+                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
+                    Menu giornaliero, ricette passo-passo, sostituzioni rapide, lista della spesa automatica e guida fuori casa.
+                </p>
+                <div class="mt-5 flex items-center text-sm font-extrabold text-emerald-800">
+                    <span>Apri Alimentazione</span>
+                    <i class="fa-solid fa-arrow-right ml-2"></i>
                 </div>
             </div>
 
-            <!-- FILTRI DISPENSA -->
-            <div class="grid grid-cols-3 gap-1.5 bg-stone-100 p-1.5 rounded-2xl">
-                <button onclick="setPantryFilter('missing')" id="filter-missing" class="py-2.5 text-sm font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">Da Comprare</button>
-                <button onclick="setPantryFilter('home')" id="filter-home" class="py-2.5 text-sm font-semibold rounded-xl text-stone-500 transition">In Casa</button>
-                <button onclick="setPantryFilter('all')" id="filter-all" class="py-2.5 text-sm font-semibold rounded-xl text-stone-500 transition">Tutti</button>
-            </div>
-
-            <div class="flex space-x-2">
-                <input type="text" id="custom-item-input" placeholder="Aggiungi altro alla spesa..." class="flex-1 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-base text-stone-900 focus:outline-none focus:border-emerald-600">
-                <button onclick="addCustomItem()" class="bg-stone-900 text-white font-extrabold px-5 rounded-2xl text-sm active:scale-95 transition">Aggiungi</button>
+            <!-- CARD 2: SCHEDA ALLENAMENTO -->
+            <div onclick="openModule('workout')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-transparent hover:border-amber-500/40 relative overflow-hidden">
+                <div class="flex items-start justify-between">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0">
+                        <i class="fa-solid fa-dumbbell"></i>
+                    </div>
+                    <span class="bg-amber-50 text-amber-900 border border-amber-200 text-xs font-extrabold px-3 py-1 rounded-xl">Mar • Gio • Sab</span>
+                </div>
+                <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Scheda Allenamento</h2>
+                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
+                    Programma sala pesi con serie, ripetizioni, tracciamento dei carichi (Kg), note tecniche e timer di recupero automatico.
+                </p>
+                <div class="mt-5 flex items-center text-sm font-extrabold text-amber-800">
+                    <span>Apri Scheda Palestra</span>
+                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                </div>
             </div>
         </div>
 
-        <div id="pantry-container" class="space-y-4"></div>
-    </main>
+        <div class="text-center text-xs text-stone-400 font-semibold pt-8">
+            Fit & Nutri Hub Pro • Sincronizzato su iPhone
+        </div>
+    </section>
 
     <!-- ========================================== -->
-    <!-- PAGINA 3: GUIDA SOPRAVVIVENZA & MEAL PREP  -->
+    <!-- MODULO A: NUTRIZIONE COMPLETA              -->
     <!-- ========================================== -->
-    <main id="view-guide" class="px-5 space-y-5 hidden">
+    <div id="module-nutrition" class="app-padding hidden">
         
-        <!-- SELETTORE INTERNO GUIDA -->
-        <div class="grid grid-cols-3 gap-1.5 bg-stone-200/80 p-1.5 rounded-2xl">
-            <button onclick="setGuideSubTab('out')" id="gsub-out" class="py-2.5 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">🍽️ Fuori Casa</button>
-            <button onclick="setGuideSubTab('prep')" id="gsub-prep" class="py-2.5 text-xs font-bold rounded-xl text-stone-600 transition">🥡 Meal Prep</button>
-            <button onclick="setGuideSubTab('sos')" id="gsub-sos" class="py-2.5 text-xs font-bold rounded-xl text-stone-600 transition">⚡ SOS Fame</button>
-        </div>
-
-        <!-- SOTTO-SEZIONE 1: SOPRAVVIVENZA FUORI CASA -->
-        <div id="guide-section-out" class="space-y-4">
-            <div class="soft-card rounded-3xl p-5">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">Zero Sensi di Colpa</span>
-                <h2 class="text-xl font-extrabold text-stone-900 mt-1">Cosa ordinare quando sei fuori</h2>
-                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Se sei al pub, in pizzeria o al bar per lavoro, usa queste scelte strategiche per goderti la compagnia restando nei tuoi macronutrienti.
-                </p>
+        <!-- HEADER NUTRIZIONE -->
+        <header class="px-5 mb-5 flex justify-between items-center">
+            <div class="min-w-0 pr-2">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 truncate" id="current-date-label">Piano Giornaliero</span>
+                </div>
+                <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate">Alimentazione</h1>
             </div>
+            <div class="flex items-center space-x-2 shrink-0">
+                <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span>Hub</span>
+                </button>
+                <button onclick="resetProgress()" class="w-11 h-11 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center text-stone-500 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-rotate-right text-sm"></i>
+                </button>
+            </div>
+        </header>
 
-            <!-- PUB / HAMBURGERIA -->
-            <div class="soft-card rounded-3xl p-5 space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-burger"></i>
+        <!-- VISTA 1: OGGI -->
+        <main id="view-plan" class="px-5 space-y-5">
+            <div class="grid grid-cols-7 gap-1.5 py-1" id="day-selector"></div>
+
+            <div id="workout-banner" class="hidden bg-amber-50 border-2 border-amber-200 rounded-3xl p-4 flex items-start justify-between space-x-3">
+                <div class="flex items-start space-x-3 min-w-0">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-800 shrink-0 mt-0.5">
+                        <i class="fa-solid fa-dumbbell text-base"></i>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-extrabold text-stone-900">Al Pub / Hamburgeria</h3>
-                        <span class="text-xs font-bold text-emerald-700">Come trasformarlo in un pasto perfetto</span>
+                    <div class="min-w-0">
+                        <h3 class="text-sm font-extrabold uppercase tracking-wide text-amber-950">Oggi ti alleni!</h3>
+                        <p class="text-xs text-amber-900 font-medium mt-0.5 leading-snug" id="workout-desc"></p>
                     </div>
                 </div>
-                <ul class="space-y-2.5 text-sm text-stone-700 pt-2 border-t border-stone-100">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>La scelta Top:</strong> Hamburger al piatto (o Tagliata di manzo/pollo) con contorno di verdure grigliate o patate al forno (evitando le patatine fritte).</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>Se prendi il Panino Hamburger:</strong> scegli carne di manzo o pollo, evita doppi formaggi fusi/bacon croccante e chiedi le salse a parte (maionese e salse burger contengono fino a 300 Kcal nascoste).</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>Da bere:</strong> Acqua, Coca Zero o al massimo 1 birra piccola/media (se bevi la birra, non mangiare le patatine o il pane extra perché la birra copre già la tua quota di carboidrati!).</span>
-                    </li>
-                </ul>
+                <button onclick="openModule('workout')" class="px-3 py-2 rounded-xl bg-amber-600 text-white text-xs font-extrabold shrink-0 self-center">
+                    Scheda
+                </button>
             </div>
 
-            <!-- IN PIZZERIA -->
-            <div class="soft-card rounded-3xl p-5 space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-pizza-slice"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-extrabold text-stone-900">In Pizzeria</h3>
-                        <span class="text-xs font-bold text-emerald-700">Bilanciare carboidrati e proteine</span>
-                    </div>
-                </div>
-                <ul class="space-y-2.5 text-sm text-stone-700 pt-2 border-t border-stone-100">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>L'ordine da Maestro:</strong> Pizza con base rossa (o Margherita con poca mozzarella) con aggiunta di <strong>Bresaola, Rucola e Scaglie di Grana</strong> oppure <strong>Prosciutto Crudo</strong> a fine cottura (alza le proteine e frena il picco glicemico dell'impasto).</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>Il trucco del giorno dopo:</strong> La pizza trattiene molta acqua per via del sale e del lievito. Il giorno dopo peserai 1 kg in più di sola acqua: NON pesarti il giorno dopo la pizza e bevi 3.5L d'acqua!</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- PRANZO VELOCE AL BAR / TAVOLA CALDA -->
-            <div class="soft-card rounded-3xl p-5 space-y-3">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-mug-Saucer"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-extrabold text-stone-900">Al Bar (Pranzo Veloce Lavoro)</h3>
-                        <span class="text-xs font-bold text-emerald-700">Quando non torni a casa a pranzo</span>
-                    </div>
-                </div>
-                <ul class="space-y-2.5 text-sm text-stone-700 pt-2 border-t border-stone-100">
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>Opzione 1 (Panino):</strong> Ciabattina o pane integrale (togliendo un po' di mollica interna) con <strong>Bresaola/Fesa/Crudo + Pomodoro e Rucola</strong> (niente maionese o formaggi spalmabili grassi).</span>
-                    </li>
-                    <li class="flex items-start space-x-2">
-                        <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
-                        <span><strong>Opzione 2 (Piatto al banco):</strong> Caprese o Prosciutto e Melone o Insalatona con Tonno, Pomodorini e Olive accompagnata da 1 pacchetto di crackers integrali o 1 panino piccolo.</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- SOTTO-SEZIONE 2: PROTOCOLLO MEAL PREP (40 MIN) -->
-        <div id="guide-section-prep" class="space-y-4 hidden">
-            <div class="soft-card rounded-3xl p-5">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">Risparmia 2 Ore in Settimana</span>
-                <h2 class="text-xl font-extrabold text-stone-900 mt-1">Sessione Meal Prep (40 min)</h2>
-                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Fai questi 5 passaggi la Domenica sera o il Lunedì: avrai i pranzi pronti in 3 minuti mentre lavori al computer.
-                </p>
-            </div>
-
-            <div class="soft-card rounded-3xl p-5 space-y-3" id="prep-checklist">
-                <!-- Generato via JS -->
-            </div>
-        </div>
-
-        <!-- SOTTO-SEZIONE 3: SOS FAME NERVOSA -->
-        <div id="guide-section-sos" class="space-y-4 hidden">
+            <!-- DASHBOARD GIORNALIERA -->
             <div class="soft-card rounded-3xl p-5 space-y-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-bolt"></i>
+                <div class="flex justify-between items-center gap-2">
+                    <div class="min-w-0">
+                        <span class="text-xs font-bold uppercase tracking-wider text-stone-400">Obiettivo</span>
+                        <div class="text-2xl font-extrabold text-stone-900 mt-0.5" id="macro-kcal">1.960 Kcal</div>
+                        <span class="inline-block mt-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-xl" id="meals-progress-text">0 di 5 completati</span>
                     </div>
+                    <div class="flex space-x-1.5 shrink-0">
+                        <div class="px-2.5 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
+                            <span class="block text-[10px] font-bold text-stone-500 uppercase">Carbo</span>
+                            <span class="text-sm font-extrabold text-stone-900" id="macro-c">175g</span>
+                        </div>
+                        <div class="px-2.5 py-2 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-center">
+                            <span class="block text-[10px] font-bold text-emerald-800 uppercase">Prot</span>
+                            <span class="text-sm font-extrabold text-emerald-900" id="macro-p">158g</span>
+                        </div>
+                        <div class="px-2.5 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
+                            <span class="block text-[10px] font-bold text-stone-500 uppercase">Grassi</span>
+                            <span class="text-sm font-extrabold text-stone-900" id="macro-g">68g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARRA ACQUA -->
+                <div class="pt-4 border-t border-stone-100 flex items-center justify-between gap-3">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between text-sm font-bold mb-1.5">
+                            <span class="text-stone-700 flex items-center"><i class="fa-solid fa-droplet text-sky-500 mr-1.5"></i>Acqua (3.5L)</span>
+                            <span class="text-sky-600 font-extrabold" id="water-val">0.00 L</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-stone-100 rounded-full overflow-hidden">
+                            <div id="water-bar" class="bg-sky-500 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-1.5 shrink-0">
+                        <button onclick="updateWater(-0.25)" class="w-10 h-10 rounded-2xl bg-stone-100 text-stone-700 font-extrabold text-base active:scale-90 transition">-</button>
+                        <button onclick="updateWater(0.25)" class="px-3.5 h-10 rounded-2xl bg-sky-600 text-white font-extrabold text-xs active:scale-95 transition shadow-sm">+250ml</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="meals-container" class="space-y-4"></div>
+        </main>
+
+        <!-- VISTA 2: SPESA -->
+        <main id="view-pantry" class="px-5 space-y-4 hidden">
+            <div class="soft-card rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
                     <div>
-                        <h2 class="text-xl font-extrabold text-stone-900">SOS Fame alla Scrivania</h2>
-                        <p class="text-xs text-stone-500">Cosa fare quando hai voglia di sgranocchiare</p>
+                        <h2 class="text-xl font-extrabold text-stone-900">Dispensa & Spesa</h2>
+                        <p class="text-xs text-stone-500 mt-0.5">Somma automatica delle quantità.</p>
+                    </div>
+                    <button onclick="shareShoppingListWhatsApp()" class="bg-emerald-700 text-white text-xs font-extrabold px-3.5 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Invia</span>
+                    </button>
+                </div>
+
+                <div class="bg-emerald-50/90 border border-emerald-200 p-3 rounded-2xl">
+                    <span class="block text-xs font-extrabold uppercase tracking-wider text-emerald-900 mb-2">Calcola quantità per:</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setShopRange(3)" id="range-3" class="py-2 px-3 rounded-xl text-xs font-extrabold bg-emerald-800 text-white shadow-sm transition">Prossimi 3 Giorni</button>
+                        <button onclick="setShopRange(7)" id="range-7" class="py-2 px-3 rounded-xl text-xs font-bold bg-white text-emerald-900 border border-emerald-200 transition">7 Giorni</button>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-950 leading-relaxed">
-                    <strong class="block text-base font-extrabold mb-1">1. Il Trucco dei 500ml d'Acqua</strong>
-                    Quando sei concentrato su Illustrator o al codice, il calo di zuccheri percepito è nel 70% dei casi disidratazione. Bevi 2 bicchieri grandi d'acqua fresca e attendi 10 minuti.
+                <div class="grid grid-cols-3 gap-1.5 bg-stone-100 p-1.5 rounded-2xl">
+                    <button onclick="setPantryFilter('missing')" id="filter-missing" class="py-2 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">Manca</button>
+                    <button onclick="setPantryFilter('home')" id="filter-home" class="py-2 text-xs font-semibold rounded-xl text-stone-500 transition">In Casa</button>
+                    <button onclick="setPantryFilter('all')" id="filter-all" class="py-2 text-xs font-semibold rounded-xl text-stone-500 transition">Tutti</button>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200 text-sm text-stone-800 leading-relaxed">
-                    <strong class="block text-base font-extrabold mb-1">2. Cibi "Calorie Zero" Liberi</strong>
-                    Tieni in frigo già lavati: <strong>finocchi a spicchi, carote, cetrioli o sedano</strong>. Puoi mangiarne quanti ne vuoi: la masticazione croccante azzera lo stress nervoso con meno di 15 Kcal.
-                </div>
-
-                <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200 text-sm text-stone-800 leading-relaxed">
-                    <strong class="block text-base font-extrabold mb-1">3. Tamponi Proteici (Fame Vera)</strong>
-                    Se lo stomaco brontola davvero: mangia <strong>3 fette di fesa di tacchino arrosto</strong> (solo 35 Kcal e 8g di proteine pure) oppure <strong>mezzo vasetto di Yogurt Greco 0%</strong> con cannella.
+                <div class="flex space-x-2">
+                    <input type="text" id="custom-item-input" placeholder="Aggiungi altro..." class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-3.5 py-2.5 text-sm text-stone-900 focus:outline-none focus:border-emerald-600">
+                    <button onclick="addCustomItem()" class="bg-stone-900 text-white font-extrabold px-4 rounded-2xl text-xs shrink-0">Aggiungi</button>
                 </div>
             </div>
-        </div>
-    </main>
+
+            <div id="pantry-container" class="space-y-4"></div>
+        </main>
+
+        <!-- VISTA 3: GUIDA & PREP -->
+        <main id="view-guide" class="px-5 space-y-4 hidden">
+            <div class="grid grid-cols-3 gap-1.5 bg-stone-200/80 p-1.5 rounded-2xl">
+                <button onclick="setGuideSubTab('out')" id="gsub-out" class="py-2.5 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">🍽️ Fuori Casa</button>
+                <button onclick="setGuideSubTab('prep')" id="gsub-prep" class="py-2.5 text-xs font-bold rounded-xl text-stone-600 transition">🥡 Meal Prep</button>
+                <button onclick="setGuideSubTab('sos')" id="gsub-sos" class="py-2.5 text-xs font-bold rounded-xl text-stone-600 transition">⚡ SOS Fame</button>
+            </div>
+
+            <div id="guide-section-out" class="space-y-4">
+                <div class="soft-card rounded-3xl p-5 space-y-2">
+                    <h3 class="text-lg font-extrabold text-stone-900">🍔 Al Pub / Hamburgeria</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Ordina Hamburger al piatto o Tagliata con verdure grigliate o patate al forno. Se prendi il panino, evita bacon/doppio formaggio e chiedi le salse a parte.</p>
+                </div>
+                <div class="soft-card rounded-3xl p-5 space-y-2">
+                    <h3 class="text-lg font-extrabold text-stone-900">🍕 In Pizzeria</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Scegli Marinara o Margherita con aggiunta di <strong>Bresaola o Prosciutto Crudo</strong> a crudo: le proteine frenano il picco glicemico della pizza. Non pesarti il giorno dopo (è solo ritenzione d'acqua del sale).</p>
+                </div>
+                <div class="soft-card rounded-3xl p-5 space-y-2">
+                    <h3 class="text-lg font-extrabold text-stone-900">🥪 Pranzo Veloce al Bar</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Panino integrale (togliendo un po' di mollica) con Bresaola o Fesa di tacchino e pomodori, oppure Insalatona con Tonno e 1 pacchetto di crackers.</p>
+                </div>
+            </div>
+
+            <div id="guide-section-prep" class="space-y-3 hidden">
+                <div class="soft-card rounded-3xl p-5 space-y-3" id="prep-checklist"></div>
+            </div>
+
+            <div id="guide-section-sos" class="space-y-3 hidden">
+                <div class="soft-card rounded-3xl p-5 space-y-3 text-sm text-stone-700 leading-relaxed">
+                    <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950">
+                        <strong class="block font-extrabold mb-1">1. Bevi 2 bicchieri grandi d'acqua</strong>
+                        Al computer il cervello confonde la sete con la voglia di sgranocchiare carboidrati.
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                        <strong class="block font-extrabold mb-1">2. Cibi "Zero Calorie" Croccanti</strong>
+                        Finocchi crudi, carote, sedano o cetrioli: puoi mangiarne a volontà per scaricare la tensione nervosa.
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                        <strong class="block font-extrabold mb-1">3. Spezza-Fame Proteico</strong>
+                        3 fette di fesa di tacchino (35 Kcal) oppure mezzo Yogurt Greco 0% con cannella.
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- VISTA 4: PROGRESSI -->
+        <main id="view-weight" class="px-5 space-y-4 hidden">
+            <div class="soft-card rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-extrabold text-stone-900">Andamento Peso</h2>
+                    <span class="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-xl" id="adherence-badge">Costanza: 0%</span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60 text-center">
+                        <span class="text-[10px] font-bold uppercase text-stone-400">Inizio</span>
+                        <div class="text-base font-extrabold text-stone-800 mt-0.5">110.0 kg</div>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 text-center">
+                        <span class="text-[10px] font-bold uppercase text-emerald-800">Attuale</span>
+                        <div class="text-base font-extrabold text-emerald-950 mt-0.5" id="current-weight-display">110.0 kg</div>
+                    </div>
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60 text-center">
+                        <span class="text-[10px] font-bold uppercase text-stone-400">Delta</span>
+                        <div class="text-base font-extrabold text-emerald-700 mt-0.5" id="diff-weight-display">0.0 kg</div>
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200/60">
+                    <div id="weight-chart-container" class="w-full h-24 flex items-center justify-center"></div>
+                </div>
+
+                <div class="flex space-x-2">
+                    <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 108.5)" class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-900">
+                    <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-extrabold px-5 rounded-2xl text-xs shrink-0">Salva</button>
+                </div>
+            </div>
+
+            <div class="soft-card rounded-3xl p-5 space-y-3">
+                <h3 class="text-base font-extrabold text-stone-900">Traguardi Fisici Raggiunti</h3>
+                <div id="nsv-container" class="space-y-2"></div>
+            </div>
+
+            <div class="soft-card rounded-3xl p-5">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">Storico Pesate</h3>
+                <div id="weight-history" class="divide-y divide-stone-100 text-sm"></div>
+            </div>
+        </main>
+
+        <!-- BARRA NAVIGAZIONE NUTRIZIONE -->
+        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5 grid grid-cols-4 gap-1">
+            <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-700 py-1 rounded-2xl transition">
+                <i class="fa-solid fa-utensils text-base"></i>
+                <span class="text-[11px] font-extrabold">Oggi</span>
+            </button>
+            <button onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition relative">
+                <i class="fa-solid fa-basket-shopping text-base"></i>
+                <span class="text-[11px] font-bold">Spesa</span>
+                <span id="missing-badge" class="absolute top-0 right-4 bg-amber-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
+            </button>
+            <button onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
+                <i class="fa-solid fa-compass text-base"></i>
+                <span class="text-[11px] font-bold">Guida</span>
+            </button>
+            <button onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
+                <i class="fa-solid fa-chart-line text-base"></i>
+                <span class="text-[11px] font-bold">Progressi</span>
+            </button>
+        </nav>
+    </div>
 
     <!-- ========================================== -->
-    <!-- PAGINA 4: PROGRESSI, GRAFICO & VITTORIE    -->
+    <!-- MODULO B: SCHEDA ALLENAMENTO PALESTRA      -->
     <!-- ========================================== -->
-    <main id="view-weight" class="px-5 space-y-4 hidden">
+    <div id="module-workout" class="app-padding hidden">
         
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Ricomposizione Corporea</span>
-                    <h2 class="text-2xl font-extrabold text-stone-900 mt-0.5">I Tuoi Progressi</h2>
+        <header class="px-5 mb-5 flex justify-between items-center">
+            <div class="min-w-0 pr-2">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 truncate">Programma Sala Pesi</span>
                 </div>
-                <span class="text-sm font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-xl" id="adherence-badge">Costanza: 0%</span>
+                <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate">Scheda Allenamento</h1>
             </div>
-
-            <div class="grid grid-cols-3 gap-2.5">
-                <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-200/60">
-                    <span class="text-xs font-bold uppercase text-stone-400">Partenza</span>
-                    <div class="text-lg font-extrabold text-stone-800 mt-1">110.0 kg</div>
-                </div>
-                <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200">
-                    <span class="text-xs font-bold uppercase text-emerald-800">Attuale</span>
-                    <div class="text-lg font-extrabold text-emerald-950 mt-1" id="current-weight-display">110.0 kg</div>
-                </div>
-                <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-200/60">
-                    <span class="text-xs font-bold uppercase text-stone-400">Variazione</span>
-                    <div class="text-lg font-extrabold text-emerald-700 mt-1" id="diff-weight-display">0.0 kg</div>
-                </div>
-            </div>
-
-            <!-- GRAFICO VISIVO SVG DELL'ANDAMENTO PESO -->
-            <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200/60">
-                <span class="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 block mb-2">Curva Andamento Peso</span>
-                <div id="weight-chart-container" class="w-full h-28 flex items-center justify-center"></div>
-            </div>
-
-            <div class="flex space-x-2 pt-1">
-                <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 108.5)" class="flex-1 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-base text-stone-900 focus:outline-none focus:border-emerald-600">
-                <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-extrabold px-6 rounded-2xl text-sm active:scale-95 transition">
-                    Salva
+            <div class="flex items-center space-x-2 shrink-0">
+                <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span>Hub</span>
+                </button>
+                <button onclick="resetWorkoutSets()" class="w-11 h-11 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center text-stone-500 shadow-sm active:scale-95 transition" title="Azzera serie">
+                    <i class="fa-solid fa-rotate-right text-sm"></i>
                 </button>
             </div>
-        </div>
+        </header>
 
-        <!-- VITTORIE NON-BILANCIA (MOTIVAZIONE ANTI-ABBANDONO) -->
-        <div class="soft-card rounded-3xl p-5 space-y-3">
-            <div>
-                <h3 class="text-base font-extrabold text-stone-900">Traguardi Fisici (Oltre la Bilancia)</h3>
-                <p class="text-xs text-stone-500">All'inizio i muscoli trattengono acqua per la palestra: spunta i segnali che stai dimagrendo davvero!</p>
+        <main class="px-5 space-y-5">
+            <!-- SELETTORE WORKOUT A / B / C -->
+            <div class="grid grid-cols-3 gap-2" id="workout-day-selector"></div>
+
+            <!-- INFO SCHEDA DEL GIORNO -->
+            <div class="soft-card rounded-3xl p-5 flex justify-between items-center">
+                <div class="min-w-0 pr-2">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800" id="wo-subtitle">Martedì • Ore 07:00</span>
+                    <h2 class="text-xl font-extrabold text-stone-900 mt-0.5 truncate" id="wo-title">Scheda A — Spinta & Upper</h2>
+                    <p class="text-xs text-stone-500 mt-1" id="wo-focus">Tocca il numero della serie appena la finisci per far partire il recupero.</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 px-3 py-2 rounded-2xl text-center shrink-0">
+                    <span class="block text-[10px] font-bold uppercase text-amber-800">Completamento</span>
+                    <span class="text-base font-extrabold text-amber-950" id="wo-progress">0%</span>
+                </div>
             </div>
-            <div id="nsv-container" class="space-y-2 pt-1"></div>
-        </div>
 
-        <!-- STORICO PESATE -->
-        <div class="soft-card rounded-3xl p-5">
-            <h3 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-3">Storico Pesate</h3>
-            <div id="weight-history" class="divide-y divide-stone-100 text-base"></div>
-        </div>
-    </main>
+            <!-- LISTA ESERCIZI -->
+            <div id="exercises-container" class="space-y-4"></div>
+        </main>
 
-    <!-- ========================================== -->
-    <!-- NAVIGAZIONE INFERIORE A 4 PAGINE           -->
-    <!-- ========================================== -->
-    <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5 grid grid-cols-4 gap-1">
-        <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-700 py-1 rounded-2xl transition">
-            <i class="fa-solid fa-utensils text-lg"></i>
-            <span class="text-[11px] font-extrabold">Oggi</span>
-        </button>
-        <button onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition relative">
-            <i class="fa-solid fa-basket-shopping text-lg"></i>
-            <span class="text-[11px] font-bold">Spesa</span>
-            <span id="missing-badge" class="absolute top-0 right-4 bg-amber-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
-        </button>
-        <button onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
-            <i class="fa-solid fa-compass text-lg"></i>
-            <span class="text-[11px] font-bold">Guida & Prep</span>
-        </button>
-        <button onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
-            <i class="fa-solid fa-chart-line text-lg"></i>
-            <span class="text-[11px] font-bold">Progressi</span>
-        </button>
-    </nav>
+        <!-- BARRA INFERIORE RAPIDA ALLENAMENTO -->
+        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3 flex justify-between items-center">
+            <button onclick="startTimer(1.5, 'Recupero 90 Secondi')" class="flex-1 mr-2 py-3 rounded-2xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+                <i class="fa-solid fa-stopwatch text-amber-400"></i>
+                <span>Recupero 90s</span>
+            </button>
+            <button onclick="openModule('nutrition')" class="flex-1 ml-2 py-3 rounded-2xl bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Vai ai Pasti</span>
+            </button>
+        </nav>
+    </div>
 
     <script>
         // ==========================================
-        // ALTERNATIVE PASTI (CON GRAMMATURE NUMERICHE PER CALCOLO SPESA)
+        // DATABASE SCHEDA DI ALLENAMENTO (3 GIORNI: MAR, GIO, SAB)
+        // ==========================================
+        const workoutProgram = [
+            {
+                id: 'wo-a',
+                dayLabel: 'Martedì',
+                shortTitle: 'Scheda A',
+                title: 'Upper Body & Spinta',
+                subtitle: 'Martedì • Ore 07:00 • Durata: 55 min',
+                exercises: [
+                    { id: 'ex-a1', name: 'Riscaldamento Tapis Roulant / Ellittica', sets: 1, reps: '5 min', rest: 60, note: 'Camminata in pendenza leggera per attivare la circolazione.' },
+                    { id: 'ex-a2', name: 'Chest Press (o Panca Piana Manubri)', sets: 4, reps: '10-12', rest: 90, note: 'Scapole bene addotte contro lo schienale, discesa controllata di 2 secondi.' },
+                    { id: 'ex-a3', name: 'Lat Machine Avanti Presa Larga', sets: 4, reps: '10-12', rest: 90, note: 'Porta la sbarra al petto alto tirando coi gomiti verso il basso.' },
+                    { id: 'ex-a4', name: 'Shoulder Press con Manubri (o Macchina)', sets: 3, reps: '10', rest: 90, note: 'Schiena ben appoggiata, non inarcare la zona lombare.' },
+                    { id: 'ex-a5', name: 'Alzate Laterali con Manubri', sets: 3, reps: '12-15', rest: 60, note: 'Movimento fluido senza slanci, gomiti leggermente flessi.' },
+                    { id: 'ex-a6', name: 'Pushdown Tricipiti ai Cavi (Corda)', sets: 3, reps: '12', rest: 60, note: 'Gomiti fermi lungo i fianchi, apri la corda in basso.' }
+                ]
+            },
+            {
+                id: 'wo-b',
+                dayLabel: 'Giovedì',
+                shortTitle: 'Scheda B',
+                title: 'Gambe, Metabolico & Core',
+                subtitle: 'Giovedì • Ore 07:00 • Durata: 55 min',
+                exercises: [
+                    { id: 'ex-b1', name: 'Mobilità Anche & Cyclette', sets: 1, reps: '5 min', rest: 60, note: 'Attivazione articolare leggera prima della pressa.' },
+                    { id: 'ex-b2', name: 'Leg Press 45° (Pressa Orizzontale)', sets: 4, reps: '12', rest: 120, note: 'Piedi larghezza spalle a metà pedana, spingi coi talloni senza bloccare le ginocchia.' },
+                    { id: 'ex-b3', name: 'Leg Curl Seduto o Sdraiato', sets: 4, reps: '12', rest: 90, note: 'Focus sui femorali, trattieni 1 secondo in massima contrazione.' },
+                    { id: 'ex-b4', name: 'Leg Extension', sets: 3, reps: '12-15', rest: 75, note: 'Movimento controllato per bruciare calorie e tonificare i quadricipiti.' },
+                    { id: 'ex-b5', name: 'Crunch Addominali + Plank', sets: 3, reps: '15 + 40"', rest: 60, note: 'Espira tutta l\'aria quando sali con le spalle.' },
+                    { id: 'ex-b6', name: 'Camminata Inclinata Finale (Brucia-Grassi)', sets: 1, reps: '10 min', rest: 0, note: 'Pendenza 6-8%, passo costante.' }
+                ]
+            },
+            {
+                id: 'wo-c',
+                dayLabel: 'Sabato',
+                shortTitle: 'Scheda C',
+                title: 'Dorso, Braccia & Full Body',
+                subtitle: 'Sabato • Ore 09:00 • Durata: 60 min',
+                exercises: [
+                    { id: 'ex-c1', name: 'Pulley Basso con Triangolo', sets: 4, reps: '10-12', rest: 90, note: 'Schiena dritta, apri bene il petto quando porti il triangolo all\'addome.' },
+                    { id: 'ex-c2', name: 'Panca Inclinata 30° con Manubri', sets: 4, reps: '10', rest: 90, note: 'Focus sulla parte alta del petto e spalle.' },
+                    { id: 'ex-c3', name: 'Rematore con Manubrio su Panca', sets: 3, reps: '10 per lato', rest: 75, note: 'Tira il manubrio verso il fianco pensando di muovere il gomito.' },
+                    { id: 'ex-c4', name: 'Affondi Sul Posto (o Goblet Squat)', sets: 3, reps: '10', rest: 90, note: 'Ottimo esercizio metabolico che attiva grandi masse muscolari.' },
+                    { id: 'ex-c5', name: 'Curl Bicipiti con Manubri Alternato', sets: 4, reps: '12', rest: 60, note: 'Non dondolare con la schiena.' }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // DATABASE ALTERNATIVE E PIANO NUTRIZIONALE
         // ==========================================
         const interactiveSwaps = {
             breakfast: [
@@ -437,11 +537,7 @@
                         { qty: 120, unit: 'g', item: 'Mela a dadini', pId: 'v9' },
                         { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
                     ],
-                    steps: [
-                        'Cuoci i fiocchi d\'avena nel latte con la mela a dadini e cannella per 4 minuti.',
-                        'A fuoco minimo versa l\'albume e mescola energicamente per 1 minuto.',
-                        'Guarnisci col fondente che si scioglierà al centro.'
-                    ]
+                    steps: ['Cuoci i fiocchi d\'avena nel latte con la mela per 4 min, unisci l\'albume sul fuoco per 1 min e guarnisci col fondente.']
                 },
                 {
                     title: 'Pancake Avena, Albume e Crema Proteica',
@@ -574,9 +670,6 @@
             ]
         };
 
-        // ==========================================
-        // PIANO SETTIMANALE CON QUANTITÀ NUMERICHE
-        // ==========================================
         const weekData = [
             {
                 id: 'lun', short: 'Lun', name: 'Lunedì', workout: false,
@@ -591,11 +684,7 @@
                             { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' },
                             { qty: 15, unit: 'g', item: 'Marmellata zero zuccheri', pId: 'g4' }
                         ],
-                        steps: [
-                            'In una ciotola sbatti farina d\'avena, albume, 2 cucchiai d\'acqua e cannella.',
-                            'Cuoci in padella antiaderente calda 2 min per lato.',
-                            'Spalma marmellata e burro d\'arachidi a caldo.'
-                        ]
+                        steps: ['Sbatti farina d\'avena, albume, 2 cucchiai d\'acqua e cannella.', 'Cuoci in padella calda 2 min per lato e farcisci a caldo.']
                     },
                     {
                         id: 'lun-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0,
@@ -604,7 +693,7 @@
                             { qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' },
                             { qty: 15, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }
                         ],
-                        steps: ['Taglia il Parmigiano a cubetti e abbinalo alle mandorle. Zero picchi glicemici al lavoro.']
+                        steps: ['Taglia il Parmigiano a cubetti e abbinalo alle mandorle.']
                     },
                     {
                         id: 'lun-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
@@ -615,11 +704,7 @@
                             { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' },
                             { qty: 10, unit: 'g', item: 'Olive taggiasche + 5g Olio EVO', pId: 'g6' }
                         ],
-                        steps: [
-                            'Bollisci la pasta (avvia il timer da 10 min).',
-                            'Taglia in una ciotola i datterini, le olive e il salmone a striscioline con olio e scorza di limone.',
-                            'Scola la pasta al dente e mescola tutto.'
-                        ]
+                        steps: ['Bollisci la pasta 10 min.', 'Condisci con datterini, olive, salmone, olio e scorza di limone.']
                     },
                     {
                         id: 'lun-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
@@ -638,17 +723,13 @@
                             { qty: 80, unit: 'g', item: 'Ceci cotti in vetro', pId: 'c10' },
                             { qty: 250, unit: 'g', item: 'Zucchine', pId: 'v1' }
                         ],
-                        steps: [
-                            'Asciuga i ceci e taglia pollo e zucchine a bastoncini.',
-                            'Condisci tutto con paprika, rosmarino, sale e 1 cucchiaino d\'olio.',
-                            'Cuoci in friggitrice ad aria o forno a 195°C per 16 minuti.'
-                        ]
+                        steps: ['Condisci pollo a bocconcini, ceci asciugati e zucchine con paprika, rosmarino e 1 cucchiaino d\'olio.', 'Cuoci in friggitrice ad aria o forno a 195°C per 16 minuti.']
                     }
                 ]
             },
             {
                 id: 'mar', short: 'Mar', name: 'Martedì', workout: true,
-                workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Porridge Caldo Post-Workout.',
+                workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Scheda A • Ore 08:30 Porridge Caldo.',
                 kcal: '1.980 Kcal', c: '182g', p: '158g', g: '67g',
                 meals: [
                     {
@@ -658,7 +739,7 @@
                             { qty: 100, unit: 'g', item: 'Banana o Mela', pId: 'v9' },
                             { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
                         ],
-                        steps: ['Energia rapida 30 min prima dei pesi con 1 caffè amaro e 2 bicchieri d\'acqua.']
+                        steps: ['Energia rapida 30 min prima dei pesi con 1 caffè amaro.']
                     },
                     {
                         id: 'mar-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast', timer: 5,
@@ -670,11 +751,7 @@
                             { qty: 120, unit: 'g', item: 'Mela a dadini + Cannella', pId: 'v9' },
                             { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' }
                         ],
-                        steps: [
-                            'Cuoci i fiocchi d\'avena nel latte con la mela a dadini e cannella per 4 minuti.',
-                            'A fiamma minima aggiungi l\'albume mescolando veloce per 1 minuto.',
-                            'Completa con le noci spezzettate.'
-                        ]
+                        steps: ['Cuoci i fiocchi d\'avena nel latte con la mela e cannella per 4 min.', 'Aggiungi l\'albume a fuoco basso mescolando per 1 min e guarnisci con le noci.']
                     },
                     {
                         id: 'mar-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
@@ -687,11 +764,7 @@
                             { qty: 200, unit: 'g', item: 'Zucchine grattugiate', pId: 'v1' },
                             { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }
                         ],
-                        steps: [
-                            'Rosola il crudo a listarelle con le zucchine grattugiate per 3 minuti.',
-                            'Sbatti uovo, albume, Parmigiano e pepe nero.',
-                            'Scola la pasta in padella a fuoco spento e manteca con l\'uovo.'
-                        ]
+                        steps: ['Rosola il crudo con le zucchine grattugiate per 3 min.', 'Scola la pasta a fuoco spento e manteca con uovo, albume, pepe e Parmigiano.']
                     },
                     {
                         id: 'mar-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
@@ -711,11 +784,7 @@
                             { qty: 100, unit: 'g', item: 'Fagioli cannellini cotti', pId: 'c11' },
                             { qty: 200, unit: 'g', item: 'Spinaci freschi', pId: 'v4' }
                         ],
-                        steps: [
-                            'Frulla i cannellini con acqua calda, rosmarino e olio.',
-                            'Cuoci il filetto di orata in padella coperta per 9-10 min con pomodorini e capperi.',
-                            'Adagia il pesce sulla crema di fagioli con spinaci saltati.'
-                        ]
+                        steps: ['Frulla i cannellini con acqua calda, rosmarino e olio.', 'Cuoci il filetto di orata in padella coperta per 10 min con pomodorini e capperi e servi sulla crema.']
                     }
                 ]
             },
@@ -732,7 +801,7 @@
                             { qty: 30, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' },
                             { qty: 150, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }
                         ],
-                        steps: ['Colazione rapida: abbina sempre lo yogurt greco per garantire la quota proteica.']
+                        steps: ['Abbina sempre lo yogurt greco per garantire la quota proteica.']
                     },
                     {
                         id: 'mer-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0,
@@ -752,11 +821,7 @@
                             { qty: 110, unit: 'g', item: 'Tonno al naturale', pId: 'c9' },
                             { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }
                         ],
-                        steps: [
-                            'Cuoci il riso basmati per 10 minuti.',
-                            'Salta le zucchine tagliate finissime in padella per 3 minuti col tonno.',
-                            'Unisci il riso, 1 cucchiaino d\'olio e abbondante scorza di limone.'
-                        ]
+                        steps: ['Cuoci il riso basmati 10 min e uniscilo a zucchine saltate, tonno, olio e limone.']
                     },
                     {
                         id: 'mer-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 1,
@@ -766,7 +831,7 @@
                             { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' },
                             { qty: 10, unit: 'g', item: 'Mandorle', pId: 'g5' }
                         ],
-                        steps: ['Sciogli il fondente 30 sec al microonde e versalo sullo yogurt freddo per creare il guscio croccante.']
+                        steps: ['Sciogli il fondente 30 sec al microonde e versalo sullo yogurt freddo.']
                     },
                     {
                         id: 'mer-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6,
@@ -776,16 +841,13 @@
                             { qty: 100, unit: 'g', item: 'Lenticchie cotte in vetro', pId: 'c12' },
                             { qty: 200, unit: 'g', item: 'Zucchine grigliate', pId: 'v1' }
                         ],
-                        steps: [
-                            'Scotta gli straccetti di vitello in padella caldissima per 3 minuti e sfuma con aceto balsamico.',
-                            'Scalda le lenticchie con rosmarino e servi con le zucchine grigliate.'
-                        ]
+                        steps: ['Scotta gli straccetti di vitello 3 min e sfuma con aceto balsamico.', 'Servi con lenticchie calde e zucchine grigliate.']
                     }
                 ]
             },
             {
                 id: 'gio', short: 'Gio', name: 'Giovedì', workout: true,
-                workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Palestra • Ore 08:30 Pancake Tiramisù.',
+                workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Scheda B • Ore 08:30 Pancake Tiramisù.',
                 kcal: '1.970 Kcal', c: '180g', p: '157g', g: '68g',
                 meals: [
                     {
@@ -795,7 +857,7 @@
                             { qty: 150, unit: 'g', item: 'Mela o Arancia', pId: 'v9' },
                             { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }
                         ],
-                        steps: ['Mangia 30 minuti prima di iniziare il riscaldamento con 1 caffè espresso.']
+                        steps: ['Mangia 30 minuti prima di iniziare il riscaldamento.']
                     },
                     {
                         id: 'gio-1', time: '08:30', type: 'Post-Palestra', swapCat: 'breakfast', timer: 4,
@@ -806,10 +868,7 @@
                             { qty: 15, unit: 'g', item: 'Crema proteica spalmabile', pId: 'g3' },
                             { qty: 10, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }
                         ],
-                        steps: [
-                            'Mescola farina d\'avena, albume e 1 caffè freddo.',
-                            'Cuoci in padella 2 min per lato e spalma le creme a caldo.'
-                        ]
+                        steps: ['Mescola farina d\'avena, albume e 1 caffè freddo.', 'Cuoci in padella 2 min per lato e spalma le creme a caldo.']
                     },
                     {
                         id: 'gio-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10,
@@ -820,10 +879,7 @@
                             { qty: 70, unit: 'g', item: 'Prosciutto cotto magro', pId: 'p13' },
                             { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }
                         ],
-                        steps: [
-                            'Cuoci la zucca 4 min al microonde con 2 cucchiai d\'acqua, poi schiacciala con forchetta, Parmigiano e olio.',
-                            'Rosola il cotto in padella, scola la pasta e manteca tutto.'
-                        ]
+                        steps: ['Cuoci la zucca 4 min al microonde, schiacciala con Parmigiano e olio.', 'Condisci la pasta col cotto rosolato.']
                     },
                     {
                         id: 'gio-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
@@ -843,10 +899,7 @@
                             { qty: 40, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' },
                             { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }
                         ],
-                        steps: [
-                            'Salta i gamberoni 4 minuti con aglio, prezzemolo, peperoncino e succo di limone.',
-                            'Servi con insalata tiepida di ceci, zucchine e pane di segale tostato.'
-                        ]
+                        steps: ['Salta i gamberoni 4 min con aglio, prezzemolo e limone.', 'Servi con ceci, zucchine e pane di segale.']
                     }
                 ]
             },
@@ -882,10 +935,7 @@
                             { qty: 60, unit: 'g', item: 'Tonno al naturale', pId: 'c9' },
                             { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }
                         ],
-                        steps: [
-                            'Scalda in padella pomodorini, fagioli borlotti, tonno e basilico.',
-                            'Cuoci gli gnocchi 2 minuti in acqua bollente, scolali e salta tutto insieme.'
-                        ]
+                        steps: ['Cuoci gli gnocchi 2 min e saltali con pomodorini, fagioli e tonno.']
                     },
                     {
                         id: 'ven-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0,
@@ -906,17 +956,13 @@
                             { qty: 50, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' },
                             { qty: 150, unit: 'g', item: 'Pomodori in insalata', pId: 'v2' }
                         ],
-                        steps: [
-                            'Bollisci le uova per 6 minuti (tuorlo morbido) o 8 minuti (sode).',
-                            'Schiaccia l\'avocado con limone, sale e pepe sul pane di segale tostato.',
-                            'Adagia sopra le uova e servi con bresaola e insalata di pomodori.'
-                        ]
+                        steps: ['Bollisci le uova 6 min, spalma l\'avocado sul pane tostato e servi con uova, bresaola e pomodori.']
                     }
                 ]
             },
             {
                 id: 'sab', short: 'Sab', name: 'Sabato', workout: true,
-                workoutNote: 'Ore 08:00 Pre-Workout • Ore 09:00 Palestra • Ore 10:30 Brunch Post-Workout.',
+                workoutNote: 'Ore 08:00 Pre-Workout • Ore 09:00 Scheda C • Ore 10:30 Brunch.',
                 kcal: '2.000 Kcal', c: '182g', p: '158g', g: '70g',
                 meals: [
                     {
@@ -967,10 +1013,7 @@
                             { qty: 200, unit: 'g', item: 'Peperoni a listarelle', pId: 'v5' },
                             { qty: 40, unit: 'g', item: 'Pane di segale o Crostoni', pId: 'c6' }
                         ],
-                        steps: [
-                            'Massaggia l\'arista con senape e rosmarino e cuocila 4 min per lato.',
-                            'Nella stessa padella salta peperoni e piselli, e servi coi crostoni.'
-                        ]
+                        steps: ['Massaggia l\'arista con senape e rosmarino e cuocila 4 min per lato.', 'Salta peperoni e piselli in padella e servi coi crostoni.']
                     }
                 ]
             },
@@ -1030,7 +1073,6 @@
             }
         ];
 
-        // DISPENSA CON FORMATO CONFEZIONI PER SUGGERIMENTO INTELLIGENTE
         const defaultPantry = [
             { id: 'p1', name: 'Albume liquido', cat: 'Proteine & Freschi', inStock: false, packSize: 500, packName: 'brick da 500g' },
             { id: 'p2', name: 'Uova fresche', cat: 'Proteine & Freschi', inStock: false, packSize: 6, packName: 'confezione da 6' },
@@ -1056,7 +1098,7 @@
             { id: 'c6', name: 'Pane di segale / Gallette / Crostoni', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c7', name: 'Biscotti secchi integrali', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c8', name: 'Cereali integrali', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c9', name: 'Tonno al naturale', cat: 'Carboidrati & Dispensa', inStock: false, packSize: 80, packName: 'scatolette sgocciolate' },
+            { id: 'c9', name: 'Tonno al naturale', cat: 'Carboidrati & Dispensa', inStock: false, packSize: 80, packName: 'scatolette' },
             { id: 'c10', name: 'Ceci cotti in vetro', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c11', name: 'Fagioli cannellini / borlotti', cat: 'Carboidrati & Dispensa', inStock: false },
             { id: 'c12', name: 'Lenticchie cotte in vetro', cat: 'Carboidrati & Dispensa', inStock: false },
@@ -1077,29 +1119,31 @@
         ];
 
         const mealPrepSteps = [
-            { id: 'mp1', title: 'Bollisci 160g di Riso Basmati', desc: 'Cuocilo per 10 min, scolalo con un filo d\'olio e chiudilo in frigo: avrai la base pronta per 2 pranzi lampo.' },
-            { id: 'mp2', title: 'Griglia o Inforna 600g di Zucchine e Peperoni', desc: 'Tagliali a bastoncini o fette e cuocili 15 min a 195°C in forno/friggitrice ad aria per i contorni della settimana.' },
-            { id: 'mp3', title: 'Lava e prepara i "Salva-Fame"', desc: 'Lava pomodorini, finocchi e carote in un contenitore ermetico pronti da sgranocchiare.' },
-            { id: 'mp4', title: 'Prepara lo Shaker dei Pancake', desc: 'Puoi shakerare in anticipo farina d\'avena e albume per 2 mattine: in frigo si conserva perfetto e al mattino versi subito in padella.' }
+            { id: 'mp1', title: 'Bollisci 160g di Riso Basmati', desc: 'Cuocilo per 10 min, scolalo con un filo d\'olio e chiudilo in frigo per 2 pranzi.' },
+            { id: 'mp2', title: 'Griglia 600g di Zucchine e Peperoni', desc: 'Tagliali a bastoncini e cuocili 15 min a 195°C in forno o friggitrice ad aria.' },
+            { id: 'mp3', title: 'Lava e prepara i "Salva-Fame"', desc: 'Lava pomodorini, finocchi e carote pronti in frigo.' },
+            { id: 'mp4', title: 'Shaker Pastella Pancake', desc: 'Shakera farina d\'avena e albume per 2 mattine: in frigo si conserva pronto da cuocere.' }
         ];
 
         const nonScaleVictoriesList = [
             { id: 'nsv1', label: '👖 Cintura dei pantaloni più comoda (-1 buco)' },
-            { id: 'nsv2', label: '💻 Zero sonnolenza ("abbiocco") dopo il pranzo al PC' },
-            { id: 'nsv3', label: '🏋️‍♂️ Più energia e fiato negli allenamenti delle 07:00' },
-            { id: 'nsv4', label: '💧 Raggiunti i 3.5 Litri d\'acqua per 4 giorni di fila' },
+            { id: 'nsv2', label: '💻 Zero sonnolenza dopo il pranzo al PC' },
+            { id: 'nsv3', label: '🏋️‍♂️ Più forza nei carichi in palestra alle 07:00' },
+            { id: 'nsv4', label: '💧 Raggiunti i 3.5 Litri d\'acqua per 4 giorni' },
             { id: 'nsv5', label: '🔥 Pancia più sgonfia al risveglio' }
         ];
 
         let currentDayIndex = (new Date().getDay() + 6) % 7;
+        let currentWorkoutIndex = 0;
         let currentPantryFilter = 'missing';
-        let shopRangeDays = 3; // Calcola spesa per i prossimi 3 giorni di default
+        let shopRangeDays = 3;
         let openRecipes = {};
         let openSwaps = {};
-        let expandedDoneMeals = {}; // permette di riaprire un pasto compattato se serve
+        let expandedDoneMeals = {};
         let timerInterval = null;
 
-        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v7')) || {
+        let appState = JSON.parse(localStorage.getItem('nutriPlanGiovanni_v8')) || {
+            loggedInUser: null,
             completedMeals: {},
             offPlanMeals: {},
             swappedMeals: {},
@@ -1107,15 +1151,197 @@
             pantry: defaultPantry,
             weights: [{ date: 'Inizio', val: 110.0 }],
             prepDone: {},
-            nsvDone: {}
+            nsvDone: {},
+            workoutSetsDone: {},
+            workoutWeights: {}
         };
 
         function saveState() {
-            localStorage.setItem('nutriPlanGiovanni_v7', JSON.stringify(appState));
+            localStorage.setItem('nutriPlanGiovanni_v8', JSON.stringify(appState));
             updateMissingBadge();
             updateAdherence();
         }
 
+        // ==========================================
+        // GESTIONE LOGIN, HUB & MODULI
+        // ==========================================
+        function checkAuthOnLoad() {
+            if (appState.loggedInUser === 'GIOVANNI') {
+                document.getElementById('screen-login').classList.add('hidden');
+                document.getElementById('screen-hub').classList.remove('hidden');
+            }
+        }
+
+        function handleLogin() {
+            const code = document.getElementById('login-code-input').value.trim().toUpperCase();
+            if (code === 'GIOVANNI' || code === 'GIOVANNI26' || code === 'DEMO') {
+                quickLogin('GIOVANNI');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function quickLogin(userCode) {
+            appState.loggedInUser = userCode;
+            saveState();
+            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-hub').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() {
+            appState.loggedInUser = null;
+            saveState();
+            document.getElementById('module-nutrition').classList.add('hidden');
+            document.getElementById('module-workout').classList.add('hidden');
+            document.getElementById('screen-hub').classList.add('hidden');
+            document.getElementById('screen-login').classList.remove('hidden');
+        }
+
+        function openModule(mod) {
+            document.getElementById('screen-hub').classList.add('hidden');
+            if (mod === 'nutrition') {
+                document.getElementById('module-workout').classList.add('hidden');
+                document.getElementById('module-nutrition').classList.remove('hidden');
+                renderPlan();
+            } else {
+                document.getElementById('module-nutrition').classList.add('hidden');
+                document.getElementById('module-workout').classList.remove('hidden');
+                renderWorkout();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToHub() {
+            document.getElementById('module-nutrition').classList.add('hidden');
+            document.getElementById('module-workout').classList.add('hidden');
+            document.getElementById('screen-hub').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // MODULO B: RENDER SCHEDA ALLENAMENTO
+        // ==========================================
+        function renderWorkout() {
+            const selector = document.getElementById('workout-day-selector');
+            selector.innerHTML = '';
+
+            workoutProgram.forEach((wo, idx) => {
+                const isSelected = idx === currentWorkoutIndex;
+                const btn = document.createElement('button');
+                btn.onclick = () => { currentWorkoutIndex = idx; renderWorkout(); };
+                btn.className = `py-3 px-2 rounded-2xl border text-center transition ${
+                    isSelected 
+                        ? 'bg-amber-600 text-white border-amber-600 font-extrabold shadow-sm' 
+                        : 'bg-white text-stone-600 border-stone-200 font-bold'
+                }`;
+                btn.innerHTML = `
+                    <span class="block text-[10px] uppercase opacity-80">${wo.dayLabel}</span>
+                    <span class="text-sm">${wo.shortTitle}</span>
+                `;
+                selector.appendChild(btn);
+            });
+
+            const currentWo = workoutProgram[currentWorkoutIndex];
+            document.getElementById('wo-subtitle').textContent = currentWo.subtitle;
+            document.getElementById('wo-title').textContent = `${currentWo.shortTitle} — ${currentWo.title}`;
+
+            if (!appState.workoutSetsDone) appState.workoutSetsDone = {};
+            if (!appState.workoutWeights) appState.workoutWeights = {};
+
+            let totalSets = 0;
+            let completedSets = 0;
+
+            const container = document.getElementById('exercises-container');
+            container.innerHTML = '';
+
+            currentWo.exercises.forEach((ex, exIdx) => {
+                totalSets += ex.sets;
+                const savedKg = appState.workoutWeights[ex.id] || '';
+
+                let setsButtonsHtml = '';
+                for (let s = 1; s <= ex.sets; s++) {
+                    const setKey = `${ex.id}_s${s}`;
+                    const isSetDone = !!appState.workoutSetsDone[setKey];
+                    if (isSetDone) completedSets++;
+
+                    setsButtonsHtml += `
+                        <button onclick="toggleWorkoutSet('${setKey}', ${ex.rest}, '${ex.name.replace(/'/g, "\\'")}')" class="h-12 rounded-2xl font-extrabold text-sm border-2 flex items-center justify-center space-x-1.5 transition ${
+                            isSetDone 
+                                ? 'bg-emerald-700 border-emerald-700 text-white shadow-sm' 
+                                : 'bg-stone-50 border-stone-200 text-stone-700'
+                        }">
+                            <span>Serie ${s}</span>
+                            ${isSetDone ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                        </button>
+                    `;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'soft-card rounded-3xl p-5 space-y-3.5';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="min-w-0">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-700">Esercizio ${exIdx + 1}</span>
+                            <h3 class="text-lg font-extrabold text-stone-900 mt-0.5 leading-snug">${ex.name}</h3>
+                        </div>
+                        <span class="bg-stone-900 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl shrink-0">
+                            ${ex.sets} x ${ex.reps}
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-stone-500 bg-stone-50 p-3 rounded-2xl border border-stone-100 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>${ex.note}
+                    </p>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-bold text-stone-500">Carico usato:</span>
+                            <input type="text" value="${savedKg}" onchange="saveExerciseWeight('${ex.id}', this.value)" placeholder="Es. 40 kg" class="w-24 bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-1.5 text-xs font-extrabold text-stone-900 text-center focus:outline-none focus:border-amber-600">
+                        </div>
+                        ${ex.rest > 0 ? `<span class="text-xs font-bold text-stone-400"><i class="fa-regular fa-clock mr-1"></i>Rec: ${ex.rest}s</span>` : ''}
+                    </div>
+
+                    <div class="grid ${ex.sets === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-2 pt-1">
+                        ${setsButtonsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const pct = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+            document.getElementById('wo-progress').textContent = `${pct}%`;
+        }
+
+        function toggleWorkoutSet(setKey, restSeconds, exName) {
+            if (!appState.workoutSetsDone) appState.workoutSetsDone = {};
+            appState.workoutSetsDone[setKey] = !appState.workoutSetsDone[setKey];
+            saveState();
+            renderWorkout();
+
+            if (appState.workoutSetsDone[setKey] && restSeconds > 0) {
+                startTimer(restSeconds / 60, `Recupero: ${exName}`);
+            }
+        }
+
+        function saveExerciseWeight(exId, val) {
+            if (!appState.workoutWeights) appState.workoutWeights = {};
+            appState.workoutWeights[exId] = val;
+            saveState();
+        }
+
+        function resetWorkoutSets() {
+            if (confirm('Vuoi azzerare le serie completate di oggi? (I pesi in Kg rimarranno salvati)')) {
+                appState.workoutSetsDone = {};
+                saveState();
+                renderWorkout();
+            }
+        }
+
+        // ==========================================
+        // MODULO A: RENDER NUTRIZIONE (CON FIX LAYOUT COMPACT BAR)
+        // ==========================================
         function getActiveMealData(meal) {
             const swapIdx = appState.swappedMeals[meal.id];
             if (swapIdx !== undefined && interactiveSwaps[meal.swapCat] && interactiveSwaps[meal.swapCat][swapIdx]) {
@@ -1125,9 +1351,6 @@
             return { ...meal, isSwapped: false };
         }
 
-        // ==========================================
-        // PAGINA 1: RENDER PIANO CON AUTO-COMPATTAZIONE
-        // ==========================================
         function renderDaySelector() {
             const container = document.getElementById('day-selector');
             container.innerHTML = '';
@@ -1172,7 +1395,7 @@
             document.getElementById('macro-g').textContent = day.g;
 
             const doneCount = day.meals.filter(m => appState.completedMeals[m.id] || appState.offPlanMeals[m.id]).length;
-            document.getElementById('meals-progress-text').textContent = `${doneCount} di ${day.meals.length} pasti completati`;
+            document.getElementById('meals-progress-text').textContent = `${doneCount} di ${day.meals.length} completati`;
 
             const waterToday = appState.water[day.id] || 0;
             document.getElementById('water-val').textContent = `${waterToday.toFixed(2)} L`;
@@ -1190,24 +1413,23 @@
                 const isNext = meal.id === nextMealId;
                 const isExpandedAnyway = !!expandedDoneMeals[meal.id];
 
-                // SE IL PASTO È COMPLETATO, MOSTRA BARRA COMPATTA "FOCUS MODE"
+                // BARRA COMPATTA CORRETTA (CON min-w-0 CHE IMPEDISCE LO DEBORDAMENTO LATERALE)
                 if ((isDone || isOffPlan) && !isExpandedAnyway) {
                     const compactBar = document.createElement('div');
-                    compactBar.className = 'bg-stone-200/70 border border-stone-300/70 rounded-2xl px-4 py-3.5 flex justify-between items-center transition-all';
+                    compactBar.className = 'w-full bg-stone-200/75 border border-stone-300/80 rounded-2xl px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden';
                     compactBar.innerHTML = `
-                        <div onclick="toggleExpandDone('${meal.id}')" class="flex items-center space-x-3 cursor-pointer flex-1">
+                        <div onclick="toggleExpandDone('${meal.id}')" class="flex items-center space-x-3 min-w-0 flex-1 cursor-pointer">
                             <span class="w-7 h-7 rounded-xl bg-emerald-700 text-white flex items-center justify-center text-xs shrink-0">
                                 <i class="fa-solid fa-check"></i>
                             </span>
-                            <div class="truncate pr-2">
-                                <span class="text-xs font-extrabold uppercase text-stone-500 mr-1.5">${meal.time} • ${meal.type}</span>
+                            <div class="min-w-0 flex-1">
+                                <span class="text-[11px] font-extrabold uppercase text-stone-500 block truncate">${meal.time} • ${meal.type}</span>
                                 <span class="text-sm font-bold text-stone-700 line-through block truncate">${isOffPlan ? '🍕 Pasto Fuori Programma' : meal.title}</span>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2 shrink-0">
-                            <button onclick="toggleExpandDone('${meal.id}')" class="text-xs font-bold text-stone-500 px-2 py-1 rounded-lg bg-white/80">Apri</button>
-                            <button onclick="uncheckMeal('${meal.id}')" class="text-xs font-bold text-rose-600 px-2 py-1 rounded-lg bg-white/80">Annulla</button>
-                        </div>
+                        <button onclick="uncheckMeal('${meal.id}')" class="w-9 h-9 rounded-xl bg-white text-rose-600 border border-stone-200 flex items-center justify-center shrink-0 active:scale-90 transition" title="Annulla spunta">
+                            <i class="fa-solid fa-rotate-left text-xs"></i>
+                        </button>
                     `;
                     mealsContainer.appendChild(compactBar);
                     return;
@@ -1217,12 +1439,12 @@
                 const isSwapOpen = !!openSwaps[meal.id];
 
                 const card = document.createElement('div');
-                card.className = `soft-card rounded-3xl p-5 transition-all ${isNext ? 'ring-2 ring-emerald-700/30' : ''}`;
+                card.className = `soft-card rounded-3xl p-5 transition-all overflow-hidden ${isNext ? 'ring-2 ring-emerald-700/30' : ''}`;
                 
                 const ingRows = meal.ingredients.map(ing => `
-                    <li class="flex justify-between items-center py-2.5 border-b border-stone-200/60 last:border-none">
-                        <span class="text-base text-stone-800 font-semibold">${ing.item}</span>
-                        <span class="text-base font-extrabold text-stone-950 bg-white border border-stone-200/80 px-3 py-1 rounded-xl shrink-0 ml-3 shadow-sm">${ing.qty}${ing.unit || ''}</span>
+                    <li class="flex justify-between items-center py-2.5 border-b border-stone-200/60 last:border-none gap-2">
+                        <span class="text-base text-stone-800 font-semibold min-w-0 break-words">${ing.item}</span>
+                        <span class="text-base font-extrabold text-stone-950 bg-white border border-stone-200/80 px-3 py-1 rounded-xl shrink-0 shadow-sm">${ing.qty}${ing.unit || ''}</span>
                     </li>
                 `).join('');
 
@@ -1235,8 +1457,8 @@
 
                 const alternatives = interactiveSwaps[meal.swapCat] || [];
                 const swapsHtml = alternatives.map((alt, idx) => `
-                    <div onclick="applyMealSwap('${meal.id}', ${idx})" class="p-3.5 rounded-2xl bg-white border border-stone-200 flex justify-between items-center cursor-pointer active:scale-98 transition shadow-sm">
-                        <div class="pr-2">
+                    <div onclick="applyMealSwap('${meal.id}', ${idx})" class="p-3.5 rounded-2xl bg-white border border-stone-200 flex justify-between items-center gap-2 cursor-pointer active:scale-98 transition shadow-sm">
+                        <div class="min-w-0 flex-1">
                             <div class="text-sm font-extrabold text-stone-900 leading-snug">${alt.title}</div>
                             <div class="text-xs font-bold text-emerald-700 mt-1">${alt.macros}</div>
                         </div>
@@ -1245,16 +1467,15 @@
                 `).join('');
 
                 card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div class="pr-2">
-                            <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center flex-wrap gap-1.5">
                                 <span class="text-sm font-extrabold text-emerald-900 bg-emerald-100/90 px-3 py-1 rounded-xl">${meal.time}</span>
                                 <span class="text-xs font-extrabold uppercase tracking-wider text-stone-500">${meal.type}</span>
                                 ${isNext ? '<span class="text-xs font-extrabold uppercase bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg">Tocca ora</span>' : ''}
-                                ${meal.isSwapped ? '<span class="text-xs font-extrabold uppercase bg-sky-100 text-sky-900 px-2.5 py-1 rounded-lg">Alternativa</span>' : ''}
-                                ${(isDone || isOffPlan) ? `<button onclick="toggleExpandDone('${meal.id}')" class="text-xs font-bold text-stone-500 underline">Compatta</button>` : ''}
+                                ${(isDone || isOffPlan) ? `<button onclick="toggleExpandDone('${meal.id}')" class="text-xs font-bold text-stone-500 underline">Chiudi</button>` : ''}
                             </div>
-                            <h3 class="text-xl font-extrabold text-stone-950 mt-2.5 leading-snug">${meal.title}</h3>
+                            <h3 class="text-xl font-extrabold text-stone-950 mt-2.5 leading-snug break-words">${meal.title}</h3>
                             <p class="text-sm font-semibold text-stone-500 mt-1">${meal.macros}</p>
                         </div>
                         <button onclick="toggleMeal('${meal.id}')" class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition shrink-0 ${
@@ -1269,13 +1490,13 @@
                     </ul>
 
                     <div class="mt-4 grid grid-cols-2 gap-2.5">
-                        <button onclick="toggleRecipe('${meal.id}')" class="py-3 px-4 rounded-2xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
+                        <button onclick="toggleRecipe('${meal.id}')" class="py-3 px-3 rounded-2xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
                             isRecipeOpen ? 'bg-emerald-800 text-white border-emerald-800' : 'bg-stone-100 text-stone-800 border-stone-200'
                         }">
                             <i class="fa-solid fa-fire-burner"></i>
                             <span>Ricetta</span>
                         </button>
-                        <button onclick="toggleSwap('${meal.id}')" class="py-3 px-4 rounded-2xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
+                        <button onclick="toggleSwap('${meal.id}')" class="py-3 px-3 rounded-2xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
                             isSwapOpen ? 'bg-amber-600 text-white border-amber-600' : 'bg-amber-50 text-amber-950 border-amber-200'
                         }">
                             <i class="fa-solid fa-repeat"></i>
@@ -1285,7 +1506,7 @@
 
                     <div class="${isRecipeOpen ? 'block' : 'hidden'} mt-4 pt-4 border-t border-stone-200/70">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">Come prepararlo:</span>
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">Procedimento:</span>
                             ${meal.timer > 0 ? `
                                 <button onclick="startTimer(${meal.timer}, '${meal.title.replace(/'/g, "\\'")}')" class="bg-stone-900 text-white text-xs font-extrabold px-3.5 py-2 rounded-xl flex items-center space-x-2 active:scale-95">
                                     <i class="fa-solid fa-stopwatch text-emerald-400"></i>
@@ -1298,15 +1519,15 @@
 
                     <div class="${isSwapOpen ? 'block' : 'hidden'} mt-4 p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2.5">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-950">Scegli un'alternativa equivalente:</span>
-                            ${meal.isSwapped ? `<button onclick="resetMealSwap('${meal.id}')" class="text-xs font-extrabold text-rose-700 underline">Torna all'originale</button>` : ''}
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-950">Alternative equivalenti:</span>
+                            ${meal.isSwapped ? `<button onclick="resetMealSwap('${meal.id}')" class="text-xs font-extrabold text-rose-700 underline">Originale</button>` : ''}
                         </div>
                         ${swapsHtml}
                         
                         <div class="pt-2 border-t border-amber-200/80">
                             <button onclick="toggleOffPlan('${meal.id}')" class="w-full py-2.5 px-3 rounded-xl bg-white border border-amber-300 text-amber-950 text-xs font-extrabold flex items-center justify-center space-x-2">
                                 <i class="fa-solid fa-pizza-slice text-amber-600"></i>
-                                <span>Oggi mangio fuori / Ho sgarrato questo pasto</span>
+                                <span>Oggi mangio fuori / Ho sgarrato</span>
                             </button>
                         </div>
                     </div>
@@ -1376,17 +1597,15 @@
             renderPlan();
         }
 
-        // ==========================================
-        // PAGINA 2: SPESA CON CALCOLO AUTOMATICO GRAMMATURE
-        // ==========================================
+        // SPESA
         function setShopRange(days) {
             shopRangeDays = days;
             document.getElementById('range-3').className = days === 3 
-                ? 'py-2.5 px-3 rounded-xl text-xs font-extrabold bg-emerald-800 text-white shadow-sm transition'
-                : 'py-2.5 px-3 rounded-xl text-xs font-bold bg-white text-emerald-900 border border-emerald-200 transition';
+                ? 'py-2 px-3 rounded-xl text-xs font-extrabold bg-emerald-800 text-white shadow-sm transition'
+                : 'py-2 px-3 rounded-xl text-xs font-bold bg-white text-emerald-900 border border-emerald-200 transition';
             document.getElementById('range-7').className = days === 7 
-                ? 'py-2.5 px-3 rounded-xl text-xs font-extrabold bg-emerald-800 text-white shadow-sm transition'
-                : 'py-2.5 px-3 rounded-xl text-xs font-bold bg-white text-emerald-900 border border-emerald-200 transition';
+                ? 'py-2 px-3 rounded-xl text-xs font-extrabold bg-emerald-800 text-white shadow-sm transition'
+                : 'py-2 px-3 rounded-xl text-xs font-bold bg-white text-emerald-900 border border-emerald-200 transition';
             renderPantry();
         }
 
@@ -1396,7 +1615,6 @@
                 const dIdx = (currentDayIndex + i) % 7;
                 const day = weekData[dIdx];
                 day.meals.forEach(rawMeal => {
-                    // Salta i pasti già completati se stiamo guardando il giorno corrente (i === 0)
                     if (i === 0 && (appState.completedMeals[rawMeal.id] || appState.offPlanMeals[rawMeal.id])) return;
                     const meal = getActiveMealData(rawMeal);
                     meal.ingredients.forEach(ing => {
@@ -1414,8 +1632,8 @@
             ['missing', 'home', 'all'].forEach(f => {
                 const btn = document.getElementById(`filter-${f}`);
                 btn.className = f === filter 
-                    ? 'py-2.5 text-sm font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition'
-                    : 'py-2.5 text-sm font-semibold rounded-xl text-stone-500 transition';
+                    ? 'py-2 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition'
+                    : 'py-2 text-xs font-semibold rounded-xl text-stone-500 transition';
             });
             renderPantry();
         }
@@ -1424,7 +1642,6 @@
             const container = document.getElementById('pantry-container');
             container.innerHTML = '';
             const neededTotals = calculateNeededQuantities();
-
             const categories = [...new Set(appState.pantry.map(i => i.cat))];
 
             categories.forEach(cat => {
@@ -1444,24 +1661,20 @@
                     const need = neededTotals[item.id];
                     let needBadge = '';
                     if (need && need.qty > 0) {
-                        let packHint = '';
-                        if (item.packSize) {
-                            const packs = Math.ceil(need.qty / item.packSize);
-                            packHint = ` (${packs} ${item.packName})`;
-                        }
-                        needBadge = `<span class="block text-xs font-bold text-emerald-700 mt-0.5">Ti servono: ${need.qty}${need.unit}${packHint} nei prossimi ${shopRangeDays} gg</span>`;
+                        let packHint = item.packSize ? ` (${Math.ceil(need.qty / item.packSize)} ${item.packName})` : '';
+                        needBadge = `<span class="block text-xs font-bold text-emerald-700 mt-0.5">Servono: ${need.qty}${need.unit}${packHint}</span>`;
                     }
 
                     return `
-                        <div onclick="togglePantryItem('${item.id}')" class="flex items-center justify-between py-3.5 border-b border-stone-100 last:border-none cursor-pointer active:opacity-60">
-                            <div class="flex items-start space-x-3.5 pr-2">
+                        <div onclick="togglePantryItem('${item.id}')" class="flex items-center justify-between py-3.5 border-b border-stone-100 last:border-none cursor-pointer gap-2">
+                            <div class="flex items-start space-x-3 min-w-0 flex-1">
                                 <div class="w-6 h-6 rounded-lg flex items-center justify-center border-2 mt-0.5 shrink-0 ${
                                     item.inStock ? 'bg-emerald-700 border-emerald-700 text-white' : 'bg-white border-stone-300'
                                 }">
                                     ${item.inStock ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
                                 </div>
-                                <div>
-                                    <span class="text-base font-semibold block ${item.inStock ? 'text-stone-400 line-through' : 'text-stone-900'}">${item.name}</span>
+                                <div class="min-w-0 flex-1">
+                                    <span class="text-base font-semibold block truncate ${item.inStock ? 'text-stone-400 line-through' : 'text-stone-900'}">${item.name}</span>
                                     ${!item.inStock ? needBadge : ''}
                                 </div>
                             </div>
@@ -1472,10 +1685,7 @@
                     `;
                 }).join('');
 
-                section.innerHTML = `
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">${cat}</h3>
-                    <div>${itemsHtml}</div>
-                `;
+                section.innerHTML = `<h3 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">${cat}</h3><div>${itemsHtml}</div>`;
                 container.appendChild(section);
             });
         }
@@ -1493,7 +1703,7 @@
             const input = document.getElementById('custom-item-input');
             const name = input.value.trim();
             if (!name) return;
-            appState.pantry.unshift({ id: 'c-' + Date.now(), name, cat: 'Aggiunti Extra', inStock: false });
+            appState.pantry.unshift({ id: 'c-' + Date.now(), name, cat: 'Extra', inStock: false });
             input.value = '';
             saveState();
             renderPantry();
@@ -1502,33 +1712,25 @@
         function shareShoppingListWhatsApp() {
             const missing = appState.pantry.filter(i => !i.inStock);
             const neededTotals = calculateNeededQuantities();
-            if (missing.length === 0) {
-                alert('Hai già tutti gli ingredienti in casa!');
-                return;
-            }
+            if (missing.length === 0) return alert('Hai già tutto in casa!');
             const lines = missing.map(i => {
                 const need = neededTotals[i.id];
                 const qtyStr = (need && need.qty > 0) ? ` (${need.qty}${need.unit})` : '';
                 return `• ${i.name}${qtyStr}`;
             });
-            const text = `🛒 *SPESA GIOVANNI (${shopRangeDays} GIORNI):*\n\n` + lines.join('\n');
-            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            window.open(`https://wa.me/?text=${encodeURIComponent(`🛒 *SPESA (${shopRangeDays} GIORNI):*\n\n` + lines.join('\n'))}`, '_blank');
         }
 
         function updateMissingBadge() {
             const count = appState.pantry.filter(i => !i.inStock).length;
             const badge = document.getElementById('missing-badge');
-            if (count > 0) {
+            if (badge) {
                 badge.textContent = count;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
+                badge.classList.toggle('hidden', count === 0);
             }
         }
 
-        // ==========================================
-        // PAGINA 3: GUIDA FUORI CASA & MEAL PREP
-        // ==========================================
+        // GUIDA & PREP
         function setGuideSubTab(sub) {
             ['out', 'prep', 'sos'].forEach(s => {
                 document.getElementById(`guide-section-${s}`).classList.toggle('hidden', s !== sub);
@@ -1553,7 +1755,7 @@
                         }">
                             ${done ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
                         </div>
-                        <div>
+                        <div class="min-w-0">
                             <h4 class="text-base font-extrabold text-stone-900 ${done ? 'line-through' : ''}">${step.title}</h4>
                             <p class="text-sm text-stone-600 mt-1 leading-relaxed">${step.desc}</p>
                         </div>
@@ -1569,9 +1771,7 @@
             renderPrepChecklist();
         }
 
-        // ==========================================
-        // PAGINA 4: PROGRESSI, GRAFICO SVG & TRAGUARDI
-        // ==========================================
+        // PROGRESSI
         function updateAdherence() {
             const totalMeals = weekData.reduce((acc, d) => acc + d.meals.length, 0);
             const doneMeals = Object.values(appState.completedMeals).filter(Boolean).length;
@@ -1584,31 +1784,24 @@
         function renderWeightChart(list) {
             const container = document.getElementById('weight-chart-container');
             if (list.length < 2) {
-                container.innerHTML = `<span class="text-xs text-stone-400 font-semibold">Inserisci la tua prossima pesata per vedere la curva grafica</span>`;
+                container.innerHTML = `<span class="text-xs text-stone-400 font-semibold text-center">Registra il prossimo peso per vedere il grafico</span>`;
                 return;
             }
             const vals = list.map(w => w.val);
             const minW = Math.min(...vals) - 1;
             const maxW = Math.max(...vals) + 1;
-            const width = 300;
-            const height = 90;
+            const width = 280;
+            const height = 80;
 
             const points = list.map((w, idx) => {
-                const x = (idx / (list.length - 1)) * (width - 30) + 15;
-                const y = height - ((w.val - minW) / (maxW - minW || 1)) * (height - 24) - 12;
+                const x = (idx / (list.length - 1)) * (width - 24) + 12;
+                const y = height - ((w.val - minW) / (maxW - minW || 1)) * (height - 20) - 10;
                 return `${x},${y}`;
             }).join(' ');
-
-            const circles = list.map((w, idx) => {
-                const x = (idx / (list.length - 1)) * (width - 30) + 15;
-                const y = height - ((w.val - minW) / (maxW - minW || 1)) * (height - 24) - 12;
-                return `<circle cx="${x}" cy="${y}" r="4" fill="#047857" />`;
-            }).join('');
 
             container.innerHTML = `
                 <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
                     <polyline fill="none" stroke="#047857" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
-                    ${circles}
                 </svg>
             `;
         }
@@ -1624,17 +1817,15 @@
 
             renderWeightChart(list);
 
-            // Renderizza Traguardi Non-Bilancia (NSV)
             if (!appState.nsvDone) appState.nsvDone = {};
-            const nsvContainer = document.getElementById('nsv-container');
-            nsvContainer.innerHTML = nonScaleVictoriesList.map(n => {
+            document.getElementById('nsv-container').innerHTML = nonScaleVictoriesList.map(n => {
                 const done = !!appState.nsvDone[n.id];
                 return `
-                    <div onclick="toggleNsv('${n.id}')" class="p-3.5 rounded-2xl border flex items-center justify-between cursor-pointer transition ${
+                    <div onclick="toggleNsv('${n.id}')" class="p-3.5 rounded-2xl border flex items-center justify-between cursor-pointer gap-2 transition ${
                         done ? 'bg-emerald-50 border-emerald-200 text-emerald-950 font-bold' : 'bg-stone-50 border-stone-200/70 text-stone-700 font-medium'
                     }">
-                        <span class="text-sm">${n.label}</span>
-                        <div class="w-6 h-6 rounded-lg flex items-center justify-center border-2 shrink-0 ml-2 ${
+                        <span class="text-sm min-w-0">${n.label}</span>
+                        <div class="w-6 h-6 rounded-lg flex items-center justify-center border-2 shrink-0 ${
                             done ? 'bg-emerald-700 border-emerald-700 text-white' : 'bg-white border-stone-300'
                         }">
                             ${done ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
@@ -1643,11 +1834,10 @@
                 `;
             }).join('');
 
-            const history = document.getElementById('weight-history');
-            history.innerHTML = [...list].reverse().map(w => `
-                <div class="py-3 flex justify-between items-center">
+            document.getElementById('weight-history').innerHTML = [...list].reverse().map(w => `
+                <div class="py-2.5 flex justify-between items-center">
                     <span class="text-stone-600 font-semibold">${w.date}</span>
-                    <span class="font-extrabold text-stone-950 text-lg">${w.val.toFixed(1)} kg</span>
+                    <span class="font-extrabold text-stone-950 text-base">${w.val.toFixed(1)} kg</span>
                 </div>
             `).join('');
         }
@@ -1663,7 +1853,6 @@
             const wInput = document.getElementById('weight-input');
             const val = parseFloat(wInput.value);
             if (!val || val < 40 || val > 200) return;
-
             const today = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
             appState.weights.push({ date: today, val });
             wInput.value = '';
@@ -1671,10 +1860,10 @@
             renderWeights();
         }
 
-        // TIMER DA CUCINA
+        // TIMER UNIVERSALE (CUCINA + PALESTRA)
         function startTimer(minutes, label) {
             if (timerInterval) clearInterval(timerInterval);
-            let secondsLeft = minutes * 60;
+            let secondsLeft = Math.round(minutes * 60);
             const widget = document.getElementById('timer-widget');
             const display = document.getElementById('timer-display');
             document.getElementById('timer-label').textContent = label;
@@ -1692,7 +1881,7 @@
                 updateDisplay();
                 if (secondsLeft <= 0) {
                     clearInterval(timerInterval);
-                    alert(`⏰ Tempo scaduto per: ${label}!`);
+                    alert(`⏰ Tempo terminato: ${label}`);
                     widget.classList.add('hidden');
                 }
             }, 1000);
@@ -1730,7 +1919,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        renderPlan();
+        checkAuthOnLoad();
         updateMissingBadge();
     </script>
 </body>
