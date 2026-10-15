@@ -32,7 +32,8 @@
                     ]
                 };
                 const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
-                document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+                const mLink = document.getElementById('manifest-link');
+                if (mLink) mLink.href = URL.createObjectURL(blob);
             } catch (e) {}
         });
     </script>
@@ -137,7 +138,7 @@
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-white">
         <div class="max-w-sm mx-auto w-full space-y-8">
             <div class="text-center space-y-3">
-                <img src="./icon.png" alt="NutriPlan Logo" class="w-20 h-20 rounded-2xl mx-auto shadow-md object-cover border border-zinc-200">
+                <img src="./icon.png" alt="NutriPlan Logo" onerror="this.style.display='none'" class="w-20 h-20 rounded-2xl mx-auto shadow-md object-cover border border-zinc-200">
                 <div class="pt-2">
                     <h1 class="text-3xl font-black tracking-tight text-zinc-950 uppercase">NutriPlan</h1>
                     <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mt-1">Alimentazione & Allenamento</p>
@@ -382,7 +383,7 @@
         <div class="space-y-6">
             <div class="flex justify-between items-center border-b border-zinc-200 pb-5">
                 <div class="flex items-center space-x-3.5">
-                    <img src="./icon.png" alt="NutriPlan" class="w-12 h-12 rounded-2xl object-cover shrink-0 shadow-sm border border-zinc-200">
+                    <img src="./icon.png" alt="NutriPlan" onerror="this.style.display='none'" class="w-12 h-12 rounded-2xl object-cover shrink-0 shadow-sm border border-zinc-200">
                     <div>
                         <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500 block" id="hub-user-code">ID</span>
                         <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 leading-tight" id="hub-user-greeting">Benvenuto</h1>
@@ -485,7 +486,7 @@
             </button>
         </header>
 
-        <!-- AVVISO SEZIONE ALLENAMENTO NON ABILITATA (SOLO PT CONVENZIONATI) -->
+        <!-- AVVISO SEZIONE ALLENAMENTO NON ABILITATA -->
         <div id="workout-locked-box" class="px-4 sm:px-6 hidden">
             <div class="pro-card rounded-3xl p-8 text-center space-y-5 border-t-4 border-t-orange-600 max-w-lg mx-auto mt-4">
                 <div class="w-16 h-16 rounded-2xl bg-orange-50 text-orange-700 border border-orange-200 flex items-center justify-center text-2xl mx-auto">
@@ -566,7 +567,7 @@
             </div>
         </header>
 
-        <!-- AVVISO SEZIONE ALIMENTAZIONE NON ABILITATA (SOLO NUTRIZIONISTI CONVENZIONATI) -->
+        <!-- AVVISO SEZIONE ALIMENTAZIONE NON ABILITATA -->
         <div id="nutrition-locked-box" class="px-4 sm:px-6 hidden">
             <div class="pro-card rounded-3xl p-8 text-center space-y-5 border-t-4 border-t-emerald-600 max-w-lg mx-auto mt-4">
                 <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-2xl mx-auto">
@@ -1194,7 +1195,7 @@
 
         let masterState = null;
         try {
-            masterState = JSON.parse(localStorage.getItem('nutriPlanPro_v18'));
+            masterState = JSON.parse(localStorage.getItem('nutriPlanPro_v19'));
         } catch (e) {}
 
         if (!masterState) {
@@ -1238,43 +1239,17 @@
             return !!(u && u.ptCode && u.workoutProgram && u.workoutProgram.length > 0 && u.workoutProgram.some(w => w.exercises && w.exercises.length > 0));
         }
 
-        async function saveState(targetClientCode = null) {
-            try {
-                localStorage.setItem('nutriPlanPro_v18', JSON.stringify(masterState));
-            } catch (e) {}
-            if (masterState.activeCode && masterState.users[masterState.activeCode]) {
-                updateMissingBadge();
-                updateAdherence();
-            }
-            const codeToSync = targetClientCode || masterState.activeCode;
-            if (sbClient && codeToSync && masterState.users[codeToSync]) {
-                const u = masterState.users[codeToSync];
-                try {
-                    await withTimeout(sbClient.from('clients').upsert({
-                        client_code: u.code, name: u.name, nutri_code: u.nutriCode, pt_code: u.ptCode, profile_data: u, updated_at: new Date().toISOString()
-                    }));
-                } catch (e) {}
-            }
-        }
-
-        async function syncAdminChangesToCloud(msg) {
-            await saveState(masterState.adminSelectedCode);
-            alert(msg);
-        }
-
         // =========================================================================
-        // 5. NAVIGAZIONE & LOGIN
+        // 5. NAVIGAZIONE & LOGIN LAMPO (0ms LOCAL-FIRST + SYNC IN BACKGROUND)
         // =========================================================================
-        // SALVATAGGIO ISTANTANEO (NON BLOCCA MAI L'INTERFACCIA)
         function saveState(targetClientCode = null) {
             try {
-                localStorage.setItem('nutriPlanPro_v18', JSON.stringify(masterState));
+                localStorage.setItem('nutriPlanPro_v19', JSON.stringify(masterState));
             } catch (e) {}
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
                 updateMissingBadge();
                 updateAdherence();
             }
-            // Sincronizza con Supabase in background senza bloccare il telefono
             const codeToSync = targetClientCode || masterState.activeCode;
             if (sbClient && codeToSync && masterState.users[codeToSync]) {
                 const u = masterState.users[codeToSync];
@@ -1289,7 +1264,11 @@
             }
         }
 
-        // SINCRONIZZAZIONE SILENZIOSA IN BACKGROUND
+        async function syncAdminChangesToCloud(msg) {
+            saveState(masterState.adminSelectedCode);
+            alert(msg);
+        }
+
         async function syncFromCloudInBackground(code) {
             if (!sbClient) return;
             try {
@@ -1299,8 +1278,7 @@
                 );
                 if (!error && data && data.profile_data) {
                     masterState.users[code] = data.profile_data;
-                    localStorage.setItem('nutriPlanPro_v18', JSON.stringify(masterState));
-                    // Aggiorna silenziosamente i numeri dell'Hub se l'utente è nella schermata Hub
+                    localStorage.setItem('nutriPlanPro_v19', JSON.stringify(masterState));
                     if (!document.getElementById('screen-hub').classList.contains('hidden')) {
                         loadUserHub(code);
                     }
@@ -1308,18 +1286,21 @@
             } catch (e) {}
         }
 
-        // AVVIO ISTANTANEO (0 MILLISECONDI DI ATTESA)
+        function hideAllScreens() {
+            ['screen-login', 'screen-super-admin', 'screen-hub', 'screen-admin-nutri', 'screen-admin-pt', 'module-nutrition', 'module-workout'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+        }
+
         function checkAuthOnLoad() {
             setThemePalette('neutral');
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
-                // 1. Apre SUBITO la schermata senza aspettare la rete!
                 loadUserHub(masterState.activeCode);
-                // 2. Controlla il cloud in background mentre usi già l'app
                 syncFromCloudInBackground(masterState.activeCode);
             }
         }
 
-        // LOGIN LAMPO (PRIMA CONTROLLA LA MEMORIA LOCALE, POI IL CLOUD IN PARALLELO)
         async function handleLogin() {
             const inputEl = document.getElementById('login-code-input');
             const btnEl = document.getElementById('login-btn');
@@ -1343,7 +1324,7 @@
                 return;
             }
 
-            // 2. Se il Cliente è già in memoria, ENTRA ALL'ISTANTE (0ms) e sincronizza in background!
+            // 2. Accesso Immediato Cliente (0ms) + Sync Cloud in Background
             if (masterState.users[raw]) {
                 masterState.activeCode = raw;
                 saveState();
@@ -1352,7 +1333,7 @@
                 return;
             }
 
-            // 3. Se il Professionista è già in memoria, ENTRA ALL'ISTANTE (0ms) e scarica i clienti in background!
+            // 3. Accesso Immediato Professionista (0ms) + Sync Clienti in Background
             if (masterState.professionals[raw]) {
                 const pro = masterState.professionals[raw];
                 masterState.activeProCode = raw;
@@ -1366,7 +1347,6 @@
                     document.getElementById('screen-admin-pt').classList.remove('hidden');
                     renderAdminPt();
                 }
-                // Scarica eventuali nuovi clienti dal cloud in background
                 if (sbClient) {
                     const col = pro.role === 'nutri' ? 'nutri_code' : 'pt_code';
                     sbClient.from('clients').select('*').eq(col, raw).then(({ data }) => {
@@ -1379,10 +1359,10 @@
                 return;
             }
 
-            // 4. Solo se il codice è totalmente sconosciuto al telefono (es. nuovo cliente su nuovo telefono), cerca sul Cloud in parallelo
+            // 4. Se il codice è nuovo e non è ancora sul dispositivo, lo cerca su Supabase
             if (sbClient) {
                 const origText = btnEl.textContent;
-                btnEl.textContent = 'Verifica in corso...';
+                btnEl.textContent = 'Verifica...';
                 try {
                     const [proRes, cliRes] = await withTimeout(Promise.all([
                         sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle(),
@@ -1391,11 +1371,11 @@
 
                     btnEl.textContent = origText;
 
-                    if (proRes.data) {
+                    if (proRes && proRes.data) {
                         masterState.professionals[raw] = { proCode: proRes.data.pro_code, role: proRes.data.role, studioName: proRes.data.studio_name };
                         return handleLogin();
                     }
-                    if (cliRes.data && cliRes.data.profile_data) {
+                    if (cliRes && cliRes.data && cliRes.data.profile_data) {
                         masterState.users[raw] = cliRes.data.profile_data;
                         masterState.activeCode = raw;
                         saveState();
@@ -1876,7 +1856,7 @@
         }
 
         // =========================================================================
-        // 7. CONSOLE SUPER-ADMIN & PORTALI PROFESSIONISTI (SEPARAZIONE NUTRI / PT)
+        // 7. CONSOLE SUPER-ADMIN & PORTALI PROFESSIONISTI
         // =========================================================================
         function renderSuperAdmin() {
             const list = document.getElementById('sa-pro-list');
@@ -1949,7 +1929,6 @@
             });
 
             const selUser = masterState.users[masterState.adminSelectedCode];
-            // Assicura che weekData esista e abbia i 7 giorni
             if (!selUser.weekData || selUser.weekData.length < 7) {
                 selUser.weekData = buildEmptyOrStarterWeekPlan(true);
             }
@@ -2067,7 +2046,6 @@
             const ing = selUser.weekData[masterState.adminNutriDayIdx].meals[mIdx].ingredients[iIdx];
             ing[field] = field === 'qty' ? (parseFloat(val) || 0) : val;
 
-            // Se il nutrizionista scrive un nuovo alimento, assicurati che esista nella dispensa del cliente per il calcolo spesa!
             if (field === 'item' && val.trim().length > 2) {
                 const customPantryId = ing.pId && ing.pId.startsWith('custom-') ? ing.pId : ('custom-' + mIdx + '-' + iIdx);
                 ing.pId = customPantryId;
@@ -2175,7 +2153,6 @@
             });
 
             const selUser = masterState.users[masterState.adminSelectedCode];
-            // Se il cliente era stato creato da un nutrizionista e ora il PT lo apre, inizializza le 3 sedute base
             if (!selUser.workoutProgram || selUser.workoutProgram.length === 0) {
                 selUser.workoutProgram = buildStarterWorkoutProgram();
             }
@@ -2330,7 +2307,6 @@
             renderAdminPt();
         }
 
-        // CREAZIONE NUOVO CLIENTE CON SEPARAZIONE RIGOROSA (NUTRIZIONISTA vs PT)
         function createNewClientForPro(role) {
             const pro = masterState.professionals[masterState.activeProCode];
             const randNum = Math.floor(1000 + Math.random() * 9000);
@@ -2348,9 +2324,7 @@
                 nutriCode: isNutriCreator ? pro.proCode : null,
                 startWeight: 70.0,
                 waterTarget: 3.0,
-                // Se lo crea il Nutrizionista ha i pasti base da modificare; se lo crea il PT l'alimentazione è VUOTA!
                 weekData: buildEmptyOrStarterWeekPlan(isNutriCreator),
-                // Se lo crea il PT ha le sedute A/B/C da modificare; se lo crea il Nutrizionista l'allenamento è VUOTO!
                 workoutProgram: isNutriCreator ? [] : buildStarterWorkoutProgram(),
                 completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
                 pantry: JSON.parse(JSON.stringify(defaultPantry)),
@@ -2364,10 +2338,10 @@
 
             if (isNutriCreator) {
                 renderAdminNutri();
-                alert(`Cliente creato con codice: ${newCode}.\nLa sezione Alimentazione è attiva e pronta da compilare, mentre la sezione Allenamento risulterà bloccata finché non verrà abilitata da un Personal Trainer convenzionato.`);
+                alert(`Cliente creato con codice: ${newCode}.\nLa sezione Alimentazione è attiva, mentre la sezione Allenamento risulterà bloccata finché non verrà abilitata da un Personal Trainer convenzionato.`);
             } else {
                 renderAdminPt();
-                alert(`Atleta creato con codice: ${newCode}.\nLa sezione Allenamento è attiva e pronta da compilare, mentre la sezione Alimentazione risulterà bloccata finché non verrà abilitata da un Nutrizionista convenzionato.`);
+                alert(`Atleta creato con codice: ${newCode}.\nLa sezione Allenamento è attiva, mentre la sezione Alimentazione risulterà bloccata finché non verrà abilitata da un Nutrizionista convenzionato.`);
             }
         }
 
