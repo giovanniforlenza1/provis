@@ -11,39 +11,22 @@
 
     <!-- FAVICON & APPLE TOUCH ICON MONOGRAMMA PROFESSIONALE "NP" (BIANCO & NERO) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%2309090B'/%3E%3Cpath d='M34 86V34H48L72 68V34H86V86H72L48 52V86H34Z' fill='%23FFFFFF'/%3E%3Ccircle cx='86' cy='26' r='6' fill='%2310B981'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%2309090B'/%3E%3Cpath d='M34 86V34H48L72 68V34H86V86H72L48 52V86H34Z' fill='%23FFFFFF'/%3E%3Ccircle cx='86' cy='26' r='6' fill='%2310B981'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%2309090B'/%3E%3Cpath d='M34 86V34H48L72 68V34H86V86H72L48 52V86H34Z' fill='%23FFFFFF'/%3E%3Ccircle cx='86' cy='26' r='6' fill='%2310B981'/%3E%3C/svg%3E">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap');
         
         :root {
             --safe-top: env(safe-area-inset-top, 16px);
             --safe-bottom: env(safe-area-inset-bottom, 16px);
-            --accent: #09090B;
-            --accent-soft: #F4F4F5;
-            --accent-border: #E4E4E7;
-        }
-
-        /* ACCENTO 1: NUTRIZIONE (BIANCO DOMINANTE + ACCENTO SALVIA/SMERALDO) */
-        body.theme-nutri {
-            --accent: #059669;
-            --accent-soft: #ECFDF5;
-            --accent-border: #A7F3D0;
-        }
-
-        /* ACCENTO 2: PALESTRA (BIANCO DOMINANTE + ACCENTO TERRACOTTA/ RAME) */
-        body.theme-gym {
-            --accent: #C2410C;
-            --accent-soft: #FFF7ED;
-            --accent-border: #FED7AA;
         }
 
         html, body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #FAFAFA;
+            background-color: #F8F8F9;
             color: #09090B;
             -webkit-tap-highlight-color: transparent;
             overflow-x: hidden !important;
@@ -51,6 +34,13 @@
             margin: 0;
             padding: 0;
             letter-spacing: -0.015em;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Impedisce a iOS di fare zoom automatico sugli input */
+        input, select, textarea {
+            font-size: 16px !important;
         }
 
         .app-container {
@@ -58,17 +48,17 @@
             max-width: 1024px;
             margin-left: auto;
             margin-right: auto;
-            padding-top: calc(var(--safe-top) + 12px);
-            padding-bottom: calc(var(--safe-bottom) + 140px);
+            padding-top: calc(var(--safe-top) + 14px);
+            padding-bottom: calc(var(--safe-bottom) + 150px);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .glass-bar {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border-top: 1px solid #E4E4E7;
             padding-bottom: var(--safe-bottom);
         }
@@ -76,7 +66,7 @@
         .pro-card {
             background: #FFFFFF;
             border: 1px solid #E4E4E7;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
         }
 
         .workout-carousel {
@@ -98,22 +88,22 @@
 </head>
 <body class="min-h-screen antialiased">
 
-    <!-- WIDGET TIMER MINIMAL IN BASSO -->
-    <div id="timer-widget" class="fixed left-4 right-4 md:left-auto md:right-6 md:w-96 bg-zinc-950 text-white rounded-2xl p-4 shadow-2xl z-50 hidden border border-zinc-800" style="bottom: calc(var(--safe-bottom) + 76px);">
+    <!-- WIDGET TIMER IN BASSO AD ALTA VISIBILITÀ -->
+    <div id="timer-widget" class="fixed left-4 right-4 md:left-auto md:right-6 md:w-[420px] bg-zinc-950 text-white rounded-2xl p-4 shadow-2xl z-50 hidden border border-zinc-800" style="bottom: calc(var(--safe-bottom) + 84px);">
         <div class="flex items-center justify-between gap-3">
-            <div class="flex items-center space-x-3 min-w-0">
-                <div class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 text-white flex items-center justify-center shrink-0">
-                    <i class="fa-regular fa-clock text-sm"></i>
+            <div class="flex items-center space-x-3.5 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-700 text-white flex items-center justify-center shrink-0">
+                    <i class="fa-regular fa-clock text-lg"></i>
                 </div>
                 <div class="min-w-0">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 block truncate" id="timer-label">Recupero</span>
-                    <span class="text-2xl font-black font-mono text-white leading-none" id="timer-display">01:30</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-zinc-400 block truncate" id="timer-label">Recupero</span>
+                    <span class="text-3xl font-black font-mono text-white leading-none mt-0.5 block" id="timer-display">01:30</span>
                 </div>
             </div>
-            <div class="flex items-center space-x-1.5 shrink-0">
-                <button type="button" onclick="adjustTimer(-15)" class="h-9 px-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-bold active:scale-95 transition">-15s</button>
-                <button type="button" onclick="adjustTimer(15)" class="h-9 px-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-bold active:scale-95 transition">+15s</button>
-                <button type="button" onclick="stopTimer()" class="h-9 px-3.5 rounded-lg bg-white text-zinc-950 text-xs font-extrabold active:scale-95 transition">Chiudi</button>
+            <div class="flex items-center space-x-2 shrink-0">
+                <button type="button" onclick="adjustTimer(-15)" class="h-11 px-3 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-200 text-sm font-bold active:scale-95 transition">-15s</button>
+                <button type="button" onclick="adjustTimer(15)" class="h-11 px-3 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-200 text-sm font-bold active:scale-95 transition">+15s</button>
+                <button type="button" onclick="stopTimer()" class="h-11 px-4 rounded-xl bg-white text-zinc-950 text-sm font-extrabold active:scale-95 transition">Chiudi</button>
             </div>
         </div>
     </div>
@@ -124,33 +114,32 @@
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-white">
         <div class="max-w-sm mx-auto w-full space-y-8">
             <div class="text-center space-y-3">
-                <!-- LOGO PROFESSIONALE ARCHITETTONICO NUTRIPLAN -->
-                <div class="w-16 h-16 rounded-2xl bg-zinc-950 flex items-center justify-center mx-auto shadow-sm">
-                    <svg viewBox="0 0 120 120" class="w-10 h-10">
+                <div class="w-20 h-20 rounded-2xl bg-zinc-950 flex items-center justify-center mx-auto shadow-md">
+                    <svg viewBox="0 0 120 120" class="w-12 h-12">
                         <path d="M28 90V30H44L76 72V30H92V90H76L44 48V90H28Z" fill="#FFFFFF"/>
                         <circle cx="92" cy="22" r="7" fill="#10B981"/>
                     </svg>
                 </div>
-                <div class="pt-1">
-                    <h1 class="text-2xl font-black tracking-tight text-zinc-950 uppercase">NutriPlan</h1>
-                    <p class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mt-0.5">Clinical Nutrition & Training System</p>
+                <div class="pt-2">
+                    <h1 class="text-3xl font-black tracking-tight text-zinc-950 uppercase">NutriPlan</h1>
+                    <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mt-1">Clinical Nutrition & Training System</p>
                 </div>
             </div>
 
-            <div class="bg-white border border-zinc-200 rounded-2xl p-6 space-y-5 shadow-sm">
+            <div class="bg-white border-2 border-zinc-200 rounded-3xl p-6 space-y-5 shadow-sm">
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-zinc-500 mb-2">Codice Identificativo Personale</label>
-                    <input type="text" id="login-code-input" onkeydown="if(event.key==='Enter') handleLogin()" placeholder="ID-0000" class="w-full bg-zinc-50 border border-zinc-300 rounded-xl px-4 py-3.5 text-base font-extrabold text-zinc-950 uppercase text-center tracking-widest focus:outline-none focus:border-zinc-950 focus:bg-white transition">
-                    <p id="login-error" class="text-xs font-semibold text-red-600 text-center mt-2 hidden">Codice non valido. Verifica le credenziali assegnate.</p>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-zinc-600 mb-2.5 text-center">Codice Identificativo Personale</label>
+                    <input type="text" id="login-code-input" onkeydown="if(event.key==='Enter') handleLogin()" placeholder="ID-0000" class="w-full h-14 bg-zinc-50 border-2 border-zinc-300 rounded-2xl px-4 text-xl font-black text-zinc-950 uppercase text-center tracking-widest focus:outline-none focus:border-zinc-950 focus:bg-white transition">
+                    <p id="login-error" class="text-sm font-bold text-red-600 text-center mt-3 hidden">Codice non valido. Verifica le credenziali assegnate.</p>
                 </div>
 
-                <button type="button" onclick="handleLogin()" id="login-btn" class="w-full bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-3.5 rounded-xl text-sm tracking-wide active:scale-99 transition cursor-pointer">
+                <button type="button" onclick="handleLogin()" id="login-btn" class="w-full h-14 bg-zinc-950 hover:bg-zinc-800 text-white font-extrabold rounded-2xl text-base tracking-wide active:scale-99 transition cursor-pointer shadow-sm">
                     Accedi al Sistema
                 </button>
             </div>
 
             <div class="text-center">
-                <span class="text-[11px] text-zinc-400 font-medium">Ambiente Cloud Sincronizzato • Multi-Device</span>
+                <span class="text-xs text-zinc-500 font-semibold">Ambiente Cloud Sincronizzato • Multi-Device</span>
             </div>
         </div>
     </section>
@@ -158,53 +147,53 @@
     <!-- ========================================================== -->
     <!-- CONSOLE PROPRIETARIO (CODICE: ADMIN-MASTER)                -->
     <!-- ========================================================== -->
-    <section id="screen-super-admin" class="app-container px-5 space-y-6 hidden">
+    <section id="screen-super-admin" class="app-container px-4 sm:px-6 space-y-6 hidden">
         <header class="flex justify-between items-center border-b border-zinc-200 pb-4">
             <div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Amministrazione Sistema</span>
-                <h1 class="text-2xl font-black text-zinc-950 mt-0.5">Gestione Licenze Studi</h1>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500">Amministrazione Sistema</span>
+                <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 mt-0.5">Gestione Licenze Studi</h1>
             </div>
-            <button type="button" onclick="logout()" class="px-4 py-2 rounded-xl bg-zinc-950 text-white text-xs font-bold">Esci</button>
+            <button type="button" onclick="logout()" class="h-11 px-5 rounded-xl bg-zinc-950 text-white text-sm font-bold">Esci</button>
         </header>
 
         <div class="pro-card rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <span class="text-xs font-bold uppercase text-zinc-900">Sincronizzazione Database Cloud (Supabase)</span>
-                <p class="text-xs text-zinc-500 mt-0.5">Allinea i profili e le tabelle sul server remoto.</p>
+                <span class="text-sm font-extrabold uppercase text-zinc-900">Sincronizzazione Database Cloud (Supabase)</span>
+                <p class="text-sm text-zinc-600 mt-1">Allinea i profili e le tabelle sul server remoto.</p>
             </div>
-            <button type="button" onclick="seedSupabaseDatabase()" class="px-4 py-2.5 rounded-xl bg-zinc-950 text-white font-bold text-xs shrink-0">
+            <button type="button" onclick="seedSupabaseDatabase()" class="h-12 px-5 rounded-xl bg-zinc-950 text-white font-bold text-sm shrink-0">
                 Sincronizza Cloud
             </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div class="pro-card rounded-2xl p-6 space-y-4">
-                <h2 class="text-sm font-bold uppercase tracking-wider text-zinc-900">Nuova Licenza Professionista</h2>
-                <div class="space-y-3 text-xs">
+                <h2 class="text-base font-extrabold uppercase tracking-wider text-zinc-900">Nuova Licenza Professionista</h2>
+                <div class="space-y-4 text-sm">
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Qualifica</label>
-                        <select id="sa-role" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 font-bold text-zinc-900">
+                        <label class="font-bold text-zinc-600 block mb-1.5">Qualifica</label>
+                        <select id="sa-role" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3 font-bold text-zinc-900">
                             <option value="nutri">Biologo Nutrizionista</option>
                             <option value="pt">Personal Trainer / Club</option>
                         </select>
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Denominazione Studio / Centro</label>
-                        <input type="text" id="sa-name" placeholder="Studio Dott. Bianchi" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 font-bold text-zinc-900">
+                        <label class="font-bold text-zinc-600 block mb-1.5">Denominazione Studio / Centro</label>
+                        <input type="text" id="sa-name" placeholder="Studio Dott. Bianchi" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-900">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Codice Accesso Riservato</label>
-                        <input type="text" id="sa-code" placeholder="NUT-BIANCHI" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5 font-bold uppercase text-zinc-900">
+                        <label class="font-bold text-zinc-600 block mb-1.5">Codice Accesso Riservato</label>
+                        <input type="text" id="sa-code" placeholder="NUT-BIANCHI" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold uppercase text-zinc-900">
                     </div>
                 </div>
-                <button type="button" onclick="createNewProfessional()" class="w-full py-3 rounded-xl bg-zinc-950 text-white font-bold text-xs">
+                <button type="button" onclick="createNewProfessional()" class="w-full h-12 rounded-xl bg-zinc-950 text-white font-bold text-sm mt-2">
                     Attiva Credenziali Studio
                 </button>
             </div>
 
             <div class="pro-card rounded-2xl p-6 space-y-3">
-                <h2 class="text-sm font-bold uppercase tracking-wider text-zinc-900">Studi Abilitati</h2>
-                <div id="sa-pro-list" class="divide-y divide-zinc-100 text-xs max-h-80 overflow-y-auto"></div>
+                <h2 class="text-base font-extrabold uppercase tracking-wider text-zinc-900">Studi Abilitati</h2>
+                <div id="sa-pro-list" class="divide-y divide-zinc-200 text-sm max-h-80 overflow-y-auto"></div>
             </div>
         </div>
     </section>
@@ -212,94 +201,94 @@
     <!-- ========================================================== -->
     <!-- PORTALE 1: AREA NUTRIZIONISTA                              -->
     <!-- ========================================================== -->
-    <section id="screen-admin-nutri" class="app-container px-5 space-y-5 hidden">
+    <section id="screen-admin-nutri" class="app-container px-4 sm:px-6 space-y-5 hidden">
         <header class="flex justify-between items-center border-b border-zinc-200 pb-4">
             <div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700" id="nutri-studio-badge">Area Nutrizione</span>
-                <h1 class="text-2xl font-black text-zinc-950 mt-0.5">Gestione Piani Nutrizionali</h1>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-700" id="nutri-studio-badge">Area Nutrizione</span>
+                <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 mt-0.5">Gestione Piani Nutrizionali</h1>
             </div>
-            <button type="button" onclick="logout()" class="px-4 py-2 rounded-xl bg-zinc-950 text-white text-xs font-bold shrink-0">Esci</button>
+            <button type="button" onclick="logout()" class="h-11 px-5 rounded-xl bg-zinc-950 text-white text-sm font-bold shrink-0">Esci</button>
         </header>
 
         <div class="pro-card rounded-2xl p-5 space-y-4">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500">1. Elenco Pazienti</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2" id="nutri-patient-list"></div>
+            <h2 class="text-xs font-extrabold uppercase tracking-wider text-zinc-500">1. Elenco Pazienti</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" id="nutri-patient-list"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-3 border-t border-zinc-100">
-                <button type="button" onclick="createNewClientForPro('nutri')" class="w-full py-2.5 rounded-xl bg-zinc-950 text-white text-xs font-bold">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-3 border-t border-zinc-100">
+                <button type="button" onclick="createNewClientForPro('nutri')" class="w-full h-12 rounded-xl bg-zinc-950 text-white text-sm font-bold">
                     + Registra Nuovo Paziente
                 </button>
-                <button type="button" onclick="linkExistingClientToPro('nutri')" class="w-full py-2.5 rounded-xl bg-zinc-100 text-zinc-800 text-xs font-bold border border-zinc-200">
+                <button type="button" onclick="linkExistingClientToPro('nutri')" class="w-full h-12 rounded-xl bg-zinc-100 text-zinc-800 text-sm font-bold border border-zinc-300">
                     Collega Codice Paziente Esistente
                 </button>
             </div>
         </div>
 
-        <div id="nutri-editor-box" class="space-y-4">
-            <div class="pro-card rounded-2xl p-5 space-y-3">
+        <div id="nutri-editor-box" class="space-y-5">
+            <div class="pro-card rounded-2xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Anagrafica & Idratazione</h3>
-                    <span class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-md" id="nutri-editing-badge">ID</span>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-zinc-500">Anagrafica & Idratazione</h3>
+                    <span class="text-sm font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg" id="nutri-editing-badge">ID</span>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-sm">
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Paziente</label>
-                        <input type="text" id="adm-nutri-name" onchange="updateClientBasicInfo()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950">
+                        <label class="font-bold text-zinc-600 block mb-1">Paziente</label>
+                        <input type="text" id="adm-nutri-name" onchange="updateClientBasicInfo()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-950">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Target Acqua (Litri)</label>
-                        <input type="number" step="0.5" id="adm-nutri-water" onchange="updateClientBasicInfo()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950">
+                        <label class="font-bold text-zinc-600 block mb-1">Target Acqua (Litri)</label>
+                        <input type="number" step="0.5" id="adm-nutri-water" onchange="updateClientBasicInfo()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-950">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Inquadramento Clinico</label>
-                        <input type="text" id="adm-nutri-bio" onchange="updateClientBasicInfo()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-medium text-zinc-950">
+                        <label class="font-bold text-zinc-600 block mb-1">Inquadramento Clinico</label>
+                        <input type="text" id="adm-nutri-bio" onchange="updateClientBasicInfo()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-medium text-zinc-950">
                     </div>
                 </div>
             </div>
 
             <div class="pro-card rounded-2xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">2. Programmazione Giornaliera</h3>
-                    <button type="button" onclick="copyDayToAllWeek()" class="text-xs font-bold text-emerald-700 underline">Applica a tutta la settimana</button>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-zinc-500">2. Programmazione Giornaliera</h3>
+                    <button type="button" onclick="copyDayToAllWeek()" class="text-sm font-bold text-emerald-700 underline">Applica a tutta la settimana</button>
                 </div>
 
                 <div class="grid grid-cols-7 gap-1.5" id="adm-nutri-day-tabs"></div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2 border-t border-zinc-100 text-xs">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3 border-t border-zinc-100 text-sm">
                     <div>
-                        <label class="font-semibold text-zinc-400 block text-[10px] uppercase">Kcal Giorno</label>
-                        <input type="text" id="adm-day-kcal" onchange="updateDayMacros()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950 mt-1">
+                        <label class="font-bold text-zinc-500 block text-xs uppercase">Kcal Giorno</label>
+                        <input type="text" id="adm-day-kcal" onchange="updateDayMacros()" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3 font-bold text-zinc-950 mt-1">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-400 block text-[10px] uppercase">Carboidrati</label>
-                        <input type="text" id="adm-day-c" onchange="updateDayMacros()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950 mt-1">
+                        <label class="font-bold text-zinc-500 block text-xs uppercase">Carboidrati</label>
+                        <input type="text" id="adm-day-c" onchange="updateDayMacros()" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3 font-bold text-zinc-950 mt-1">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-400 block text-[10px] uppercase">Proteine</label>
-                        <input type="text" id="adm-day-p" onchange="updateDayMacros()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950 mt-1">
+                        <label class="font-bold text-zinc-500 block text-xs uppercase">Proteine</label>
+                        <input type="text" id="adm-day-p" onchange="updateDayMacros()" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3 font-bold text-zinc-950 mt-1">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-400 block text-[10px] uppercase">Grassi</label>
-                        <input type="text" id="adm-day-g" onchange="updateDayMacros()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950 mt-1">
+                        <label class="font-bold text-zinc-500 block text-xs uppercase">Grassi</label>
+                        <input type="text" id="adm-day-g" onchange="updateDayMacros()" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3 font-bold text-zinc-950 mt-1">
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row md:items-center gap-3 pt-2">
-                    <label class="text-xs font-bold text-zinc-800 flex items-center space-x-2 shrink-0">
-                        <input type="checkbox" id="adm-day-workout" onchange="updateDayMacros()" class="w-4 h-4 accent-emerald-600 rounded">
+                    <label class="text-sm font-bold text-zinc-800 flex items-center space-x-2.5 shrink-0">
+                        <input type="checkbox" id="adm-day-workout" onchange="updateDayMacros()" class="w-5 h-5 accent-emerald-600 rounded">
                         <span>Giornata con Seduta di Allenamento</span>
                     </label>
-                    <input type="text" id="adm-day-workout-note" onchange="updateDayMacros()" placeholder="Indicazione nutrizionale pre/post allenamento..." class="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-xs text-zinc-900">
+                    <input type="text" id="adm-day-workout-note" onchange="updateDayMacros()" placeholder="Indicazione nutrizionale pre/post allenamento..." class="flex-1 h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-sm text-zinc-900">
                 </div>
             </div>
 
             <div id="adm-nutri-meals-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-            <button type="button" onclick="addNewMealToDay()" class="w-full py-3 rounded-xl bg-white border border-dashed border-zinc-400 text-zinc-800 font-bold text-xs">
+            <button type="button" onclick="addNewMealToDay()" class="w-full h-12 rounded-xl bg-white border-2 border-dashed border-zinc-400 text-zinc-800 font-bold text-sm">
                 + Aggiungi Pasto al Giorno Selezionato
             </button>
 
-            <button type="button" onclick="syncAdminChangesToCloud('Piano alimentare aggiornato con successo.')" class="w-full py-4 rounded-xl bg-zinc-950 text-white font-bold text-sm shadow-sm">
+            <button type="button" onclick="syncAdminChangesToCloud('Piano alimentare aggiornato con successo.')" class="w-full h-14 rounded-2xl bg-zinc-950 text-white font-extrabold text-base shadow-sm">
                 Salva e Pubblica Piano Alimentare
             </button>
         </div>
@@ -308,152 +297,152 @@
     <!-- ========================================================== -->
     <!-- PORTALE 2: AREA PERSONAL TRAINER                           -->
     <!-- ========================================================== -->
-    <section id="screen-admin-pt" class="app-container px-5 space-y-5 hidden">
+    <section id="screen-admin-pt" class="app-container px-4 sm:px-6 space-y-5 hidden">
         <header class="flex justify-between items-center border-b border-zinc-200 pb-4">
             <div>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-orange-700" id="pt-studio-badge">Area Tecnica Fitness</span>
-                <h1 class="text-2xl font-black text-zinc-950 mt-0.5">Programmazione Allenamento</h1>
+                <span class="text-xs font-extrabold uppercase tracking-widest text-orange-700" id="pt-studio-badge">Area Tecnica Fitness</span>
+                <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 mt-0.5">Programmazione Allenamento</h1>
             </div>
-            <button type="button" onclick="logout()" class="px-4 py-2 rounded-xl bg-zinc-950 text-white text-xs font-bold shrink-0">Esci</button>
+            <button type="button" onclick="logout()" class="h-11 px-5 rounded-xl bg-zinc-950 text-white text-sm font-bold shrink-0">Esci</button>
         </header>
 
         <div class="pro-card rounded-2xl p-5 space-y-4">
-            <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500">1. Elenco Atleti</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2" id="pt-athlete-list"></div>
+            <h2 class="text-xs font-extrabold uppercase tracking-wider text-zinc-500">1. Elenco Atleti</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" id="pt-athlete-list"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-3 border-t border-zinc-100">
-                <button type="button" onclick="createNewClientForPro('pt')" class="w-full py-2.5 rounded-xl bg-zinc-950 text-white text-xs font-bold">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-3 border-t border-zinc-100">
+                <button type="button" onclick="createNewClientForPro('pt')" class="w-full h-12 rounded-xl bg-zinc-950 text-white text-sm font-bold">
                     + Registra Nuovo Atleta
                 </button>
-                <button type="button" onclick="linkExistingClientToPro('pt')" class="w-full py-2.5 rounded-xl bg-zinc-100 text-zinc-800 text-xs font-bold border border-zinc-200">
+                <button type="button" onclick="linkExistingClientToPro('pt')" class="w-full h-12 rounded-xl bg-zinc-100 text-zinc-800 text-sm font-bold border border-zinc-300">
                     Collega Codice Atleta Esistente
                 </button>
             </div>
         </div>
 
-        <div id="pt-editor-box" class="space-y-4">
+        <div id="pt-editor-box" class="space-y-5">
             <div class="pro-card rounded-2xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500">2. Configurazione Seduta</h2>
-                    <span class="text-xs font-bold text-orange-800 bg-orange-50 border border-orange-200 px-2.5 py-0.5 rounded-md" id="pt-editing-badge">ID</span>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider text-zinc-500">2. Configurazione Seduta</h2>
+                    <span class="text-sm font-extrabold text-orange-800 bg-orange-50 border border-orange-200 px-3 py-1 rounded-lg" id="pt-editing-badge">ID</span>
                 </div>
 
                 <div class="grid grid-cols-3 gap-2" id="adm-pt-day-tabs"></div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-zinc-100 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-2 border-t border-zinc-100 text-sm">
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Giorno</label>
-                        <input type="text" id="adm-wo-daylabel" onchange="updateWorkoutDayHeader()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950">
+                        <label class="font-bold text-zinc-600 block mb-1">Giorno</label>
+                        <input type="text" id="adm-wo-daylabel" onchange="updateWorkoutDayHeader()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-950">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Gruppi Muscolari</label>
-                        <input type="text" id="adm-wo-title" onchange="updateWorkoutDayHeader()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950">
+                        <label class="font-bold text-zinc-600 block mb-1">Gruppi Muscolari</label>
+                        <input type="text" id="adm-wo-title" onchange="updateWorkoutDayHeader()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-950">
                     </div>
                     <div>
-                        <label class="font-semibold text-zinc-500 block mb-1">Parametri Seduta</label>
-                        <input type="text" id="adm-wo-subtitle" onchange="updateWorkoutDayHeader()" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-medium text-zinc-950">
+                        <label class="font-bold text-zinc-600 block mb-1">Parametri Seduta</label>
+                        <input type="text" id="adm-wo-subtitle" onchange="updateWorkoutDayHeader()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-medium text-zinc-950">
                     </div>
                 </div>
             </div>
 
             <div id="adm-pt-exercises-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-            <button type="button" onclick="addNewExerciseToWorkoutDay()" class="w-full py-3 rounded-xl bg-white border border-dashed border-zinc-400 text-zinc-800 font-bold text-xs">
+            <button type="button" onclick="addNewExerciseToWorkoutDay()" class="w-full h-12 rounded-xl bg-white border-2 border-dashed border-zinc-400 text-zinc-800 font-bold text-sm">
                 + Aggiungi Esercizio alla Seduta
             </button>
 
-            <button type="button" onclick="syncAdminChangesToCloud('Scheda tecnica aggiornata con successo.')" class="w-full py-4 rounded-xl bg-zinc-950 text-white font-bold text-sm shadow-sm">
+            <button type="button" onclick="syncAdminChangesToCloud('Scheda tecnica aggiornata con successo.')" class="w-full h-14 rounded-2xl bg-zinc-950 text-white font-extrabold text-base shadow-sm">
                 Salva e Pubblica Scheda Tecnica
             </button>
         </div>
     </section>
 
     <!-- ========================================================== -->
-    <!-- SCHERMATA 1: HUB PRINCIPALE CLIENTE (BIANCO & NERO PULITO) -->
+    <!-- SCHERMATA 1: HUB PRINCIPALE CLIENTE                        -->
     <!-- ========================================================== -->
-    <section id="screen-hub" class="app-container min-h-screen flex flex-col justify-between px-5 py-6 hidden">
+    <section id="screen-hub" class="app-container min-h-screen flex flex-col justify-between px-4 sm:px-6 py-6 hidden">
         <div class="space-y-6">
             <!-- Header Utente -->
             <div class="flex justify-between items-center border-b border-zinc-200 pb-5">
                 <div class="flex items-center space-x-3.5">
-                    <div class="w-11 h-11 rounded-xl bg-zinc-950 flex items-center justify-center shrink-0">
-                        <svg viewBox="0 0 120 120" class="w-6 h-6">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-950 flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 120 120" class="w-7 h-7">
                             <path d="M28 90V30H44L76 72V30H92V90H76L44 48V90H28Z" fill="#FFFFFF"/>
                             <circle cx="92" cy="22" r="7" fill="#10B981"/>
                         </svg>
                     </div>
                     <div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 block" id="hub-user-code">ID</span>
-                        <h1 class="text-2xl font-black text-zinc-950 leading-tight" id="hub-user-greeting">Benvenuto</h1>
+                        <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500 block" id="hub-user-code">ID</span>
+                        <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 leading-tight" id="hub-user-greeting">Benvenuto</h1>
                     </div>
                 </div>
-                <button type="button" onclick="logout()" class="px-3.5 py-2 rounded-xl bg-white border border-zinc-200 text-zinc-600 text-xs font-bold hover:bg-zinc-50 transition">
+                <button type="button" onclick="logout()" class="h-11 px-4 rounded-xl bg-white border border-zinc-300 text-zinc-700 text-sm font-bold hover:bg-zinc-50 transition">
                     Esci
                 </button>
             </div>
 
-            <p class="text-xs text-zinc-500 font-medium" id="hub-user-bio"></p>
+            <p class="text-sm text-zinc-600 font-medium leading-relaxed" id="hub-user-bio"></p>
 
-            <!-- RIEPILOGO STATO DI OGGI (PULIZIA ASSOLUTA) -->
+            <!-- RIEPILOGO STATO DI OGGI -->
             <div class="pro-card rounded-2xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
-                    <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400">Stato Giornaliero</span>
-                    <span class="text-xs font-extrabold text-zinc-950 bg-zinc-100 px-2.5 py-1 rounded-md" id="hub-today-name">Oggi</span>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500">Stato Giornaliero</span>
+                    <span class="text-sm font-extrabold text-zinc-950 bg-zinc-100 px-3 py-1 rounded-lg" id="hub-today-name">Oggi</span>
                 </div>
                 <div class="grid grid-cols-3 gap-3 text-center">
-                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Pasti</span>
-                        <span class="text-lg font-black text-zinc-950 mt-1 block" id="hub-stat-meals">0/5</span>
+                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-500 block">Pasti</span>
+                        <span class="text-xl font-black text-zinc-950 mt-1 block" id="hub-stat-meals">0/5</span>
                     </div>
-                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Acqua</span>
-                        <span class="text-lg font-black text-zinc-950 mt-1 block" id="hub-stat-water">0.0 L</span>
+                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-500 block">Acqua</span>
+                        <span class="text-xl font-black text-zinc-950 mt-1 block" id="hub-stat-water">0.0 L</span>
                     </div>
-                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Sessione</span>
-                        <span class="text-xs font-extrabold text-zinc-950 mt-2 block uppercase" id="hub-stat-workout">Riposo</span>
+                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-500 block">Sessione</span>
+                        <span class="text-sm font-extrabold text-zinc-950 mt-1.5 block uppercase" id="hub-stat-workout">Riposo</span>
                     </div>
                 </div>
             </div>
 
-            <!-- LE DUE SEZIONI (BIANCO DOMINANTE + SOLO ACCENTO DI COLORE) -->
+            <!-- LE DUE SEZIONI -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                 
-                <!-- CARD NUTRIZIONE (BIANCA CON ACCENTO VERDE SALVIA) -->
+                <!-- CARD NUTRIZIONE -->
                 <div onclick="openModule('nutrition')" class="pro-card rounded-2xl p-6 cursor-pointer active:scale-99 transition border-l-4 border-l-emerald-600 hover:border-zinc-300 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-lg shrink-0">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-xl shrink-0">
                                 <i class="fa-solid fa-utensils"></i>
                             </div>
-                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-2.5 py-1 rounded-md" id="hub-kcal-badge">1.960 Kcal</span>
+                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-sm font-extrabold px-3 py-1 rounded-lg" id="hub-kcal-badge">1.960 Kcal</span>
                         </div>
-                        <h2 class="text-xl font-black text-zinc-950 mt-5">Piano Nutrizionale</h2>
-                        <p class="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                        <h2 class="text-2xl font-black text-zinc-950 mt-5">Piano Nutrizionale</h2>
+                        <p class="text-sm text-zinc-600 mt-2 leading-relaxed">
                             Pasti giornalieri, grammature calibrate, procedimento di preparazione, alternative equivalenti e calcolo spesa.
                         </p>
                     </div>
-                    <div class="mt-6 flex items-center justify-between pt-4 border-t border-zinc-100 text-xs font-extrabold uppercase tracking-wider text-emerald-700">
+                    <div class="mt-6 flex items-center justify-between pt-4 border-t border-zinc-100 text-sm font-extrabold uppercase tracking-wider text-emerald-700">
                         <span>Apri Alimentazione</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </div>
                 </div>
 
-                <!-- CARD ALLENAMENTO (BIANCA CON ACCENTO TERRACOTTA) -->
+                <!-- CARD ALLENAMENTO -->
                 <div onclick="openModule('workout')" class="pro-card rounded-2xl p-6 cursor-pointer active:scale-99 transition border-l-4 border-l-orange-600 hover:border-zinc-300 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 flex items-center justify-center text-lg shrink-0">
+                            <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 flex items-center justify-center text-xl shrink-0">
                                 <i class="fa-solid fa-dumbbell"></i>
                             </div>
-                            <span class="bg-orange-50 text-orange-800 border border-orange-200 text-xs font-bold px-2.5 py-1 rounded-md">Programma Tecnico</span>
+                            <span class="bg-orange-50 text-orange-800 border border-orange-200 text-sm font-extrabold px-3 py-1 rounded-lg">Programma Tecnico</span>
                         </div>
-                        <h2 class="text-xl font-black text-zinc-950 mt-5">Scheda Allenamento</h2>
-                        <p class="text-xs text-zinc-500 mt-1.5 leading-relaxed">
+                        <h2 class="text-2xl font-black text-zinc-950 mt-5">Scheda Allenamento</h2>
+                        <p class="text-sm text-zinc-600 mt-2 leading-relaxed">
                             Navigazione orizzontale esercizio per esercizio, registrazione carichi per singola serie, storico pesi e timer recupero.
                         </p>
                     </div>
-                    <div class="mt-6 flex items-center justify-between pt-4 border-t border-zinc-100 text-xs font-extrabold uppercase tracking-wider text-orange-700">
+                    <div class="mt-6 flex items-center justify-between pt-4 border-t border-zinc-100 text-sm font-extrabold uppercase tracking-wider text-orange-700">
                         <span>Apri Scheda Palestra</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </div>
@@ -461,46 +450,45 @@
             </div>
         </div>
 
-        <div class="text-center text-[11px] text-zinc-400 font-semibold pt-8">
+        <div class="text-center text-xs text-zinc-400 font-semibold pt-8">
             NutriPlan Professional • Clinical & Fitness System
         </div>
     </section>
 
     <!-- ========================================================================= -->
-    <!-- MODULO B: PALESTRA (BIANCO DOMINANTE, ACCENTO TERRACOTTA, TITOLO GRANDE)  -->
+    <!-- MODULO B: PALESTRA (TIPOGRAFIA MAGGIORATA PER SALA PESI)                  -->
     <!-- ========================================================================= -->
     <div id="module-workout" class="app-container hidden">
         
-        <header class="px-5 mb-4 flex justify-between items-center">
+        <header class="px-4 sm:px-6 mb-4 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-orange-600 shrink-0"></span>
-                    <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 truncate" id="wo-header-user">Scheda Tecnica</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange-600 shrink-0"></span>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500 truncate" id="wo-header-user">Scheda Tecnica</span>
                 </div>
-                <h1 class="text-xl font-black text-zinc-950 mt-0.5 truncate" id="wo-title">Giorno A</h1>
+                <h1 class="text-2xl font-black text-zinc-950 mt-0.5 truncate" id="wo-title">Seduta A</h1>
             </div>
-            <button type="button" onclick="backToHub()" class="h-10 px-4 rounded-xl bg-zinc-950 text-white text-xs font-bold flex items-center space-x-2 shrink-0 active:scale-95 transition">
-                <i class="fa-solid fa-grid-2 text-xs"></i>
+            <button type="button" onclick="backToHub()" class="h-11 px-4 rounded-xl bg-zinc-950 text-white text-sm font-bold flex items-center space-x-2 shrink-0 active:scale-95 transition">
                 <span>Menu</span>
             </button>
         </header>
 
-        <main class="px-5 space-y-4">
+        <main class="px-4 sm:px-6 space-y-4">
             <!-- 1. SELETTORE GIORNATA A / B / C -->
             <div class="grid grid-cols-3 gap-2" id="workout-day-selector"></div>
 
             <!-- 2. BARRA AVANZAMENTO ESERCIZI A SEGMENTI -->
             <div class="pro-card rounded-2xl p-4 space-y-3">
                 <div class="flex justify-between items-center">
-                    <button type="button" onclick="goToSlide(currentExerciseSlide - 1)" id="btn-prev-ex" class="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-800 flex items-center justify-center disabled:opacity-25">
-                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    <button type="button" onclick="goToSlide(currentExerciseSlide - 1)" id="btn-prev-ex" class="w-11 h-11 rounded-xl bg-zinc-100 text-zinc-900 flex items-center justify-center disabled:opacity-25">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
                     </button>
                     <div class="text-center">
-                        <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-950" id="slide-counter-label">Esercizio 1 di 5</span>
-                        <span class="block text-[11px] font-medium text-zinc-500 mt-0.5" id="wo-volume-inline">Volume totale: 0 kg</span>
+                        <span class="text-sm font-black uppercase tracking-wider text-zinc-950 block" id="slide-counter-label">Esercizio 1 di 5</span>
+                        <span class="block text-xs font-semibold text-zinc-500 mt-0.5" id="wo-volume-inline">Volume totale: 0 kg</span>
                     </div>
-                    <button type="button" onclick="goToSlide(currentExerciseSlide + 1)" id="btn-next-ex" class="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-800 flex items-center justify-center disabled:opacity-25">
-                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    <button type="button" onclick="goToSlide(currentExerciseSlide + 1)" id="btn-next-ex" class="w-11 h-11 rounded-xl bg-zinc-100 text-zinc-900 flex items-center justify-center disabled:opacity-25">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
                     </button>
                 </div>
                 <div class="flex space-x-1.5" id="workout-story-segments"></div>
@@ -510,14 +498,14 @@
             <div id="exercises-carousel" class="workout-carousel no-scrollbar" onscroll="handleCarouselScroll()"></div>
         </main>
 
-        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3">
+        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-4 py-3">
             <div class="max-w-3xl mx-auto flex justify-between items-center gap-3">
-                <button type="button" onclick="startTimer(1.5, 'Recupero 90s')" class="flex-1 py-3 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-200 font-bold text-xs flex items-center justify-center space-x-2 active:scale-98 transition">
+                <button type="button" onclick="startTimer(1.5, 'Recupero 90s')" class="flex-1 h-12 rounded-xl bg-zinc-100 text-zinc-900 border border-zinc-300 font-extrabold text-sm flex items-center justify-center space-x-2 active:scale-98 transition">
                     <i class="fa-regular fa-clock text-orange-600"></i>
                     <span>Timer 90s</span>
                 </button>
-                <button type="button" onclick="goToSlide(currentExerciseSlide + 1)" class="flex-1 py-3 rounded-xl bg-zinc-950 text-white font-bold text-xs flex items-center justify-center space-x-2 active:scale-98 transition">
-                    <span>Esercizio Successivo</span>
+                <button type="button" onclick="goToSlide(currentExerciseSlide + 1)" class="flex-1 h-12 rounded-xl bg-zinc-950 text-white font-extrabold text-sm flex items-center justify-center space-x-2 active:scale-98 transition">
+                    <span>Successivo</span>
                     <i class="fa-solid fa-arrow-right text-orange-500"></i>
                 </button>
             </div>
@@ -525,74 +513,76 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- MODULO A: NUTRIZIONE (BIANCO DOMINANTE + ACCENTO VERDE SALVIA)            -->
+    <!-- MODULO A: NUTRIZIONE (CARATTERI GRANDI E NITIDI PER LETTURA IMMEDIATA)    -->
     <!-- ========================================================================= -->
     <div id="module-nutrition" class="app-container hidden">
-        <header class="px-5 mb-5 flex justify-between items-center">
+        <header class="px-4 sm:px-6 mb-5 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-600 shrink-0"></span>
-                    <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 truncate" id="current-date-label">Piano Giornaliero</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500 truncate" id="current-date-label">Piano Giornaliero</span>
                 </div>
-                <h1 class="text-2xl font-black text-zinc-950 mt-0.5 truncate" id="nutri-header-title">Alimentazione</h1>
+                <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 mt-0.5 truncate" id="nutri-header-title">Alimentazione</h1>
             </div>
             <div class="flex items-center space-x-2 shrink-0">
-                <button type="button" onclick="backToHub()" class="h-10 px-4 rounded-xl bg-zinc-950 text-white text-xs font-bold flex items-center space-x-2 active:scale-95 transition">
+                <button type="button" onclick="backToHub()" class="h-11 px-4 rounded-xl bg-zinc-950 text-white text-sm font-bold flex items-center space-x-2 active:scale-95 transition">
                     <span>Menu</span>
                 </button>
-                <button type="button" onclick="resetProgress()" class="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-zinc-500 active:scale-95 transition" title="Azzera settimana">
-                    <i class="fa-solid fa-rotate-right text-xs"></i>
+                <button type="button" onclick="resetProgress()" class="w-11 h-11 rounded-xl bg-white border border-zinc-300 flex items-center justify-center text-zinc-600 active:scale-95 transition" title="Azzera settimana">
+                    <i class="fa-solid fa-rotate-right text-sm"></i>
                 </button>
             </div>
         </header>
 
-        <main id="view-plan" class="px-5 space-y-5">
+        <main id="view-plan" class="px-4 sm:px-6 space-y-5">
+            <!-- SELETTORE GIORNI BEN LEGGIBILE -->
             <div class="grid grid-cols-7 gap-1.5 py-1" id="day-selector"></div>
 
             <div id="workout-banner" class="hidden pro-card border-l-4 border-l-orange-600 rounded-2xl p-4 flex items-center justify-between space-x-3">
                 <div class="min-w-0">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-orange-700 block">Giornata di Allenamento</span>
-                    <p class="text-xs text-zinc-700 font-medium mt-0.5 leading-snug" id="workout-desc"></p>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-orange-700 block">Giornata di Allenamento</span>
+                    <p class="text-sm text-zinc-700 font-medium mt-1 leading-snug" id="workout-desc"></p>
                 </div>
-                <button type="button" onclick="openModule('workout')" class="px-3.5 py-2 rounded-xl bg-zinc-950 text-white text-xs font-bold shrink-0">Scheda</button>
+                <button type="button" onclick="openModule('workout')" class="h-10 px-4 rounded-xl bg-zinc-950 text-white text-xs font-bold shrink-0">Scheda</button>
             </div>
 
+            <!-- RIEPILOGO TARGET E ACQUA -->
             <div class="pro-card rounded-2xl p-5 space-y-4">
-                <div class="flex justify-between items-center gap-2">
+                <div class="flex flex-wrap justify-between items-center gap-3">
                     <div class="min-w-0">
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Riferimento Giornaliero</span>
-                        <div class="text-2xl font-black text-zinc-950 mt-0.5" id="macro-kcal">1.960 Kcal</div>
-                        <span class="inline-block mt-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-md" id="meals-progress-text">0 completati</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-500">Riferimento Giornaliero</span>
+                        <div class="text-3xl font-black text-zinc-950 mt-0.5" id="macro-kcal">1.960 Kcal</div>
+                        <span class="inline-block mt-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg" id="meals-progress-text">0 completati</span>
                     </div>
-                    <div class="flex space-x-1.5 shrink-0">
-                        <div class="px-3 py-2 rounded-xl bg-zinc-50 border border-zinc-200 text-center">
-                            <span class="block text-[9px] font-bold text-zinc-400 uppercase">Carbo</span>
-                            <span class="text-sm font-extrabold text-zinc-950" id="macro-c">175g</span>
+                    <div class="flex space-x-2 shrink-0">
+                        <div class="px-3.5 py-2.5 rounded-xl bg-zinc-50 border border-zinc-200 text-center min-w-[66px]">
+                            <span class="block text-xs font-bold text-zinc-500 uppercase">Carbo</span>
+                            <span class="text-base font-black text-zinc-950 mt-0.5 block" id="macro-c">175g</span>
                         </div>
-                        <div class="px-3 py-2 rounded-xl bg-emerald-50/70 border border-emerald-200 text-center">
-                            <span class="block text-[9px] font-bold text-emerald-800 uppercase">Prot</span>
-                            <span class="text-sm font-extrabold text-emerald-950" id="macro-p">158g</span>
+                        <div class="px-3.5 py-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200 text-center min-w-[66px]">
+                            <span class="block text-xs font-bold text-emerald-800 uppercase">Prot</span>
+                            <span class="text-base font-black text-emerald-950 mt-0.5 block" id="macro-p">158g</span>
                         </div>
-                        <div class="px-3 py-2 rounded-xl bg-zinc-50 border border-zinc-200 text-center">
-                            <span class="block text-[9px] font-bold text-zinc-400 uppercase">Grassi</span>
-                            <span class="text-sm font-extrabold text-zinc-950" id="macro-g">68g</span>
+                        <div class="px-3.5 py-2.5 rounded-xl bg-zinc-50 border border-zinc-200 text-center min-w-[66px]">
+                            <span class="block text-xs font-bold text-zinc-500 uppercase">Grassi</span>
+                            <span class="text-base font-black text-zinc-950 mt-0.5 block" id="macro-g">68g</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-4 border-t border-zinc-100 flex items-center justify-between gap-3">
+                <div class="pt-4 border-t border-zinc-100 flex items-center justify-between gap-4">
                     <div class="flex-1 min-w-0">
-                        <div class="flex justify-between text-xs font-bold mb-1.5">
-                            <span class="text-zinc-600 uppercase tracking-wider" id="water-target-label">Idratazione (3.5L)</span>
-                            <span class="text-zinc-950 font-black" id="water-val">0.00 L</span>
+                        <div class="flex justify-between text-sm font-bold mb-2">
+                            <span class="text-zinc-700" id="water-target-label">Idratazione (3.5L)</span>
+                            <span class="text-zinc-950 font-black text-base" id="water-val">0.00 L</span>
                         </div>
-                        <div class="w-full h-2 bg-zinc-100 rounded-full overflow-hidden">
+                        <div class="w-full h-3 bg-zinc-100 rounded-full overflow-hidden">
                             <div id="water-bar" class="bg-emerald-600 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
                         </div>
                     </div>
-                    <div class="flex space-x-1.5 shrink-0">
-                        <button type="button" onclick="updateWater(-0.25)" class="w-9 h-9 rounded-xl bg-zinc-100 text-zinc-800 font-bold text-sm active:scale-90 transition">-</button>
-                        <button type="button" onclick="updateWater(0.25)" class="px-3 h-9 rounded-xl bg-zinc-950 text-white font-bold text-xs active:scale-95 transition">+250ml</button>
+                    <div class="flex space-x-2 shrink-0">
+                        <button type="button" onclick="updateWater(-0.25)" class="w-11 h-11 rounded-xl bg-zinc-100 text-zinc-900 font-black text-lg active:scale-90 transition">-</button>
+                        <button type="button" onclick="updateWater(0.25)" class="px-4 h-11 rounded-xl bg-zinc-950 text-white font-extrabold text-sm active:scale-95 transition">+250ml</button>
                     </div>
                 </div>
             </div>
@@ -601,36 +591,36 @@
         </main>
 
         <!-- VISTA 2: SPESA -->
-        <main id="view-pantry" class="px-5 space-y-4 hidden">
+        <main id="view-pantry" class="px-4 sm:px-6 space-y-4 hidden">
             <div class="pro-card rounded-2xl p-5 space-y-4">
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center gap-2">
                     <div>
-                        <h2 class="text-lg font-black text-zinc-950">Dispensa & Approvvigionamento</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">Fabbisogno calcolato automaticamente sulle grammature del piano.</p>
+                        <h2 class="text-xl font-black text-zinc-950">Dispensa & Spesa</h2>
+                        <p class="text-sm text-zinc-600 mt-0.5">Fabbisogno calcolato sulle grammature del piano.</p>
                     </div>
-                    <button type="button" onclick="shareShoppingListWhatsApp()" class="bg-zinc-950 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center space-x-1.5 active:scale-95 transition">
-                        <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+                    <button type="button" onclick="shareShoppingListWhatsApp()" class="h-11 bg-zinc-950 text-white text-sm font-bold px-4 rounded-xl flex items-center space-x-2 shrink-0 active:scale-95 transition">
+                        <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i>
                         <span>Esporta</span>
                     </button>
                 </div>
 
-                <div class="bg-zinc-50 border border-zinc-200 p-3 rounded-xl">
-                    <span class="block text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Orizzonte calcolo spesa:</span>
+                <div class="bg-zinc-50 border border-zinc-200 p-3.5 rounded-xl">
+                    <span class="block text-xs font-extrabold uppercase tracking-wider text-zinc-600 mb-2.5">Orizzonte calcolo spesa:</span>
                     <div class="grid grid-cols-2 gap-2">
-                        <button type="button" onclick="setShopRange(3)" id="range-3" class="py-2 px-3 rounded-lg text-xs font-bold bg-zinc-950 text-white transition">Prossimi 3 Giorni</button>
-                        <button type="button" onclick="setShopRange(7)" id="range-7" class="py-2 px-3 rounded-lg text-xs font-semibold bg-white text-zinc-700 border border-zinc-200 transition">Intera Settimana (7 gg)</button>
+                        <button type="button" onclick="setShopRange(3)" id="range-3" class="h-11 px-3 rounded-xl text-sm font-bold bg-zinc-950 text-white transition">Prossimi 3 Giorni</button>
+                        <button type="button" onclick="setShopRange(7)" id="range-7" class="h-11 px-3 rounded-xl text-sm font-semibold bg-white text-zinc-700 border border-zinc-300 transition">7 Giorni</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-1 bg-zinc-100 p-1 rounded-xl">
-                    <button type="button" onclick="setPantryFilter('missing')" id="filter-missing" class="py-2 text-xs font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition">Da Acquistare</button>
-                    <button type="button" onclick="setPantryFilter('home')" id="filter-home" class="py-2 text-xs font-semibold rounded-lg text-zinc-500 transition">Disponibili</button>
-                    <button type="button" onclick="setPantryFilter('all')" id="filter-all" class="py-2 text-xs font-semibold rounded-lg text-zinc-500 transition">Tutti</button>
+                <div class="grid grid-cols-3 gap-1.5 bg-zinc-100 p-1.5 rounded-xl">
+                    <button type="button" onclick="setPantryFilter('missing')" id="filter-missing" class="py-2.5 text-sm font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition">Da Acquistare</button>
+                    <button type="button" onclick="setPantryFilter('home')" id="filter-home" class="py-2.5 text-sm font-semibold rounded-lg text-zinc-600 transition">In Casa</button>
+                    <button type="button" onclick="setPantryFilter('all')" id="filter-all" class="py-2.5 text-sm font-semibold rounded-lg text-zinc-600 transition">Tutti</button>
                 </div>
 
                 <div class="flex space-x-2">
-                    <input type="text" id="custom-item-input" placeholder="Aggiungi voce extra..." class="flex-1 min-w-0 bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-sm text-zinc-950 focus:outline-none focus:border-zinc-950">
-                    <button type="button" onclick="addCustomItem()" class="bg-zinc-950 text-white font-bold px-4 rounded-xl text-xs shrink-0">Aggiungi</button>
+                    <input type="text" id="custom-item-input" placeholder="Aggiungi voce extra..." class="flex-1 min-w-0 h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-4 text-base text-zinc-950 focus:outline-none focus:border-zinc-950">
+                    <button type="button" onclick="addCustomItem()" class="h-12 bg-zinc-950 text-white font-bold px-5 rounded-xl text-sm shrink-0">Aggiungi</button>
                 </div>
             </div>
 
@@ -638,25 +628,25 @@
         </main>
 
         <!-- VISTA 3: LINEE GUIDA & PREP -->
-        <main id="view-guide" class="px-5 space-y-4 hidden">
-            <div class="grid grid-cols-3 gap-1 bg-zinc-200/70 p-1 rounded-xl">
-                <button type="button" onclick="setGuideSubTab('out')" id="gsub-out" class="py-2 text-xs font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition">Pasti Fuori</button>
-                <button type="button" onclick="setGuideSubTab('prep')" id="gsub-prep" class="py-2 text-xs font-semibold rounded-lg text-zinc-600 transition">Meal Prep</button>
-                <button type="button" onclick="setGuideSubTab('sos')" id="gsub-sos" class="py-2 text-xs font-semibold rounded-lg text-zinc-600 transition">Gestione Fame</button>
+        <main id="view-guide" class="px-4 sm:px-6 space-y-4 hidden">
+            <div class="grid grid-cols-3 gap-1.5 bg-zinc-200/80 p-1.5 rounded-xl">
+                <button type="button" onclick="setGuideSubTab('out')" id="gsub-out" class="py-2.5 text-sm font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition">Pasti Fuori</button>
+                <button type="button" onclick="setGuideSubTab('prep')" id="gsub-prep" class="py-2.5 text-sm font-semibold rounded-lg text-zinc-600 transition">Meal Prep</button>
+                <button type="button" onclick="setGuideSubTab('sos')" id="gsub-sos" class="py-2.5 text-sm font-semibold rounded-lg text-zinc-600 transition">Gestione Fame</button>
             </div>
 
             <div id="guide-section-out" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="pro-card rounded-2xl p-5 space-y-2 border-l-4 border-l-zinc-900">
-                    <h3 class="text-base font-extrabold text-zinc-950">Ristorante / Pub</h3>
-                    <p class="text-xs text-zinc-600 leading-relaxed">Privilegiare tagliate di carne magra, hamburger al piatto o pesce alla griglia con verdure o patate al forno. Richiedere eventuali salse a parte.</p>
+                    <h3 class="text-lg font-black text-zinc-950">Ristorante / Pub</h3>
+                    <p class="text-sm text-zinc-700 leading-relaxed">Privilegiare tagliate di carne magra, hamburger al piatto o pesce alla griglia con verdure o patate al forno. Richiedere eventuali salse a parte.</p>
                 </div>
                 <div class="pro-card rounded-2xl p-5 space-y-2 border-l-4 border-l-zinc-900">
-                    <h3 class="text-base font-extrabold text-zinc-950">Pizzeria</h3>
-                    <p class="text-xs text-zinc-600 leading-relaxed">Ordinare base Marinara o Margherita aggiungendo una fonte proteica magra a crudo (Bresaola o Prosciutto Crudo sgrassato) per ridurre l'impatto glicemico.</p>
+                    <h3 class="text-lg font-black text-zinc-950">Pizzeria</h3>
+                    <p class="text-sm text-zinc-700 leading-relaxed">Ordinare base Marinara o Margherita aggiungendo una fonte proteica magra a crudo (Bresaola o Prosciutto Crudo sgrassato) per ridurre l'impatto glicemico.</p>
                 </div>
                 <div class="pro-card rounded-2xl p-5 space-y-2 border-l-4 border-l-zinc-900">
-                    <h3 class="text-base font-extrabold text-zinc-950">Pausa Pranzo Veloce</h3>
-                    <p class="text-xs text-zinc-600 leading-relaxed">Panino integrale o di segale con affettato magro (Fesa di tacchino o Bresaola) e verdure, oppure insalata mista con tonno al naturale e gallette.</p>
+                    <h3 class="text-lg font-black text-zinc-950">Pausa Pranzo Veloce</h3>
+                    <p class="text-sm text-zinc-700 leading-relaxed">Panino integrale o di segale con affettato magro (Fesa di tacchino o Bresaola) e verdure, oppure insalata mista con tonno al naturale e gallette.</p>
                 </div>
             </div>
 
@@ -665,17 +655,17 @@
             </div>
 
             <div id="guide-section-sos" class="space-y-3 hidden">
-                <div class="pro-card rounded-2xl p-5 space-y-3 text-xs text-zinc-700 leading-relaxed">
-                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
-                        <strong class="block font-bold text-zinc-950 mb-1">1. Protocollo Idratazione Preventiva</strong>
+                <div class="pro-card rounded-2xl p-5 space-y-3.5 text-sm text-zinc-700 leading-relaxed">
+                    <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200">
+                        <strong class="block font-extrabold text-base text-zinc-950 mb-1">1. Protocollo Idratazione Preventiva</strong>
                         Assumere 400-500 ml di acqua e attendere 10 minuti: il calo di attenzione durante il lavoro sedentario simula frequentemente lo stimolo della fame.
                     </div>
-                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
-                        <strong class="block font-bold text-zinc-950 mb-1">2. Alimenti Fibrosi a Densità Calorica Nulla</strong>
-                        Finocchi crudi, sedano, cetrioli o carote possono essere consumati liberamente per aumentare la distensione gastrica senza alterare il bilancio calorico.
+                    <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200">
+                        <strong class="block font-extrabold text-base text-zinc-950 mb-1">2. Alimenti Fibrosi a Densità Calorica Nulla</strong>
+                        Finocchi crudi, sedano, cetrioli o carote possono essere consumati liberamente per aumentare la sazietà gastrica senza alterare il bilancio calorico.
                     </div>
-                    <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
-                        <strong class="block font-bold text-zinc-950 mb-1">3. Tamponamento Proteico</strong>
+                    <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200">
+                        <strong class="block font-extrabold text-base text-zinc-950 mb-1">3. Tamponamento Proteico</strong>
                         In caso di fame fisiologica reale, utilizzare 30-40 g di fesa di tacchino oppure mezzo vasetto di Yogurt Greco 0%.
                     </div>
                 </div>
@@ -683,26 +673,26 @@
         </main>
 
         <!-- VISTA 4: PROGRESSI -->
-        <main id="view-weight" class="px-5 space-y-4 hidden">
+        <main id="view-weight" class="px-4 sm:px-6 space-y-4 hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="pro-card rounded-2xl p-5 space-y-4">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-lg font-black text-zinc-950">Monitoraggio Peso</h2>
-                        <span class="text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md" id="adherence-badge">Aderenza: 0%</span>
+                        <h2 class="text-xl font-black text-zinc-950">Monitoraggio Peso</h2>
+                        <span class="text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-lg" id="adherence-badge">Aderenza: 0%</span>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 text-center">
-                            <span class="text-[10px] font-bold uppercase text-zinc-400">Iniziale</span>
-                            <div class="text-base font-black text-zinc-900 mt-0.5" id="start-weight-display">110.0 kg</div>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 text-center">
+                            <span class="text-xs font-bold uppercase text-zinc-500">Iniziale</span>
+                            <div class="text-lg font-black text-zinc-900 mt-1" id="start-weight-display">110.0 kg</div>
                         </div>
-                        <div class="bg-zinc-950 p-3 rounded-xl text-center">
-                            <span class="text-[10px] font-bold uppercase text-zinc-400">Attuale</span>
-                            <div class="text-base font-black text-white mt-0.5" id="current-weight-display">110.0 kg</div>
+                        <div class="bg-zinc-950 p-3.5 rounded-xl text-center">
+                            <span class="text-xs font-bold uppercase text-zinc-400">Attuale</span>
+                            <div class="text-lg font-black text-white mt-1" id="current-weight-display">110.0 kg</div>
                         </div>
-                        <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 text-center">
-                            <span class="text-[10px] font-bold uppercase text-zinc-400">Variazione</span>
-                            <div class="text-base font-black text-emerald-700 mt-0.5" id="diff-weight-display">0.0 kg</div>
+                        <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 text-center">
+                            <span class="text-xs font-bold uppercase text-zinc-500">Delta</span>
+                            <div class="text-lg font-black text-emerald-700 mt-1" id="diff-weight-display">0.0 kg</div>
                         </div>
                     </div>
 
@@ -711,43 +701,44 @@
                     </div>
 
                     <div class="flex space-x-2">
-                        <input type="number" step="0.1" id="weight-input" placeholder="Inserisci peso in kg (es. 108.5)" class="flex-1 min-w-0 bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-950 focus:outline-none focus:border-zinc-950">
-                        <button type="button" onclick="addWeightEntry()" class="bg-zinc-950 text-white font-bold px-5 rounded-xl text-xs shrink-0">Registra</button>
+                        <input type="number" step="0.1" id="weight-input" placeholder="Inserisci peso in kg (es. 108.5)" class="flex-1 min-w-0 h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-4 text-base text-zinc-950 focus:outline-none focus:border-zinc-950">
+                        <button type="button" onclick="addWeightEntry()" class="h-12 bg-zinc-950 text-white font-bold px-5 rounded-xl text-sm shrink-0">Registra</button>
                     </div>
                 </div>
 
                 <div class="space-y-4">
                     <div class="pro-card rounded-2xl p-5 space-y-3">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500">Indicatori Clinici Non-Bilancia</h3>
-                        <div id="nsv-container" class="space-y-2"></div>
+                        <h3 class="text-sm font-extrabold uppercase tracking-wider text-zinc-500">Indicatori Clinici Non-Bilancia</h3>
+                        <div id="nsv-container" class="space-y-2.5"></div>
                     </div>
 
                     <div class="pro-card rounded-2xl p-5">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Storico Rilevazioni</h3>
-                        <div id="weight-history" class="divide-y divide-zinc-100 text-sm"></div>
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-zinc-500 mb-3">Storico Rilevazioni</h3>
+                        <div id="weight-history" class="divide-y divide-zinc-200 text-base"></div>
                     </div>
                 </div>
             </div>
         </main>
 
+        <!-- BARRA NAVIGAZIONE INFERIORE GRANDE E CHIARA -->
         <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5">
             <div class="max-w-3xl mx-auto grid grid-cols-4 gap-1">
-                <button type="button" onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-zinc-950 py-1 rounded-xl transition">
-                    <i class="fa-solid fa-utensils text-sm"></i>
-                    <span class="text-[10px] font-extrabold uppercase">Piano</span>
+                <button type="button" onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-zinc-950 py-1.5 rounded-xl transition">
+                    <i class="fa-solid fa-utensils text-base"></i>
+                    <span class="text-xs font-extrabold">Piano</span>
                 </button>
-                <button type="button" onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-zinc-400 py-1 rounded-xl transition relative">
-                    <i class="fa-solid fa-basket-shopping text-sm"></i>
-                    <span class="text-[10px] font-bold uppercase">Spesa</span>
-                    <span id="missing-badge" class="absolute top-0 right-4 bg-zinc-950 text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
+                <button type="button" onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition relative">
+                    <i class="fa-solid fa-basket-shopping text-base"></i>
+                    <span class="text-xs font-bold">Spesa</span>
+                    <span id="missing-badge" class="absolute top-0.5 right-3.5 bg-zinc-950 text-white text-[11px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
                 </button>
-                <button type="button" onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-zinc-400 py-1 rounded-xl transition">
-                    <i class="fa-solid fa-book-open text-sm"></i>
-                    <span class="text-[10px] font-bold uppercase">Linee Guida</span>
+                <button type="button" onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition">
+                    <i class="fa-solid fa-book-open text-base"></i>
+                    <span class="text-xs font-bold">Guida</span>
                 </button>
-                <button type="button" onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-zinc-400 py-1 rounded-xl transition">
-                    <i class="fa-solid fa-chart-line text-sm"></i>
-                    <span class="text-[10px] font-bold uppercase">Progressi</span>
+                <button type="button" onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition">
+                    <i class="fa-solid fa-chart-line text-base"></i>
+                    <span class="text-xs font-bold">Progressi</span>
                 </button>
             </div>
         </nav>
@@ -755,7 +746,7 @@
 
     <script>
         // =========================================================================
-        // 1. SUPABASE CLOUD CONFIGURATO (CON TIMEOUT ANTI-BLOCCO)
+        // 1. SUPABASE CLOUD CONFIGURATO
         // =========================================================================
         const SUPABASE_URL = 'https://ltzujfpwibiugredvpjl.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0enVqZnB3aWJpdWdyZWR2cGpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNDA4MTQsImV4cCI6MjEwNzYxNjgxNH0.SuM4fC0c56UJpf0n1j8eZjbchbkOCIQf2zjtbaEz3do';
@@ -798,7 +789,7 @@
         }
 
         // =========================================================================
-        // 2. PIANI E SCHEDE DI DEFAULT (ZERO EMOJI, PULIZIA PROFESSIONALE)
+        // 2. PIANI E SCHEDE DI DEFAULT
         // =========================================================================
         function buildSyncedWeekPlan(isFemaleActive) {
             const pPasta = isFemaleActive ? 75 : 80;
@@ -1082,7 +1073,7 @@
 
         let masterState = null;
         try {
-            masterState = JSON.parse(localStorage.getItem('nutriPlanPro_v16'));
+            masterState = JSON.parse(localStorage.getItem('nutriPlanPro_v17'));
         } catch (e) {}
 
         if (!masterState) {
@@ -1120,7 +1111,7 @@
 
         async function saveState(targetClientCode = null) {
             try {
-                localStorage.setItem('nutriPlanPro_v16', JSON.stringify(masterState));
+                localStorage.setItem('nutriPlanPro_v17', JSON.stringify(masterState));
             } catch (e) {}
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
                 updateMissingBadge();
@@ -1288,7 +1279,7 @@
         }
 
         // =========================================================================
-        // 5. MODULO B: PALESTRA CON FIX DEL POSIZIONAMENTO CAROSELLO E STATISTICHE LIVE
+        // 5. MODULO B: PALESTRA CON GERARCHIA TIPOGRAFICA MAGGIORATA
         // =========================================================================
         function ensureExerciseState(ex) {
             const u = currentUser();
@@ -1325,7 +1316,6 @@
             const endVolEl = document.getElementById('wo-end-slide-volume');
             if (endVolEl) endVolEl.textContent = `${totalVolumeKg.toLocaleString('it-IT')} kg`;
 
-            // Aggiorna segmenti barra superiore senza distruggere il carosello
             const segContainer = document.getElementById('workout-story-segments');
             if (segContainer) {
                 segContainer.innerHTML = '';
@@ -1334,14 +1324,14 @@
                     const isCurrent = idx === currentExerciseSlide;
                     const seg = document.createElement('div');
                     seg.onclick = () => goToSlide(idx);
-                    seg.className = `h-1.5 flex-1 rounded-full cursor-pointer transition-all ${
+                    seg.className = `h-2 flex-1 rounded-full cursor-pointer transition-all ${
                         allDone ? 'bg-emerald-600' : (isCurrent ? 'bg-orange-600' : 'bg-zinc-200')
                     }`;
                     segContainer.appendChild(seg);
                 });
                 const finalSeg = document.createElement('div');
                 finalSeg.onclick = () => goToSlide(currentWo.exercises.length);
-                finalSeg.className = `h-1.5 w-6 rounded-full cursor-pointer transition-all ${currentExerciseSlide === currentWo.exercises.length ? 'bg-orange-600' : 'bg-zinc-200'}`;
+                finalSeg.className = `h-2 w-7 rounded-full cursor-pointer transition-all ${currentExerciseSlide === currentWo.exercises.length ? 'bg-orange-600' : 'bg-zinc-200'}`;
                 segContainer.appendChild(finalSeg);
             }
 
@@ -1362,10 +1352,10 @@
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.onclick = () => { currentWorkoutIndex = idx; currentExerciseSlide = 0; renderWorkout(true); };
-                btn.className = `py-2.5 px-2 rounded-xl border text-center transition ${
-                    isSelected ? 'bg-zinc-950 text-white border-zinc-950 font-bold shadow-sm' : 'bg-white text-zinc-500 border-zinc-200 font-semibold'
+                btn.className = `py-3 px-2 rounded-xl border text-center transition ${
+                    isSelected ? 'bg-zinc-950 text-white border-zinc-950 font-bold shadow-sm' : 'bg-white text-zinc-600 border-zinc-200 font-semibold'
                 }`;
-                btn.innerHTML = `<span class="block text-[10px] uppercase opacity-75">${wo.dayLabel}</span><span class="text-xs font-extrabold">${wo.shortTitle}</span>`;
+                btn.innerHTML = `<span class="block text-xs uppercase opacity-75">${wo.dayLabel}</span><span class="text-sm font-black">${wo.shortTitle}</span>`;
                 selector.appendChild(btn);
             });
 
@@ -1389,33 +1379,33 @@
                     const prevStr = lastSessionSets[sIdx] || '—';
                     const badgeStyle = sObj.type === 'W' 
                         ? 'bg-amber-50 text-amber-800 border-amber-200' 
-                        : (sObj.type === 'D' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-zinc-100 text-zinc-800 border-zinc-200');
+                        : (sObj.type === 'D' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-zinc-100 text-zinc-900 border-zinc-300');
 
                     rowsHtml += `
-                        <div class="grid grid-cols-12 gap-2 items-center py-2.5 px-3 rounded-xl border transition ${sObj.done ? 'bg-emerald-50/50 border-emerald-300' : 'bg-zinc-50/70 border-zinc-200/80'}">
+                        <div class="grid grid-cols-12 gap-2 items-center py-3 px-3 rounded-2xl border transition ${sObj.done ? 'bg-emerald-50/60 border-emerald-300' : 'bg-zinc-50 border-zinc-200'}">
                             <div class="col-span-2 flex items-center space-x-1.5">
-                                <span class="w-7 h-7 rounded-lg border ${badgeStyle} font-extrabold text-xs flex items-center justify-center">${sIdx + 1}</span>
-                                <span class="text-[10px] font-bold text-zinc-400">${sObj.type}</span>
+                                <span class="w-8 h-8 rounded-xl border ${badgeStyle} font-black text-sm flex items-center justify-center shrink-0">${sIdx + 1}</span>
+                                <span class="text-xs font-bold text-zinc-500">${sObj.type}</span>
                             </div>
                             <div class="col-span-3 text-center">
-                                <span class="text-xs font-semibold text-zinc-400 block truncate">${prevStr}</span>
+                                <span class="text-sm font-bold text-zinc-500 block truncate">${prevStr}</span>
                             </div>
                             <div class="col-span-3">
                                 <input type="number" step="0.5" inputmode="decimal" value="${sObj.kg}" 
-                                     oninput="updateSetData('${ex.id}', ${sIdx}, 'kg', this.value)"
-                                    class="w-full h-10 bg-white border border-zinc-300 rounded-lg text-center font-extrabold text-sm text-zinc-950 focus:outline-none focus:border-zinc-950">
+                                    oninput="updateSetData('${ex.id}', ${sIdx}, 'kg', this.value)"
+                                    class="w-full h-12 bg-white border-2 border-zinc-300 rounded-xl text-center font-black text-lg text-zinc-950 focus:outline-none focus:border-zinc-950">
                             </div>
                             <div class="col-span-2">
                                 <input type="number" inputmode="numeric" value="${sObj.reps}" 
                                     oninput="updateSetData('${ex.id}', ${sIdx}, 'reps', this.value)"
-                                    class="w-full h-10 bg-white border border-zinc-300 rounded-lg text-center font-extrabold text-sm text-zinc-950 focus:outline-none focus:border-zinc-950">
+                                    class="w-full h-12 bg-white border-2 border-zinc-300 rounded-xl text-center font-black text-lg text-zinc-950 focus:outline-none focus:border-zinc-950">
                             </div>
                             <div class="col-span-2 flex justify-end">
                                 <button type="button" onclick="toggleSetComplete('${ex.id}', ${sIdx}, ${ex.rest}, ${exIdx})" 
-                                    class="w-10 h-10 rounded-xl flex items-center justify-center border transition ${
-                                        sObj.done ? 'bg-zinc-950 border-zinc-950 text-white shadow-sm' : 'bg-white border-zinc-300 text-zinc-300 hover:border-zinc-400'
+                                    class="w-12 h-12 rounded-xl flex items-center justify-center border-2 transition ${
+                                        sObj.done ? 'bg-zinc-950 border-zinc-950 text-white shadow-sm' : 'bg-white border-zinc-300 text-zinc-300'
                                     }">
-                                    <i class="fa-solid fa-check text-sm"></i>
+                                    <i class="fa-solid fa-check text-lg"></i>
                                 </button>
                             </div>
                         </div>
@@ -1423,83 +1413,83 @@
                 });
 
                 const historyDropdownHtml = historyList.length > 0 ? historyList.map(h => `
-                    <div class="py-2 border-b border-zinc-200/70 last:border-none flex justify-between items-center gap-2 text-xs">
-                        <span class="font-bold text-zinc-700 shrink-0">${h.date}</span>
-                        <div class="flex flex-wrap justify-end gap-1">
-                            ${h.sets.map((st, i) => `<span class="bg-white px-2 py-0.5 rounded border border-zinc-200 font-semibold text-zinc-800">S${i+1}: ${st}</span>`).join('')}
+                    <div class="py-2.5 border-b border-zinc-200 last:border-none flex justify-between items-center gap-2 text-sm">
+                        <span class="font-bold text-zinc-800 shrink-0">${h.date}</span>
+                        <div class="flex flex-wrap justify-end gap-1.5">
+                            ${h.sets.map((st, i) => `<span class="bg-white px-2.5 py-1 rounded-lg border border-zinc-300 font-bold text-zinc-900 text-xs">S${i+1}: ${st}</span>`).join('')}
                         </div>
                     </div>
-                `).join('') : '<span class="text-xs text-zinc-400">Nessuno storico precedente registrato.</span>';
+                `).join('') : '<span class="text-sm text-zinc-500">Nessuno storico precedente registrato.</span>';
 
                 const slide = document.createElement('div');
                 slide.className = 'workout-slide';
                 slide.innerHTML = `
-                    <div class="pro-card rounded-2xl p-6 space-y-5 border-t-4 ${allExSetsDone ? 'border-t-emerald-600' : 'border-t-orange-600'}">
+                    <div class="pro-card rounded-3xl p-5 sm:p-6 space-y-5 border-t-4 ${allExSetsDone ? 'border-t-emerald-600' : 'border-t-orange-600'}">
                         
-                        <!-- SPAZIO DOMINANTE AL NOME DELL'ESERCIZIO -->
-                        <div class="space-y-2 border-b border-zinc-100 pb-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[11px] font-extrabold uppercase tracking-widest text-orange-700">${ex.primaryMuscle}</span>
+                        <!-- NOME DELL'ESERCIZIO GRANDE E PROTAGONISTA -->
+                        <div class="space-y-2.5 border-b border-zinc-200 pb-4">
+                            <div class="flex justify-between items-center gap-2">
+                                <span class="text-xs font-extrabold uppercase tracking-widest text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1 rounded-lg">${ex.primaryMuscle}</span>
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-[11px] font-semibold text-zinc-400">TUT ${ex.tut || '2-0-1-1'}</span>
-                                    <span class="bg-zinc-100 text-zinc-800 text-xs font-bold px-2.5 py-1 rounded-md">
+                                    <span class="text-xs font-bold text-zinc-500">TUT ${ex.tut || '2-0-1-1'}</span>
+                                    <span class="bg-zinc-100 text-zinc-900 text-sm font-extrabold px-3 py-1 rounded-lg border border-zinc-200">
                                         Rec. ${ex.rest}s
                                     </span>
                                 </div>
                             </div>
-                            <h3 class="text-2xl md:text-3xl font-black text-zinc-950 tracking-tight leading-tight pt-1">${ex.name}</h3>
+                            <h3 class="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight leading-tight pt-1">${ex.name}</h3>
                         </div>
 
-                        <!-- Indicazioni Tecniche + Nota Personale Settaggio Macchina -->
-                        <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 space-y-2 text-xs">
-                            <div class="text-zinc-700 leading-relaxed">
-                                <strong class="text-zinc-950 uppercase text-[10px] tracking-wider block mb-0.5">Indicazione Tecnica</strong>
+                        <!-- Indicazioni Tecniche + Nota Settaggio Macchina -->
+                        <div class="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-3">
+                            <div class="text-base text-zinc-800 leading-relaxed font-medium">
+                                <strong class="text-zinc-950 uppercase text-xs font-extrabold tracking-wider block mb-1">Indicazione Tecnica</strong>
                                 ${ex.note}
                             </div>
-                            <div class="pt-2 border-t border-zinc-200/70 flex items-center space-x-2">
-                                <i class="fa-solid fa-sliders text-zinc-400 text-xs"></i>
-                                <input type="text" value="${pinNote}" onchange="saveExPinNote('${ex.id}', this.value)" placeholder="Annota settaggio macchina (es. Sedile 4, leva 2)..." class="w-full bg-transparent text-xs font-semibold text-zinc-900 placeholder-zinc-400 focus:outline-none">
+                            <div class="pt-2.5 border-t border-zinc-200 flex items-center space-x-2.5">
+                                <i class="fa-solid fa-sliders text-zinc-500 text-sm"></i>
+                                <input type="text" value="${pinNote}" onchange="saveExPinNote('${ex.id}', this.value)" placeholder="Annota settaggio (es. Sedile 4, foro 3)..." class="w-full bg-transparent text-sm font-bold text-zinc-950 placeholder-zinc-400 focus:outline-none">
                             </div>
                         </div>
 
                         <!-- Pulsante Storico Carichi -->
                         <div>
-                            <button type="button" onclick="toggleExHistory('${ex.id}')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-between border transition ${
-                                isHistoryOpen ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-white text-zinc-700 border-zinc-200'
+                            <button type="button" onclick="toggleExHistory('${ex.id}')" class="w-full h-12 px-4 rounded-xl text-sm font-bold flex items-center justify-between border transition ${
+                                isHistoryOpen ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-white text-zinc-800 border-zinc-300'
                             }">
                                 <span><i class="fa-solid fa-clock-rotate-left mr-2 text-orange-600"></i>Storico Carichi Sessioni Precedenti</span>
-                                <i class="fa-solid ${isHistoryOpen ? 'fa-chevron-up' : 'fa-chevron-down'} text-[10px]"></i>
+                                <i class="fa-solid ${isHistoryOpen ? 'fa-chevron-up' : 'fa-chevron-down'} text-xs"></i>
                             </button>
-                            <div class="${isHistoryOpen ? 'block' : 'hidden'} mt-2 p-3.5 rounded-xl bg-zinc-50 border border-zinc-200">
+                            <div class="${isHistoryOpen ? 'block' : 'hidden'} mt-2 p-4 rounded-xl bg-zinc-50 border border-zinc-200">
                                 ${historyDropdownHtml}
                             </div>
                         </div>
 
                         <!-- Intestazione Tabella Serie -->
-                        <div class="grid grid-cols-12 gap-2 px-3 pt-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                        <div class="grid grid-cols-12 gap-2 px-3 pt-1 text-xs font-extrabold uppercase tracking-wider text-zinc-500">
                             <div class="col-span-2">Serie</div>
                             <div class="col-span-3 text-center">Precedente</div>
-                            <div class="col-span-3 text-center">Carico (Kg)</div>
+                            <div class="col-span-3 text-center">Kg</div>
                             <div class="col-span-2 text-center">Reps</div>
-                            <div class="col-span-2 text-right">Stato</div>
+                            <div class="col-span-2 text-right">Esito</div>
                         </div>
 
                         <!-- Righe Serie -->
-                        <div class="space-y-2">${rowsHtml}</div>
+                        <div class="space-y-2.5">${rowsHtml}</div>
 
                         <!-- Azioni Serie -->
-                        <div class="flex justify-between items-center pt-3 border-t border-zinc-100">
+                        <div class="flex justify-between items-center pt-3 border-t border-zinc-200">
                             <div class="flex space-x-2">
-                                <button type="button" onclick="addSetToExercise('${ex.id}')" class="text-xs font-bold text-zinc-800 bg-zinc-100 px-3 py-1.5 rounded-lg border border-zinc-200">
-                                    + Aggiungi Serie
+                                <button type="button" onclick="addSetToExercise('${ex.id}')" class="h-11 text-sm font-bold text-zinc-900 bg-zinc-100 px-4 rounded-xl border border-zinc-300">
+                                    + Serie
                                 </button>
                                 ${setsLog.length > 1 ? `
-                                    <button type="button" onclick="removeLastSetFromExercise('${ex.id}')" class="text-xs font-semibold text-zinc-400 px-2 py-1.5">
+                                    <button type="button" onclick="removeLastSetFromExercise('${ex.id}')" class="h-11 text-sm font-semibold text-zinc-500 px-3">
                                         - Rimuovi
                                     </button>
                                 ` : ''}
                             </div>
-                            <button type="button" onclick="goToSlide(${exIdx + 1})" class="text-xs font-extrabold uppercase tracking-wider text-orange-700 flex items-center space-x-1.5">
+                            <button type="button" onclick="goToSlide(${exIdx + 1})" class="h-11 px-3 text-sm font-extrabold uppercase tracking-wider text-orange-700 flex items-center space-x-1.5">
                                 <span>Successivo</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -1513,20 +1503,20 @@
             const endSlide = document.createElement('div');
             endSlide.className = 'workout-slide';
             endSlide.innerHTML = `
-                <div class="pro-card rounded-2xl p-8 text-center space-y-6 border-t-4 border-t-emerald-600">
+                <div class="pro-card rounded-3xl p-8 text-center space-y-6 border-t-4 border-t-emerald-600">
                     <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center text-2xl mx-auto">
                         <i class="fa-solid fa-check"></i>
                     </div>
-                    <div class="space-y-1">
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Riepilogo Seduta</span>
-                        <h3 class="text-2xl font-black text-zinc-950">Sessione Completata</h3>
-                        <p class="text-xs text-zinc-500">Tutti gli esercizi di <strong>${currentWo.shortTitle}</strong> sono stati visionati.</p>
+                    <div class="space-y-1.5">
+                        <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-700">Riepilogo Seduta</span>
+                        <h3 class="text-3xl font-black text-zinc-950">Sessione Completata</h3>
+                        <p class="text-base text-zinc-600">Tutti gli esercizi di <strong>${currentWo.shortTitle}</strong> sono stati visionati.</p>
                     </div>
-                    <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 max-w-xs mx-auto">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Volume Totale Sollevato</span>
-                        <span class="text-2xl font-black text-zinc-950 mt-1 block" id="wo-end-slide-volume">0 kg</span>
+                    <div class="p-5 rounded-2xl bg-zinc-50 border border-zinc-200 max-w-xs mx-auto">
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-500 block">Volume Totale Sollevato</span>
+                        <span class="text-3xl font-black text-zinc-950 mt-1 block" id="wo-end-slide-volume">0 kg</span>
                     </div>
-                    <button type="button" onclick="finishAndSaveWorkout()" class="w-full py-4 rounded-xl bg-zinc-950 text-white font-bold text-sm shadow-sm active:scale-98 transition">
+                    <button type="button" onclick="finishAndSaveWorkout()" class="w-full h-14 rounded-2xl bg-zinc-950 text-white font-extrabold text-base shadow-sm active:scale-98 transition">
                         Archivia Carichi nello Storico e Chiudi
                     </button>
                 </div>
@@ -1535,7 +1525,6 @@
 
             recalculateWorkoutStats();
 
-            // Ripristina istantaneamente la posizione della slide attiva evitando il salto all'Esercizio 1!
             requestAnimationFrame(() => {
                 currentExerciseSlide = targetSlideToRestore;
                 if (carousel.children[currentExerciseSlide]) {
@@ -1609,7 +1598,7 @@
             const exObj = currentWo.exercises[exIdx];
             const setObj = u.workoutLogs[exId][setIdx];
             setObj.done = !setObj.done;
-            currentExerciseSlide = exIdx; // Mantiene bloccato l'indice sulla slide corrente
+            currentExerciseSlide = exIdx;
             saveState();
             renderWorkout(false);
 
@@ -1674,12 +1663,12 @@
         function renderSuperAdmin() {
             const list = document.getElementById('sa-pro-list');
             list.innerHTML = Object.values(masterState.professionals).map(p => `
-                <div class="py-3 flex justify-between items-center">
+                <div class="py-3.5 flex justify-between items-center">
                     <div>
-                        <span class="font-bold text-zinc-950">${p.studioName}</span>
-                        <span class="block text-zinc-500">Qualifica: ${p.role === 'nutri' ? 'Biologo Nutrizionista' : 'PT / Palestra'}</span>
+                        <span class="font-bold text-zinc-950 text-base">${p.studioName}</span>
+                        <span class="block text-zinc-500 text-xs mt-0.5">Qualifica: ${p.role === 'nutri' ? 'Biologo Nutrizionista' : 'PT / Palestra'}</span>
                     </div>
-                    <span class="bg-zinc-100 border border-zinc-200 px-3 py-1 rounded-lg font-mono font-bold text-zinc-900">${p.proCode}</span>
+                    <span class="bg-zinc-100 border border-zinc-300 px-3 py-1.5 rounded-lg font-mono font-bold text-zinc-900 text-sm">${p.proCode}</span>
                 </div>
             `).join('');
         }
@@ -1721,7 +1710,7 @@
             list.innerHTML = '';
 
             if (myClients.length === 0) {
-                list.innerHTML = `<div class="col-span-full p-4 rounded-xl bg-zinc-50 text-center text-xs text-zinc-500">Nessun paziente associato allo studio.</div>`;
+                list.innerHTML = `<div class="col-span-full p-4 rounded-xl bg-zinc-50 text-center text-sm text-zinc-500">Nessun paziente associato allo studio.</div>`;
                 document.getElementById('nutri-editor-box').classList.add('hidden');
                 return;
             }
@@ -1736,8 +1725,8 @@
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.onclick = () => { masterState.adminSelectedCode = u.code; renderAdminNutri(); };
-                btn.className = `p-3 rounded-xl border text-left transition ${isSel ? 'bg-zinc-950 text-white border-zinc-950 font-bold' : 'bg-white text-zinc-800 border-zinc-200 font-semibold'}`;
-                btn.innerHTML = `<span class="block text-[10px] opacity-70">${u.code}</span><span class="text-sm truncate block">${u.name}</span>`;
+                btn.className = `p-3.5 rounded-xl border text-left transition ${isSel ? 'bg-zinc-950 text-white border-zinc-950 font-bold' : 'bg-white text-zinc-800 border-zinc-200 font-semibold'}`;
+                btn.innerHTML = `<span class="block text-xs opacity-70">${u.code}</span><span class="text-base truncate block">${u.name}</span>`;
                 list.appendChild(btn);
             });
 
@@ -1754,7 +1743,7 @@
                 const b = document.createElement('button');
                 b.type = 'button';
                 b.onclick = () => { masterState.adminNutriDayIdx = idx; renderAdminNutri(); };
-                b.className = `py-2 rounded-lg text-xs font-bold border transition ${isDaySel ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-zinc-50 text-zinc-600 border-zinc-200'}`;
+                b.className = `py-2.5 rounded-xl text-sm font-bold border transition ${isDaySel ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-zinc-50 text-zinc-600 border-zinc-200'}`;
                 b.textContent = d.short;
                 dayTabs.appendChild(b);
             });
@@ -1772,48 +1761,48 @@
 
             activeDay.meals.forEach((meal, mIdx) => {
                 const card = document.createElement('div');
-                card.className = 'pro-card rounded-2xl p-5 space-y-3 border-l-4 border-l-emerald-600';
+                card.className = 'pro-card rounded-2xl p-5 space-y-3.5 border-l-4 border-l-emerald-600';
 
                 const ingInputsHtml = meal.ingredients.map((ing, iIdx) => `
-                    <div class="flex items-center space-x-1.5">
-                        <input type="text" value="${ing.item}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'item', this.value)" class="flex-1 min-w-0 bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-zinc-950">
-                        <input type="number" value="${ing.qty}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'qty', this.value)" class="w-16 bg-white border border-zinc-200 rounded-lg px-2 py-1.5 text-xs font-bold text-center text-zinc-950">
-                        <input type="text" value="${ing.unit || 'g'}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'unit', this.value)" class="w-12 bg-white border border-zinc-200 rounded-lg px-1.5 py-1.5 text-xs font-semibold text-center text-zinc-500">
-                        <button type="button" onclick="removeAdminMealIng(${mIdx}, ${iIdx})" class="w-7 h-7 rounded-lg bg-zinc-100 text-zinc-500 flex items-center justify-center shrink-0"><i class="fa-solid fa-xmark text-xs"></i></button>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" value="${ing.item}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'item', this.value)" class="flex-1 min-w-0 h-11 bg-white border border-zinc-300 rounded-xl px-3 text-sm font-semibold text-zinc-950">
+                        <input type="number" value="${ing.qty}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'qty', this.value)" class="w-20 h-11 bg-white border border-zinc-300 rounded-xl px-2 text-sm font-bold text-center text-zinc-950">
+                        <input type="text" value="${ing.unit || 'g'}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'unit', this.value)" class="w-14 h-11 bg-white border border-zinc-300 rounded-xl px-1.5 text-sm font-semibold text-center text-zinc-500">
+                        <button type="button" onclick="removeAdminMealIng(${mIdx}, ${iIdx})" class="w-10 h-11 rounded-xl bg-zinc-100 text-zinc-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-xmark text-sm"></i></button>
                     </div>
                 `).join('');
 
                 card.innerHTML = `
                     <div class="flex justify-between items-center gap-2">
                         <div class="flex items-center space-x-2 flex-1">
-                            <input type="text" value="${meal.time}" onchange="updateAdminMealField(${mIdx}, 'time', this.value)" class="w-16 bg-zinc-100 rounded-lg px-2 py-1 text-xs font-bold text-zinc-900 text-center">
-                            <input type="text" value="${meal.type}" onchange="updateAdminMealField(${mIdx}, 'type', this.value)" class="flex-1 bg-zinc-50 border border-zinc-200 rounded-lg px-2.5 py-1 text-xs font-bold uppercase text-zinc-800">
+                            <input type="text" value="${meal.time}" onchange="updateAdminMealField(${mIdx}, 'time', this.value)" class="w-20 h-10 bg-zinc-100 rounded-lg px-2 text-sm font-bold text-zinc-900 text-center">
+                            <input type="text" value="${meal.type}" onchange="updateAdminMealField(${mIdx}, 'type', this.value)" class="flex-1 h-10 bg-zinc-50 border border-zinc-200 rounded-lg px-3 text-sm font-bold uppercase text-zinc-800">
                         </div>
-                        <button type="button" onclick="deleteAdminMeal(${mIdx})" class="text-xs font-semibold text-red-600 px-2 py-1">Rimuovi</button>
+                        <button type="button" onclick="deleteAdminMeal(${mIdx})" class="text-sm font-semibold text-red-600 px-2 py-1">Rimuovi</button>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-2 text-xs">
+                    <div class="grid grid-cols-1 gap-2.5 text-sm">
                         <div>
-                            <label class="font-semibold text-zinc-400 text-[10px] uppercase">Denominazione Piatto</label>
-                            <input type="text" value="${meal.title}" onchange="updateAdminMealField(${mIdx}, 'title', this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-sm text-zinc-950 mt-0.5">
+                            <label class="font-bold text-zinc-500 text-xs uppercase">Denominazione Piatto</label>
+                            <input type="text" value="${meal.title}" onchange="updateAdminMealField(${mIdx}, 'title', this.value)" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-base text-zinc-950 mt-1">
                         </div>
                         <div>
-                            <label class="font-semibold text-zinc-400 text-[10px] uppercase">Ripartizione Macronutrienti</label>
-                            <input type="text" value="${meal.macros}" onchange="updateAdminMealField(${mIdx}, 'macros', this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-1.5 font-semibold text-emerald-700 mt-0.5">
+                            <label class="font-bold text-zinc-500 text-xs uppercase">Ripartizione Macronutrienti</label>
+                            <input type="text" value="${meal.macros}" onchange="updateAdminMealField(${mIdx}, 'macros', this.value)" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-semibold text-emerald-700 mt-1">
                         </div>
                     </div>
 
-                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 space-y-2">
+                    <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 space-y-2.5">
                         <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-bold uppercase text-zinc-500">Alimenti e Grammature</span>
-                            <button type="button" onclick="addAdminMealIng(${mIdx})" class="text-[11px] font-bold text-emerald-700">+ Aggiungi Voce</button>
+                            <span class="text-xs font-extrabold uppercase text-zinc-500">Alimenti e Grammature</span>
+                            <button type="button" onclick="addAdminMealIng(${mIdx})" class="text-xs font-extrabold text-emerald-700">+ Aggiungi Voce</button>
                         </div>
-                        <div class="space-y-1.5">${ingInputsHtml}</div>
+                        <div class="space-y-2">${ingInputsHtml}</div>
                     </div>
 
                     <div>
-                        <label class="font-semibold text-zinc-400 text-[10px] uppercase block mb-1">Procedimento (1 passaggio per riga)</label>
-                        <textarea rows="2" onchange="updateAdminMealSteps(${mIdx}, this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl p-2.5 text-xs text-zinc-800 leading-relaxed">${(meal.steps || []).join('\n')}</textarea>
+                        <label class="font-bold text-zinc-500 text-xs uppercase block mb-1">Procedimento (1 passaggio per riga)</label>
+                        <textarea rows="3" onchange="updateAdminMealSteps(${mIdx}, this.value)" class="w-full bg-zinc-50 border border-zinc-300 rounded-xl p-3 text-sm text-zinc-800 leading-relaxed">${(meal.steps || []).join('\n')}</textarea>
                     </div>
                 `;
                 mealsList.appendChild(card);
@@ -1923,7 +1912,7 @@
             list.innerHTML = '';
 
             if (myClients.length === 0) {
-                list.innerHTML = `<div class="col-span-full p-4 rounded-xl bg-zinc-50 text-center text-xs text-zinc-500">Nessun atleta associato al centro.</div>`;
+                list.innerHTML = `<div class="col-span-full p-4 rounded-xl bg-zinc-50 text-center text-sm text-zinc-500">Nessun atleta associato al centro.</div>`;
                 document.getElementById('pt-editor-box').classList.add('hidden');
                 return;
             }
@@ -1938,8 +1927,8 @@
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.onclick = () => { masterState.adminSelectedCode = u.code; renderAdminPt(); };
-                btn.className = `p-3 rounded-xl border text-left transition ${isSel ? 'bg-zinc-950 text-white border-zinc-950 font-bold' : 'bg-white text-zinc-800 border-zinc-200 font-semibold'}`;
-                btn.innerHTML = `<span class="block text-[10px] opacity-70">${u.code}</span><span class="text-sm truncate block">${u.name}</span>`;
+                btn.className = `p-3.5 rounded-xl border text-left transition ${isSel ? 'bg-zinc-950 text-white border-zinc-950 font-bold' : 'bg-white text-zinc-800 border-zinc-200 font-semibold'}`;
+                btn.innerHTML = `<span class="block text-xs opacity-70">${u.code}</span><span class="text-base truncate block">${u.name}</span>`;
                 list.appendChild(btn);
             });
 
@@ -1953,8 +1942,8 @@
                 const b = document.createElement('button');
                 b.type = 'button';
                 b.onclick = () => { masterState.adminPtDayIdx = idx; renderAdminPt(); };
-                b.className = `py-2.5 px-2 rounded-xl text-xs font-bold border transition ${isWoSel ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-zinc-50 text-zinc-600 border-zinc-200'}`;
-                b.innerHTML = `<span class="block text-[10px] opacity-70">${wo.dayLabel}</span><span>${wo.shortTitle}</span>`;
+                b.className = `py-3 px-2 rounded-xl text-sm font-bold border transition ${isWoSel ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-zinc-50 text-zinc-600 border-zinc-200'}`;
+                b.innerHTML = `<span class="block text-xs opacity-70">${wo.dayLabel}</span><span>${wo.shortTitle}</span>`;
                 dayTabs.appendChild(b);
             });
 
@@ -1968,52 +1957,52 @@
 
             activeWo.exercises.forEach((ex, exIdx) => {
                 const setsHtml = (ex.defaultSets || []).map((s, sIdx) => `
-                    <div class="grid grid-cols-10 gap-1.5 items-center text-xs">
-                        <span class="col-span-2 font-bold text-zinc-500">Serie ${sIdx + 1}</span>
-                        <select onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'type', this.value)" class="col-span-2 bg-white border border-zinc-200 rounded-lg py-1.5 px-1 font-bold text-center">
+                    <div class="grid grid-cols-10 gap-2 items-center text-sm">
+                        <span class="col-span-2 font-bold text-zinc-600">Serie ${sIdx + 1}</span>
+                        <select onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'type', this.value)" class="col-span-2 h-11 bg-white border border-zinc-300 rounded-xl px-1 font-bold text-center">
                             <option value="W" ${s.type === 'W' ? 'selected' : ''}>W (Risc)</option>
                             <option value="N" ${s.type === 'N' ? 'selected' : ''}>N (Norm)</option>
                             <option value="D" ${s.type === 'D' ? 'selected' : ''}>D (Drop)</option>
                         </select>
-                        <input type="number" step="0.5" value="${s.kg}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'kg', this.value)" class="col-span-3 bg-white border border-zinc-200 rounded-lg py-1.5 px-2 font-bold text-center">
-                        <input type="number" value="${s.reps}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'reps', this.value)" class="col-span-2 bg-white border border-zinc-200 rounded-lg py-1.5 px-2 font-bold text-center">
-                        <button type="button" onclick="removeAdminExSet(${exIdx}, ${sIdx})" class="col-span-1 text-zinc-400 flex justify-center"><i class="fa-solid fa-xmark"></i></button>
+                        <input type="number" step="0.5" value="${s.kg}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'kg', this.value)" class="col-span-3 h-11 bg-white border border-zinc-300 rounded-xl px-2 font-bold text-center">
+                        <input type="number" value="${s.reps}" onchange="updateAdminExSet(${exIdx}, ${sIdx}, 'reps', this.value)" class="col-span-2 h-11 bg-white border border-zinc-300 rounded-xl px-2 font-bold text-center">
+                        <button type="button" onclick="removeAdminExSet(${exIdx}, ${sIdx})" class="col-span-1 text-zinc-500 flex justify-center"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 `).join('');
 
                 const card = document.createElement('div');
-                card.className = 'pro-card rounded-2xl p-5 space-y-3 border-l-4 border-l-orange-600';
+                card.className = 'pro-card rounded-2xl p-5 space-y-3.5 border-l-4 border-l-orange-600';
                 card.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold uppercase text-orange-700">Esercizio ${exIdx + 1}</span>
-                        <button type="button" onclick="deleteAdminExercise(${exIdx})" class="text-xs font-semibold text-red-600">Rimuovi</button>
+                        <span class="text-xs font-extrabold uppercase text-orange-700">Esercizio ${exIdx + 1}</span>
+                        <button type="button" onclick="deleteAdminExercise(${exIdx})" class="text-sm font-semibold text-red-600">Rimuovi</button>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="grid grid-cols-2 gap-2.5 text-sm">
                         <div class="col-span-2">
-                            <label class="font-semibold text-zinc-400 text-[10px] uppercase">Nome Esercizio</label>
-                            <input type="text" value="${ex.name}" onchange="updateAdminExField(${exIdx}, 'name', this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-sm text-zinc-950 mt-0.5">
+                            <label class="font-bold text-zinc-500 text-xs uppercase">Nome Esercizio</label>
+                            <input type="text" value="${ex.name}" onchange="updateAdminExField(${exIdx}, 'name', this.value)" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-base text-zinc-950 mt-1">
                         </div>
                         <div>
-                            <label class="font-semibold text-zinc-400 text-[10px] uppercase">Distretto Muscolare</label>
-                            <input type="text" value="${ex.primaryMuscle}" onchange="updateAdminExField(${exIdx}, 'primaryMuscle', this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950 mt-0.5">
+                            <label class="font-bold text-zinc-500 text-xs uppercase">Distretto Muscolare</label>
+                            <input type="text" value="${ex.primaryMuscle}" onchange="updateAdminExField(${exIdx}, 'primaryMuscle', this.value)" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-950 mt-1">
                         </div>
                         <div>
-                            <label class="font-semibold text-zinc-400 text-[10px] uppercase">Recupero (s)</label>
-                            <input type="number" value="${ex.rest}" onchange="updateAdminExField(${exIdx}, 'rest', this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-bold text-zinc-950 mt-0.5">
+                            <label class="font-bold text-zinc-500 text-xs uppercase">Recupero (s)</label>
+                            <input type="number" value="${ex.rest}" onchange="updateAdminExField(${exIdx}, 'rest', this.value)" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-bold text-zinc-950 mt-1">
                         </div>
                         <div class="col-span-2">
-                            <label class="font-semibold text-zinc-400 text-[10px] uppercase">Indicazioni Tecniche</label>
-                            <input type="text" value="${ex.note}" onchange="updateAdminExField(${exIdx}, 'note', this.value)" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 font-medium text-zinc-900 mt-0.5">
+                            <label class="font-bold text-zinc-500 text-xs uppercase">Indicazioni Tecniche</label>
+                            <input type="text" value="${ex.note}" onchange="updateAdminExField(${exIdx}, 'note', this.value)" class="w-full h-11 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 font-medium text-zinc-900 mt-1">
                         </div>
                     </div>
 
-                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 space-y-2">
+                    <div class="bg-zinc-50 p-3.5 rounded-xl border border-zinc-200 space-y-2.5">
                         <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-bold uppercase text-zinc-500">Serie (Tipo • Kg • Reps)</span>
-                            <button type="button" onclick="addAdminExSet(${exIdx})" class="text-[11px] font-bold text-orange-700">+ Serie</button>
+                            <span class="text-xs font-extrabold uppercase text-zinc-500">Serie (Tipo • Kg • Reps)</span>
+                            <button type="button" onclick="addAdminExSet(${exIdx})" class="text-xs font-extrabold text-orange-700">+ Serie</button>
                         </div>
-                        <div class="space-y-1.5">${setsHtml}</div>
+                        <div class="space-y-2">${setsHtml}</div>
                     </div>
                 `;
                 exList.appendChild(card);
@@ -2142,7 +2131,7 @@
         }
 
         // =========================================================================
-        // 7. MODULO A: NUTRIZIONE PAZIENTE
+        // 7. MODULO A: NUTRIZIONE PAZIENTE (TESTI MAGGIORATI E LEGGIBILI)
         // =========================================================================
         function getActiveMealData(meal) {
             const u = currentUser();
@@ -2165,11 +2154,11 @@
                 btn.type = 'button';
                 btn.onclick = () => { currentDayIndex = idx; renderPlan(); };
                 btn.className = `py-3 rounded-xl flex flex-col items-center justify-center transition ${
-                    isSelected ? 'bg-zinc-950 text-white font-extrabold shadow-sm' : 'bg-white text-zinc-500 border border-zinc-200 font-semibold'
+                    isSelected ? 'bg-zinc-950 text-white font-black shadow-sm' : 'bg-white text-zinc-600 border border-zinc-200 font-bold'
                 }`;
                 btn.innerHTML = `
-                    <span class="text-xs">${day.short}</span>
-                    <span class="mt-1.5 w-1.5 h-1.5 rounded-full ${
+                    <span class="text-sm">${day.short}</span>
+                    <span class="mt-1.5 w-2 h-2 rounded-full ${
                         day.workout ? 'bg-orange-500' : (isSelected ? 'bg-emerald-400' : 'bg-zinc-200')
                     }"></span>
                 `;
@@ -2213,25 +2202,25 @@
             day.meals.forEach(rawMeal => {
                 const meal = getActiveMealData(rawMeal);
                 const isDone = !!u.completedMeals[meal.id];
-                const isOffPlan = !!u.offPlanMeals[meal.id];
+                const isOffPlan = !!u.offPlanMeals[m.id];
                 const isNext = meal.id === nextMealId;
                 const isExpandedAnyway = !!expandedDoneMeals[meal.id];
 
                 if ((isDone || isOffPlan) && !isExpandedAnyway) {
                     const compactBar = document.createElement('div');
-                    compactBar.className = 'w-full bg-zinc-100 border border-zinc-200 rounded-xl px-4 py-3 flex items-center justify-between gap-2 overflow-hidden';
+                    compactBar.className = 'w-full bg-zinc-100 border border-zinc-200 rounded-2xl px-4 py-3.5 flex items-center justify-between gap-2 overflow-hidden';
                     compactBar.innerHTML = `
-                        <div onclick="toggleExpandDone('${meal.id}')" class="flex items-center space-x-3 min-w-0 flex-1 cursor-pointer">
-                            <span class="w-6 h-6 rounded-md bg-emerald-600 text-white flex items-center justify-center text-[10px] shrink-0">
+                        <div onclick="toggleExpandDone('${meal.id}')" class="flex items-center space-x-3.5 min-w-0 flex-1 cursor-pointer">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs shrink-0">
                                 <i class="fa-solid fa-check"></i>
                             </span>
                             <div class="min-w-0 flex-1">
-                                <span class="text-[10px] font-bold uppercase text-zinc-400 block truncate">${meal.time} • ${meal.type}</span>
-                                <span class="text-sm font-bold text-zinc-600 line-through block truncate">${isOffPlan ? 'Pasto Fuori Programma' : meal.title}</span>
+                                <span class="text-xs font-extrabold uppercase text-zinc-500 block truncate">${meal.time} • ${meal.type}</span>
+                                <span class="text-base font-bold text-zinc-700 line-through block truncate">${isOffPlan ? 'Pasto Fuori Programma' : meal.title}</span>
                             </div>
                         </div>
-                        <button type="button" onclick="uncheckMeal('${meal.id}')" class="w-8 h-8 rounded-lg bg-white text-zinc-500 border border-zinc-200 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-rotate-left text-xs"></i>
+                        <button type="button" onclick="uncheckMeal('${meal.id}')" class="w-10 h-10 rounded-xl bg-white text-zinc-600 border border-zinc-300 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-rotate-left text-sm"></i>
                         </button>
                     `;
                     mealsContainer.appendChild(compactBar);
@@ -2242,72 +2231,72 @@
                 const isSwapOpen = !!openSwaps[meal.id];
 
                 const card = document.createElement('div');
-                card.className = `pro-card rounded-2xl p-5 transition-all overflow-hidden ${isNext ? 'border-l-4 border-l-emerald-600' : ''}`;
+                card.className = `pro-card rounded-3xl p-5 sm:p-6 transition-all overflow-hidden ${isNext ? 'border-l-4 border-l-emerald-600' : ''}`;
                 
                 const ingRows = meal.ingredients.map(ing => `
-                    <li class="flex justify-between items-center py-2.5 border-b border-zinc-100 last:border-none gap-2">
-                        <span class="text-sm text-zinc-800 font-semibold min-w-0 break-words">${ing.item}</span>
-                        <span class="text-sm font-extrabold text-zinc-950 bg-zinc-50 border border-zinc-200 px-2.5 py-0.5 rounded-md shrink-0">${ing.qty}${ing.unit || ''}</span>
+                    <li class="flex justify-between items-center py-3 border-b border-zinc-200/70 last:border-none gap-3">
+                        <span class="text-[17px] text-zinc-900 font-semibold min-w-0 break-words leading-snug">${ing.item}</span>
+                        <span class="text-[17px] font-black text-zinc-950 bg-white border border-zinc-300 px-3 py-1 rounded-xl shrink-0 shadow-sm">${ing.qty}${ing.unit || ''}</span>
                     </li>
                 `).join('');
 
                 const stepsHtml = (meal.steps || []).map((s, idx) => `
-                    <div class="flex items-start space-x-3 mb-2.5 last:mb-0">
-                        <span class="w-5 h-5 rounded-full bg-zinc-100 text-zinc-800 font-extrabold text-[10px] flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
-                        <p class="text-sm text-zinc-700 leading-relaxed">${s}</p>
+                    <div class="flex items-start space-x-3.5 mb-3 last:mb-0">
+                        <span class="w-6 h-6 rounded-full bg-zinc-200 text-zinc-900 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
+                        <p class="text-base text-zinc-800 leading-relaxed font-medium">${s}</p>
                     </div>
                 `).join('');
 
                 const alternatives = interactiveSwaps[meal.swapCat] || [];
                 const swapsHtml = alternatives.map((alt, idx) => `
-                    <div onclick="applyMealSwap('${meal.id}', ${idx})" class="p-3 rounded-xl bg-white border border-zinc-200 flex justify-between items-center gap-2 cursor-pointer hover:border-zinc-400 transition">
+                    <div onclick="applyMealSwap('${meal.id}', ${idx})" class="p-4 rounded-xl bg-white border border-zinc-300 flex justify-between items-center gap-3 cursor-pointer hover:border-zinc-500 transition">
                         <div class="min-w-0 flex-1">
-                            <div class="text-xs font-extrabold text-zinc-950 leading-snug">${alt.title}</div>
-                            <div class="text-[11px] font-semibold text-emerald-700 mt-0.5">${alt.macros}</div>
+                            <div class="text-base font-extrabold text-zinc-950 leading-snug">${alt.title}</div>
+                            <div class="text-sm font-bold text-emerald-700 mt-1">${alt.macros}</div>
                         </div>
-                        <span class="px-2.5 py-1 rounded-lg bg-zinc-950 text-white font-bold text-[11px] shrink-0">Applica</span>
+                        <span class="px-3.5 py-2 rounded-xl bg-zinc-950 text-white font-bold text-xs shrink-0">Applica</span>
                     </div>
                 `).join('');
 
                 card.innerHTML = `
-                    <div class="flex justify-between items-start gap-2">
+                    <div class="flex justify-between items-start gap-3">
                         <div class="min-w-0 flex-1">
-                            <div class="flex items-center flex-wrap gap-1.5">
-                                <span class="text-xs font-extrabold text-zinc-950 bg-zinc-100 px-2.5 py-0.5 rounded-md">${meal.time}</span>
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">${meal.type}</span>
-                                ${isNext ? '<span class="text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded">Prossimo</span>' : ''}
-                                ${(isDone || isOffPlan) ? `<button type="button" onclick="toggleExpandDone('${meal.id}')" class="text-xs font-bold text-zinc-400 underline">Chiudi</button>` : ''}
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="text-sm font-black text-zinc-950 bg-zinc-100 border border-zinc-200 px-3 py-1 rounded-lg">${meal.time}</span>
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-500">${meal.type}</span>
+                                ${isNext ? '<span class="text-xs font-extrabold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-lg">Prossimo</span>' : ''}
+                                ${(isDone || isOffPlan) ? `<button type="button" onclick="toggleExpandDone('${meal.id}')" class="text-xs font-bold text-zinc-500 underline">Chiudi</button>` : ''}
                             </div>
-                            <h3 class="text-lg font-black text-zinc-950 mt-2 leading-snug break-words">${meal.title}</h3>
-                            <p class="text-xs font-semibold text-zinc-400 mt-0.5">${meal.macros}</p>
+                            <h3 class="text-xl sm:text-2xl font-black text-zinc-950 mt-3 leading-tight break-words">${meal.title}</h3>
+                            <p class="text-sm font-bold text-zinc-500 mt-1">${meal.macros}</p>
                         </div>
-                        <button type="button" onclick="toggleMeal('${meal.id}')" class="w-11 h-11 rounded-xl flex items-center justify-center border transition shrink-0 ${
+                        <button type="button" onclick="toggleMeal('${meal.id}')" class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition shrink-0 ${
                             isDone ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-zinc-300 text-zinc-300'
                         }">
-                            <i class="fa-solid fa-check text-base"></i>
+                            <i class="fa-solid fa-check text-xl"></i>
                         </button>
                     </div>
 
-                    <ul class="mt-4 bg-zinc-50/70 rounded-xl px-3.5 py-1 border border-zinc-200/70">${ingRows}</ul>
+                    <ul class="mt-4 bg-zinc-50 rounded-2xl px-4 py-1.5 border border-zinc-200">${ingRows}</ul>
 
-                    <div class="mt-4 grid grid-cols-2 gap-2">
-                        <button type="button" onclick="toggleRecipe('${meal.id}')" class="py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 border transition ${
-                            isRecipeOpen ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-white text-zinc-800 border-zinc-200'
+                    <div class="mt-4 grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="toggleRecipe('${meal.id}')" class="h-12 px-4 rounded-xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
+                            isRecipeOpen ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-white text-zinc-800 border-zinc-300'
                         }">
                             <span>Preparazione</span>
                         </button>
-                        <button type="button" onclick="toggleSwap('${meal.id}')" class="py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 border transition ${
-                            isSwapOpen ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-zinc-50 text-zinc-700 border-zinc-200'
+                        <button type="button" onclick="toggleSwap('${meal.id}')" class="h-12 px-4 rounded-xl text-sm font-extrabold flex items-center justify-center space-x-2 border transition ${
+                            isSwapOpen ? 'bg-zinc-950 text-white border-zinc-950' : 'bg-zinc-50 text-zinc-800 border-zinc-300'
                         }">
                             <span>Sostituzioni</span>
                         </button>
                     </div>
 
-                    <div class="${isRecipeOpen ? 'block' : 'hidden'} mt-4 pt-4 border-t border-zinc-100">
+                    <div class="${isRecipeOpen ? 'block' : 'hidden'} mt-4 pt-4 border-t border-zinc-200">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Note di Preparazione</span>
+                            <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500">Note di Preparazione</span>
                             ${meal.timer > 0 ? `
-                                <button type="button" onclick="startMealTimerById('${meal.id}')" class="bg-zinc-950 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg flex items-center space-x-1.5">
+                                <button type="button" onclick="startMealTimerById('${meal.id}')" class="h-10 bg-zinc-950 text-white text-xs font-bold px-3.5 rounded-xl flex items-center space-x-2">
                                     <i class="fa-regular fa-clock text-emerald-400"></i>
                                     <span>Timer ${meal.timer} min</span>
                                 </button>
@@ -2316,15 +2305,15 @@
                         ${stepsHtml}
                     </div>
 
-                    <div class="${isSwapOpen ? 'block' : 'hidden'} mt-4 p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-2">
+                    <div class="${isSwapOpen ? 'block' : 'hidden'} mt-4 p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-2.5">
                         <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Alternative Iso-Caloriche</span>
-                            ${meal.isSwapped ? `<button type="button" onclick="resetMealSwap('${meal.id}')" class="text-[11px] font-bold text-red-600 underline">Ripristina</button>` : ''}
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-600">Alternative Iso-Caloriche</span>
+                            ${meal.isSwapped ? `<button type="button" onclick="resetMealSwap('${meal.id}')" class="text-xs font-bold text-red-600 underline">Ripristina</button>` : ''}
                         </div>
                         ${swapsHtml}
                         
                         <div class="pt-2 border-t border-zinc-200">
-                            <button type="button" onclick="toggleOffPlan('${meal.id}')" class="w-full py-2 px-3 rounded-lg bg-white border border-zinc-300 text-zinc-700 text-xs font-bold">
+                            <button type="button" onclick="toggleOffPlan('${meal.id}')" class="w-full h-11 px-3 rounded-xl bg-white border border-zinc-300 text-zinc-800 text-sm font-bold">
                                 Registra come Pasto Fuori Programma
                             </button>
                         </div>
@@ -2394,8 +2383,8 @@
         // SPESA
         function setShopRange(days) {
             shopRangeDays = days;
-            document.getElementById('range-3').className = days === 3 ? 'py-2 px-3 rounded-lg text-xs font-bold bg-zinc-950 text-white transition' : 'py-2 px-3 rounded-lg text-xs font-semibold bg-white text-zinc-700 border border-zinc-200 transition';
-            document.getElementById('range-7').className = days === 7 ? 'py-2 px-3 rounded-lg text-xs font-bold bg-zinc-950 text-white transition' : 'py-2 px-3 rounded-lg text-xs font-semibold bg-white text-zinc-700 border border-zinc-200 transition';
+            document.getElementById('range-3').className = days === 3 ? 'h-11 px-3 rounded-xl text-sm font-bold bg-zinc-950 text-white transition' : 'h-11 px-3 rounded-xl text-sm font-semibold bg-white text-zinc-700 border border-zinc-300 transition';
+            document.getElementById('range-7').className = days === 7 ? 'h-11 px-3 rounded-xl text-sm font-bold bg-zinc-950 text-white transition' : 'h-11 px-3 rounded-xl text-sm font-semibold bg-white text-zinc-700 border border-zinc-300 transition';
             renderPantry();
         }
 
@@ -2422,7 +2411,7 @@
             currentPantryFilter = filter;
             ['missing', 'home', 'all'].forEach(f => {
                 const btn = document.getElementById(`filter-${f}`);
-                btn.className = f === filter ? 'py-2 text-xs font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition' : 'py-2 text-xs font-semibold rounded-lg text-zinc-500 transition';
+                btn.className = f === filter ? 'py-2.5 text-sm font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition' : 'py-2.5 text-sm font-semibold rounded-lg text-zinc-600 transition';
             });
             renderPantry();
         }
@@ -2452,30 +2441,30 @@
                     let needBadge = '';
                     if (need && need.qty > 0) {
                         let packHint = item.packSize ? ` (${Math.ceil(need.qty / item.packSize)} ${item.packName})` : '';
-                        needBadge = `<span class="block text-xs font-semibold text-emerald-700 mt-0.5">Richiesti: ${need.qty}${need.unit}${packHint}</span>`;
+                        needBadge = `<span class="block text-sm font-bold text-emerald-700 mt-0.5">Richiesti: ${need.qty}${need.unit}${packHint}</span>`;
                     }
 
                     return `
-                        <div onclick="togglePantryItem('${item.id}')" class="flex items-center justify-between py-3 border-b border-zinc-100 last:border-none cursor-pointer gap-2">
-                            <div class="flex items-start space-x-3 min-w-0 flex-1">
-                                <div class="w-5 h-5 rounded flex items-center justify-center border mt-0.5 shrink-0 ${
+                        <div onclick="togglePantryItem('${item.id}')" class="flex items-center justify-between py-3.5 border-b border-zinc-100 last:border-none cursor-pointer gap-3">
+                            <div class="flex items-start space-x-3.5 min-w-0 flex-1">
+                                <div class="w-6 h-6 rounded-md flex items-center justify-center border-2 mt-0.5 shrink-0 ${
                                     item.inStock ? 'bg-zinc-950 border-zinc-950 text-white' : 'bg-white border-zinc-300'
                                 }">
-                                    ${item.inStock ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                                    ${item.inStock ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <span class="text-sm font-semibold block truncate ${item.inStock ? 'text-zinc-400 line-through' : 'text-zinc-950'}">${item.name}</span>
+                                    <span class="text-base font-semibold block truncate ${item.inStock ? 'text-zinc-400 line-through' : 'text-zinc-950'}">${item.name}</span>
                                     ${!item.inStock ? needBadge : ''}
                                 </div>
                             </div>
-                            <span class="text-[11px] font-bold px-2 py-0.5 rounded shrink-0 ${item.inStock ? 'bg-zinc-100 text-zinc-600' : 'bg-emerald-50 text-emerald-800'}">
-                                ${item.inStock ? 'Disponibile' : 'Acquista'}
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg shrink-0 ${item.inStock ? 'bg-zinc-100 text-zinc-600' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}">
+                                ${item.inStock ? 'In casa' : 'Acquista'}
                             </span>
                         </div>
                     `;
                 }).join('');
 
-                section.innerHTML = `<h3 class="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-2">${cat}</h3><div>${itemsHtml}</div>`;
+                section.innerHTML = `<h3 class="text-xs font-extrabold uppercase tracking-widest text-zinc-500 mb-2">${cat}</h3><div>${itemsHtml}</div>`;
                 container.appendChild(section);
             });
         }
@@ -2521,7 +2510,7 @@
         function setGuideSubTab(sub) {
             ['out', 'prep', 'sos'].forEach(s => {
                 document.getElementById(`guide-section-${s}`).classList.toggle('hidden', s !== sub);
-                document.getElementById(`gsub-${s}`).className = s === sub ? 'py-2 text-xs font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition' : 'py-2 text-xs font-semibold rounded-lg text-zinc-600 transition';
+                document.getElementById(`gsub-${s}`).className = s === sub ? 'py-2.5 text-sm font-bold rounded-lg bg-white text-zinc-950 shadow-sm transition' : 'py-2.5 text-sm font-semibold rounded-lg text-zinc-600 transition';
             });
             if (sub === 'prep') renderPrepChecklist();
         }
@@ -2536,14 +2525,14 @@
                     <div onclick="togglePrepStep('${step.id}')" class="p-4 rounded-xl border transition cursor-pointer flex items-start space-x-3.5 ${
                         done ? 'bg-zinc-50 border-zinc-200 opacity-60' : 'bg-white border-zinc-200'
                     }">
-                        <div class="w-5 h-5 rounded flex items-center justify-center border mt-0.5 shrink-0 ${
+                        <div class="w-6 h-6 rounded-md flex items-center justify-center border-2 mt-0.5 shrink-0 ${
                             done ? 'bg-zinc-950 border-zinc-950 text-white' : 'border-zinc-300'
                         }">
-                            ${done ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                            ${done ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
                         </div>
                         <div class="min-w-0">
-                            <h4 class="text-sm font-bold text-zinc-950 ${done ? 'line-through' : ''}">${step.title}</h4>
-                            <p class="text-xs text-zinc-600 mt-1 leading-relaxed">${step.desc}</p>
+                            <h4 class="text-base font-extrabold text-zinc-950 ${done ? 'line-through' : ''}">${step.title}</h4>
+                            <p class="text-sm text-zinc-600 mt-1 leading-relaxed">${step.desc}</p>
                         </div>
                     </div>
                 `;
@@ -2572,7 +2561,7 @@
         function renderWeightChart(list) {
             const container = document.getElementById('weight-chart-container');
             if (list.length < 2) {
-                container.innerHTML = `<span class="text-xs text-zinc-400 font-medium text-center">Inserire una seconda rilevazione per generare il grafico</span>`;
+                container.innerHTML = `<span class="text-sm text-zinc-500 font-medium text-center">Inserire una seconda rilevazione per generare il grafico</span>`;
                 return;
             }
             const vals = list.map(w => w.val);
@@ -2585,7 +2574,7 @@
                 const y = height - ((w.val - minW) / (maxW - minW || 1)) * (height - 20) - 10;
                 return `${x},${y}`;
             }).join(' ');
-            container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible"><polyline fill="none" stroke="#09090B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${points}" /></svg>`;
+            container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible"><polyline fill="none" stroke="#09090B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${points}" /></svg>`;
         }
 
         function renderWeights() {
@@ -2605,23 +2594,23 @@
             document.getElementById('nsv-container').innerHTML = nonScaleVictoriesList.map(n => {
                 const done = !!u.nsvDone[n.id];
                 return `
-                    <div onclick="toggleNsv('${n.id}')" class="p-3 rounded-xl border flex items-center justify-between cursor-pointer gap-2 transition ${
-                        done ? 'bg-emerald-50/70 border-emerald-200 text-zinc-950 font-bold' : 'bg-zinc-50 border-zinc-200 text-zinc-600 font-medium'
+                    <div onclick="toggleNsv('${n.id}')" class="p-3.5 rounded-xl border flex items-center justify-between cursor-pointer gap-3 transition ${
+                        done ? 'bg-emerald-50/70 border-emerald-300 text-zinc-950 font-bold' : 'bg-zinc-50 border-zinc-200 text-zinc-700 font-medium'
                     }">
-                        <span class="text-xs min-w-0">${n.label}</span>
-                        <div class="w-5 h-5 rounded flex items-center justify-center border shrink-0 ${
+                        <span class="text-sm min-w-0 leading-snug">${n.label}</span>
+                        <div class="w-6 h-6 rounded-md flex items-center justify-center border-2 shrink-0 ${
                             done ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-white border-zinc-300'
                         }">
-                            ${done ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                            ${done ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
                         </div>
                     </div>
                 `;
             }).join('');
 
             document.getElementById('weight-history').innerHTML = [...list].reverse().map(w => `
-                <div class="py-2.5 flex justify-between items-center">
-                    <span class="text-zinc-500 font-medium text-xs">${w.date}</span>
-                    <span class="font-bold text-zinc-950 text-sm">${w.val.toFixed(1)} kg</span>
+                <div class="py-3 flex justify-between items-center">
+                    <span class="text-zinc-600 font-semibold text-sm">${w.date}</span>
+                    <span class="font-black text-zinc-950 text-base">${w.val.toFixed(1)} kg</span>
                 </div>
             `).join('');
         }
@@ -2701,8 +2690,8 @@
                 document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab);
                 const btn = document.getElementById(`tab-${t}`);
                 btn.className = t === tab 
-                    ? 'flex flex-col items-center space-y-1 text-zinc-950 py-1 rounded-xl transition relative'
-                    : 'flex flex-col items-center space-y-1 text-zinc-400 py-1 rounded-xl transition relative';
+                    ? 'flex flex-col items-center space-y-1 text-zinc-950 py-1.5 rounded-xl transition relative'
+                    : 'flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition relative';
             });
             if (tab === 'plan') renderPlan();
             if (tab === 'pantry') renderPantry();
