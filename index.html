@@ -4,14 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NutriPlan">
-    <meta name="theme-color" content="#FFFFFF">
+    <meta name="theme-color" content="#09090B">
     <title>NutriPlan — Clinical Nutrition & Performance</title>
 
-    <!-- FAVICON & APPLE TOUCH ICON MONOGRAMMA PROFESSIONALE "NP" (BIANCO & NERO) -->
+    <!-- 1. ICONA STATICA DIRETTA PER SAFARI iOS & ANDROID (LEGGE IL FILE icon.png SU GITHUB) -->
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon.png">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%2309090B'/%3E%3Cpath d='M34 86V34H48L72 68V34H86V86H72L48 52V86H34Z' fill='%23FFFFFF'/%3E%3Ccircle cx='86' cy='26' r='6' fill='%2310B981'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%2309090B'/%3E%3Cpath d='M34 86V34H48L72 68V34H86V86H72L48 52V86H34Z' fill='%23FFFFFF'/%3E%3Ccircle cx='86' cy='26' r='6' fill='%2310B981'/%3E%3C/svg%3E">
+    <link id="manifest-link" rel="manifest" href="">
+
+    <!-- 2. GENERATORE PNG 512x512 + FUNZIONE DOWNLOAD DIRETTO DI icon.png -->
+    <script>
+        window.downloadOfficialAppIcon = function() {
+            const canvas = document.getElementById('hidden-icon-canvas');
+            if (!canvas) return;
+            const link = document.createElement('a');
+            link.download = 'icon.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+
+        window.addEventListener('DOMContentLoaded', function() {
+            try {
+                const size = 512;
+                const canvas = document.createElement('canvas');
+                canvas.id = 'hidden-icon-canvas';
+                canvas.width = size;
+                canvas.height = size;
+                canvas.style.display = 'none';
+                document.body.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+
+                // Sfondo Nero Antracite (#09090B)
+                ctx.fillStyle = '#09090B';
+                ctx.fillRect(0, 0, size, size);
+
+                // Monogramma "N" Bianco Puro (#FFFFFF)
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(136, 140, 60, 232);
+                ctx.fillRect(316, 140, 60, 232);
+                ctx.beginPath();
+                ctx.moveTo(196, 140);
+                ctx.lineTo(316, 300);
+                ctx.lineTo(316, 372);
+                ctx.lineTo(196, 212);
+                ctx.closePath();
+                ctx.fill();
+
+                // Accento Verde Smeraldo (#10B981)
+                ctx.fillStyle = '#10B981';
+                ctx.beginPath();
+                ctx.arc(346, 102, 26, 0, Math.PI * 2);
+                ctx.fill();
+
+                const pngUrl = canvas.toDataURL('image/png');
+
+                // Web App Manifest dinamico per Android
+                const manifest = {
+                    name: "NutriPlan",
+                    short_name: "NutriPlan",
+                    start_url: "/",
+                    display: "standalone",
+                    background_color: "#09090B",
+                    theme_color: "#09090B",
+                    icons: [
+                        { src: "/icon.png", sizes: "192x192", type: "image/png" },
+                        { src: "/icon.png", sizes: "512x512", type: "image/png" },
+                        { src: pngUrl, sizes: "512x512", type: "image/png" }
+                    ]
+                };
+                const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+                document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+            } catch (e) {}
+        });
+    </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
