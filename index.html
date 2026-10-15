@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Fit & Nutri SaaS">
-    <title>Fit & Nutri Pro — SaaS Platform</title>
+    <meta name="apple-mobile-web-app-title" content="Fit & Nutri Pro">
+    <meta name="theme-color" content="#F4F3EE">
+    <title>Fit & Nutri Pro — Piattaforma Integrata</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -14,27 +15,28 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
         
         :root {
-            --safe-top: env(safe-area-inset-top, 20px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --safe-top: env(safe-area-inset-top, 16px);
+            --safe-bottom: env(safe-area-inset-bottom, 16px);
         }
 
         html, body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
             background-color: #F4F3EE;
             color: #181C19;
             -webkit-tap-highlight-color: transparent;
-            user-select: none;
             overflow-x: hidden !important;
             width: 100% !important;
-            max-width: 100vw !important;
-            position: relative;
             margin: 0;
             padding: 0;
         }
 
-        .app-padding {
-            padding-top: calc(var(--safe-top) + 14px);
-            padding-bottom: calc(var(--safe-bottom) + 165px);
+        .app-container {
+            width: 100%;
+            max-width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: calc(var(--safe-top) + 12px);
+            padding-bottom: calc(var(--safe-bottom) + 160px);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -54,7 +56,7 @@
             box-shadow: 0 8px 28px -6px rgba(24, 28, 25, 0.05);
         }
 
-        /* MOTORE SIMULAZIONE BIOMECCANICA INTERNA (NESSUN LINK ESTERNO) */
+        /* MOTORE SIMULAZIONE BIOMECCANICA INTERNA */
         @keyframes animPressBar {
             0%, 100% { transform: translateY(0px); }
             45%, 55% { transform: translateY(-26px); }
@@ -85,8 +87,8 @@
 </head>
 <body class="min-h-screen antialiased">
 
-    <!-- WIDGET TIMER IN BASSO (THUMB-ZONE) -->
-    <div id="timer-widget" class="fixed left-3 right-3 bg-stone-900 text-white rounded-3xl p-4 shadow-2xl z-50 hidden border border-stone-700" style="bottom: calc(var(--safe-bottom) + 78px);">
+    <!-- WIDGET TIMER IN BASSO RESPONSIVE (MOBILE + DESKTOP) -->
+    <div id="timer-widget" class="fixed left-3 right-3 md:left-auto md:right-6 md:w-96 bg-stone-900 text-white rounded-3xl p-4 shadow-2xl z-50 hidden border border-stone-700" style="bottom: calc(var(--safe-bottom) + 78px);">
         <div class="flex items-center justify-between gap-2">
             <div class="flex items-center space-x-3 min-w-0">
                 <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
@@ -106,175 +108,142 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- SCHERMATA 0: LOGIN UNICO MULTI-TENANT                      -->
+    <!-- SCHERMATA 0: LOGIN PULITO PER UTENTI E PROFESSIONISTI      -->
     <!-- ========================================================== -->
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-[#F4F3EE]">
-        <div class="max-w-sm mx-auto w-full space-y-6">
+        <div class="max-w-md mx-auto w-full space-y-6">
             <div class="text-center space-y-2">
-                <div class="w-16 h-16 rounded-3xl bg-stone-900 text-white flex items-center justify-center mx-auto shadow-lg text-2xl">
+                <div class="w-16 h-16 rounded-3xl bg-emerald-800 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-900/15 text-2xl">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
-                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Piattaforma Cloud Multi-Studio</span>
+                <span class="inline-block text-xs font-extrabold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Nutrition & Workout Hub</span>
                 <h1 class="text-3xl font-extrabold text-stone-900">Fit & Nutri Pro</h1>
                 <p class="text-sm text-stone-500 leading-relaxed">
-                    Inserisci il tuo <strong>Codice Personale Cliente</strong> oppure la tua <strong>Chiave Professionista (PT / Nutrizionista)</strong>.
+                    Inserisci il tuo <strong>Codice Unico Personale</strong> per accedere al tuo Piano Alimentare e alla tua Scheda di Allenamento.
                 </p>
             </div>
 
-            <div class="soft-card rounded-3xl p-6 space-y-4">
+            <div class="soft-card rounded-3xl p-6 md:p-8 space-y-4">
                 <div>
-                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Identificativo</label>
-                    <input type="text" id="login-code-input" placeholder="Es. XXX-0000" class="w-full bg-stone-50 border-2 border-stone-200 rounded-2xl px-4 py-3.5 text-lg font-extrabold text-stone-900 uppercase text-center tracking-widest focus:outline-none focus:border-emerald-700">
-                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice non trovato. Verifica la sigla con il tuo Studio.</p>
+                    <label class="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">Codice Accesso</label>
+                    <input type="text" id="login-code-input" onkeydown="if(event.key==='Enter') handleLogin()" placeholder="Es. ID-0000" class="w-full bg-stone-50 border-2 border-stone-200 rounded-2xl px-4 py-3.5 text-lg font-extrabold text-stone-900 uppercase text-center tracking-widest focus:outline-none focus:border-emerald-700">
+                    <p id="login-error" class="text-xs font-bold text-rose-600 text-center mt-2 hidden">Codice non valido o non trovato. Verifica il codice con il tuo professionista.</p>
                 </div>
 
-                <button onclick="handleLogin()" id="login-btn" class="w-full bg-emerald-800 text-white font-extrabold py-4 rounded-2xl text-base shadow-md active:scale-98 transition">
-                    Accedi al Portale
+                <button onclick="handleLogin()" id="login-btn" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-extrabold py-4 rounded-2xl text-base shadow-md active:scale-98 transition">
+                    Entra nel tuo Spazio
                 </button>
             </div>
 
-            <div class="text-center space-y-2">
-                <p id="cloud-status-indicator" class="text-xs font-bold text-stone-500">
-                    <i class="fa-solid fa-database mr-1"></i>Stato Database: Memoria Locale Attiva
-                </p>
-                <button onclick="toggleSupabaseModal()" class="text-[11px] font-extrabold text-emerald-800 underline">
-                    ⚙️ Configura Connessione Cloud Supabase
-                </button>
-            </div>
+            <p class="text-center text-[11px] text-stone-400 font-semibold">
+                <i class="fa-solid fa-shield-halved mr-1"></i>Accesso unificato Nutrizione & Fitness • Cloud Sync
+            </p>
         </div>
     </section>
 
-    <!-- MODALE CONFIGURAZIONE DIRETTA SUPABASE -->
-    <div id="supabase-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-5">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl">
-            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
-                <h3 class="text-base font-extrabold text-stone-900">Connessione Cloud Supabase</h3>
-                <button onclick="toggleSupabaseModal()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <p class="text-xs text-stone-500 leading-relaxed">
-                Incolla qui <strong>Project URL</strong> e <strong>Anon Public Key</strong> del tuo progetto Supabase per sincronizzare in tempo reale tutti i telefoni di PT, Nutrizionisti e Clienti.
-            </p>
-            <div class="space-y-3 text-xs">
-                <div>
-                    <label class="font-bold text-stone-600 block mb-1">Supabase Project URL</label>
-                    <input type="text" id="sb-url-input" placeholder="https://xyz.supabase.co" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-mono text-stone-900">
-                </div>
-                <div>
-                    <label class="font-bold text-stone-600 block mb-1">Supabase Anon Key (Public)</label>
-                    <input type="text" id="sb-key-input" placeholder="eyJhbGciOiJIUzI1NiIsInR..." class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-mono text-stone-900">
-                </div>
-            </div>
-            <div class="space-y-2 pt-2">
-                <button onclick="saveSupabaseConfig()" class="w-full py-3 rounded-2xl bg-emerald-800 text-white font-extrabold text-xs">
-                    1. Salva e Connetti a Supabase
-                </button>
-                <button onclick="seedSupabaseDatabase()" class="w-full py-3 rounded-2xl bg-amber-100 text-amber-950 border border-amber-300 font-extrabold text-xs">
-                    2. Invia Profili Iniziali al Database Cloud (1° Avvio)
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- ========================================================== -->
-    <!-- CONSOLE SUPER-ADMIN (CODICE: ADMIN-MASTER - SOLO PER TE)   -->
+    <!-- CONSOLE PROPRIETARIO (CODICE: ADMIN-MASTER - SOLO PER TE)  -->
     <!-- ========================================================== -->
-    <section id="screen-super-admin" class="app-padding px-5 space-y-5 hidden">
+    <section id="screen-super-admin" class="app-container px-5 space-y-6 hidden">
         <header class="flex justify-between items-start border-b border-stone-200 pb-4">
             <div>
-                <span class="text-xs font-extrabold uppercase tracking-wider text-white bg-stone-900 px-2.5 py-1 rounded-lg">Console Proprietario Piattaforma</span>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Gestione Studi & Licenze</h1>
-                <p class="text-xs text-stone-500">Crea nuovi codici di accesso per i Nutrizionisti e i PT a cui vendi l'app.</p>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-white bg-stone-900 px-2.5 py-1 rounded-lg">Console Proprietario (Giovanni)</span>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-1.5">Gestione Licenze B2B</h1>
+                <p class="text-xs text-stone-500">Crea i codici di accesso per i Nutrizionisti e i Personal Trainer a cui vendi la piattaforma.</p>
             </div>
             <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold">Esci</button>
         </header>
 
-        <div class="soft-card rounded-3xl p-5 space-y-4">
-            <h2 class="text-base font-extrabold text-stone-900">Crea Nuovo Professionista (B2B)</h2>
-            <div class="grid grid-cols-2 gap-3 text-xs">
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Ruolo Professionista</label>
-                    <select id="sa-role" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                        <option value="nutri">Biologo Nutrizionista</option>
-                        <option value="pt">Personal Trainer / Palestra</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="font-bold text-stone-500 block mb-1">Sigla Clienti (3 Lettere)</label>
-                    <input type="text" id="sa-prefix" maxlength="4" placeholder="Es. MED" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold uppercase text-stone-900">
-                </div>
-                <div class="col-span-2">
-                    <label class="font-bold text-stone-500 block mb-1">Nome Studio / Palestra</label>
-                    <input type="text" id="sa-name" placeholder="Es. Studio Nutrizione Dott. Bianchi" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
-                </div>
-                <div class="col-span-2">
-                    <label class="font-bold text-stone-500 block mb-1">Codice di Accesso Riservato al Professionista</label>
-                    <input type="text" id="sa-code" placeholder="Es. NUT-BIANCHI" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold uppercase text-stone-900">
-                </div>
+        <!-- PULSANTE SINCRONIZZAZIONE INIZIALE SUPABASE -->
+        <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <span class="text-xs font-extrabold uppercase text-emerald-900"><i class="fa-solid fa-cloud-arrow-up mr-1"></i>Database Supabase Connesso (ltzujfpwibiugredvpjl)</span>
+                <p class="text-xs text-emerald-800 mt-0.5">Clicca il pulsante a lato per inviare o aggiornare tutti i profili base sul tuo database Cloud Supabase.</p>
             </div>
-            <button onclick="createNewProfessional()" class="w-full py-3.5 rounded-2xl bg-emerald-800 text-white font-extrabold text-xs shadow-md">
-                + Attiva Licenza Professionista
+            <button onclick="seedSupabaseDatabase()" class="px-5 py-3 rounded-2xl bg-emerald-800 text-white font-extrabold text-xs shrink-0 shadow-sm active:scale-95 transition">
+                Sincronizza Dati Iniziali sul Cloud
             </button>
         </div>
 
-        <div class="soft-card rounded-3xl p-5 space-y-3">
-            <h2 class="text-base font-extrabold text-stone-900">Professionisti Attivi sulla Piattaforma</h2>
-            <div id="sa-pro-list" class="divide-y divide-stone-100 text-xs"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="soft-card rounded-3xl p-6 space-y-4">
+                <h2 class="text-base font-extrabold text-stone-900">Attiva Nuovo Professionista (PT o Nutrizionista)</h2>
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Tipo di Professionista</label>
+                        <select id="sa-role" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
+                            <option value="nutri">Biologo Nutrizionista</option>
+                            <option value="pt">Personal Trainer / Palestra</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Nome Studio / Palestra</label>
+                        <input type="text" id="sa-name" placeholder="Es. Studio Nutrizione Dott. Bianchi" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
+                    </div>
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Codice segreto di accesso per il Professionista</label>
+                        <input type="text" id="sa-code" placeholder="Es. NUT-BIANCHI oppure PT-CLUB2" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold uppercase text-stone-900">
+                    </div>
+                </div>
+                <button onclick="createNewProfessional()" class="w-full py-3.5 rounded-2xl bg-stone-900 text-white font-extrabold text-xs shadow-md">
+                    + Crea Accesso Professionista
+                </button>
+            </div>
+
+            <div class="soft-card rounded-3xl p-6 space-y-3">
+                <h2 class="text-base font-extrabold text-stone-900">Professionisti Attivi</h2>
+                <div id="sa-pro-list" class="divide-y divide-stone-100 text-xs max-h-80 overflow-y-auto"></div>
+            </div>
         </div>
     </section>
 
     <!-- ========================================================== -->
     <!-- PORTALE 1: AREA NUTRIZIONISTA (EDITOR GIORNO PER GIORNO)   -->
     <!-- ========================================================== -->
-    <section id="screen-admin-nutri" class="app-padding px-5 space-y-5 hidden">
+    <section id="screen-admin-nutri" class="app-container px-5 space-y-5 hidden">
         <header class="flex justify-between items-start border-b border-stone-200 pb-4">
             <div>
                 <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="nutri-studio-badge">Studio Nutrizione</span>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Editor Piani Alimentari</h1>
-                <p class="text-xs text-stone-500 mt-0.5">Seleziona un tuo paziente per modificare piatti, grammature e ricette giorno per giorno.</p>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-1.5">Gestione Piani Alimentari</h1>
+                <p class="text-xs text-stone-500 mt-0.5">Vedi solo i tuoi pazienti. Il codice del paziente è unico sia per la dieta che per la palestra.</p>
             </div>
             <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold shrink-0">Esci</button>
         </header>
 
-        <!-- 1. SELETTORE PAZIENTI ISOLATI PER QUESTO NUTRIZIONISTA -->
+        <!-- 1. SELETTORE PAZIENTI DELLO STUDIO -->
         <div class="soft-card rounded-3xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-base font-extrabold text-stone-900">1. I Tuoi Pazienti Esclusivi</h2>
-                <span class="text-xs font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200" id="nutri-prefix-label">Sigla: FOR</span>
-            </div>
+            <h2 class="text-base font-extrabold text-stone-900">1. Seleziona un Tuo Paziente</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" id="nutri-patient-list"></div>
 
-            <div class="grid grid-cols-2 gap-2" id="nutri-patient-list"></div>
-
-            <div class="grid grid-cols-1 gap-2 pt-2 border-t border-stone-100">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t border-stone-100">
                 <button onclick="createNewClientForPro('nutri')" class="w-full py-3 rounded-2xl bg-emerald-800 text-white text-xs font-extrabold shadow-sm">
-                    + Crea Nuovo Paziente (Genera Codice con la tua Sigla)
+                    + Crea Nuovo Paziente (Genera Codice Unico ID-XXXX)
                 </button>
-                <button onclick="linkExistingClientToPro('nutri')" class="w-full py-2.5 rounded-2xl bg-stone-100 text-stone-700 text-xs font-bold border border-stone-200">
-                    🔗 Aggancia Codice Cliente già registrato in Palestra (es. KNX-8492)
+                <button onclick="linkExistingClientToPro('nutri')" class="w-full py-3 rounded-2xl bg-stone-100 text-stone-800 text-xs font-bold border border-stone-200">
+                    🔗 Aggancia Codice di un Paziente che usa già l'App in Palestra
                 </button>
             </div>
         </div>
 
         <!-- 2. EDITOR COMPLETO PASTI GIORNO PER GIORNO -->
         <div id="nutri-editor-box" class="space-y-4">
-            
-            <!-- Parametri generali paziente -->
             <div class="soft-card rounded-3xl p-5 space-y-3">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-extrabold text-stone-900">Anagrafica & Target Acqua</h3>
-                    <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="nutri-editing-badge">ID</span>
+                    <h3 class="text-sm font-extrabold text-stone-900">Dati Paziente & Idratazione</h3>
+                    <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-lg" id="nutri-editing-badge">ID</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2.5 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                     <div>
                         <label class="font-bold text-stone-500 block mb-1">Nome Paziente</label>
-                        <input type="text" id="adm-nutri-name" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
+                        <input type="text" id="adm-nutri-name" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
                     </div>
                     <div>
-                        <label class="font-bold text-stone-500 block mb-1">Target Acqua (Litri)</label>
-                        <input type="number" step="0.5" id="adm-nutri-water" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
+                        <label class="font-bold text-stone-500 block mb-1">Acqua Giornaliera (Litri)</label>
+                        <input type="number" step="0.5" id="adm-nutri-water" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-extrabold text-stone-900">
                     </div>
-                    <div class="col-span-2">
-                        <label class="font-bold text-stone-500 block mb-1">Note Cliniche / Stile di Vita</label>
-                        <input type="text" id="adm-nutri-bio" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-medium text-stone-900">
+                    <div>
+                        <label class="font-bold text-stone-500 block mb-1">Note / Obiettivo Clinico</label>
+                        <input type="text" id="adm-nutri-bio" onchange="updateClientBasicInfo()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2.5 font-medium text-stone-900">
                     </div>
                 </div>
             </div>
@@ -282,52 +251,49 @@
             <!-- Selettore Giorno da Modificare (Lun - Dom) -->
             <div class="soft-card rounded-3xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-base font-extrabold text-stone-900">2. Scegli il Giorno da Compilare</h3>
-                    <button onclick="copyDayToAllWeek()" class="text-[11px] font-bold text-emerald-800 underline">Copia su altri giorni</button>
+                    <h3 class="text-base font-extrabold text-stone-900">2. Scegli il Giorno della Settimana</h3>
+                    <button onclick="copyDayToAllWeek()" class="text-xs font-bold text-emerald-800 underline">Copia questo giorno su tutta la settimana</button>
                 </div>
 
-                <div class="grid grid-cols-7 gap-1" id="adm-nutri-day-tabs"></div>
+                <div class="grid grid-cols-7 gap-1.5" id="adm-nutri-day-tabs"></div>
 
-                <!-- Macro del Giorno Selezionato -->
-                <div class="grid grid-cols-4 gap-2 pt-2 border-t border-stone-100 text-xs">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2 border-t border-stone-100 text-xs">
                     <div>
                         <label class="font-bold text-stone-400 block text-[10px] uppercase">Kcal Giorno</label>
-                        <input type="text" id="adm-day-kcal" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                        <input type="text" id="adm-day-kcal" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900 mt-1">
                     </div>
                     <div>
-                        <label class="font-bold text-stone-400 block text-[10px] uppercase">Carbo</label>
-                        <input type="text" id="adm-day-c" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                        <label class="font-bold text-stone-400 block text-[10px] uppercase">Carboidrati</label>
+                        <input type="text" id="adm-day-c" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900 mt-1">
                     </div>
                     <div>
                         <label class="font-bold text-stone-400 block text-[10px] uppercase">Proteine</label>
-                        <input type="text" id="adm-day-p" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                        <input type="text" id="adm-day-p" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900 mt-1">
                     </div>
                     <div>
                         <label class="font-bold text-stone-400 block text-[10px] uppercase">Grassi</label>
-                        <input type="text" id="adm-day-g" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-2.5 py-2 font-extrabold text-stone-900 mt-1">
+                        <input type="text" id="adm-day-g" onchange="updateDayMacros()" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900 mt-1">
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2">
-                    <label class="text-xs font-bold text-stone-700 flex items-center space-x-2">
+                <div class="flex flex-col md:flex-row md:items-center gap-3 pt-2">
+                    <label class="text-xs font-bold text-stone-700 flex items-center space-x-2 shrink-0">
                         <input type="checkbox" id="adm-day-workout" onchange="updateDayMacros()" class="w-4 h-4 accent-emerald-700 rounded">
-                        <span>Segna come Giorno di Palestra</span>
+                        <span>È un Giorno di Allenamento</span>
                     </label>
+                    <input type="text" id="adm-day-workout-note" onchange="updateDayMacros()" placeholder="Indicazione pre/post allenamento per il paziente..." class="flex-1 bg-amber-50/60 border border-amber-200 rounded-xl px-3 py-2 text-xs text-amber-950">
                 </div>
-                <input type="text" id="adm-day-workout-note" onchange="updateDayMacros()" placeholder="Nota protocollo giorno palestra (es. Pre-workout alle 06:30...)" class="w-full bg-amber-50/60 border border-amber-200 rounded-xl px-3 py-2 text-xs text-amber-950">
             </div>
 
-            <!-- Lista Pasti del Giorno Selezionato (Modificabili uno ad uno) -->
-            <div id="adm-nutri-meals-list" class="space-y-4"></div>
+            <!-- Lista Pasti del Giorno Selezionato -->
+            <div id="adm-nutri-meals-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-            <!-- Bottone Aggiungi Nuovo Pasto al Giorno -->
             <button onclick="addNewMealToDay()" class="w-full py-3.5 rounded-2xl bg-white border-2 border-dashed border-emerald-600 text-emerald-800 font-extrabold text-xs">
                 + Aggiungi Nuovo Pasto / Spuntino a questo Giorno
             </button>
 
-            <!-- Bottone Salva Tutto sul Cloud -->
-            <button onclick="syncAdminChangesToCloud('Piano nutrizionale salvato e sincronizzato sul telefono del paziente!')" class="w-full py-4 rounded-3xl bg-emerald-800 text-white font-extrabold text-base shadow-lg">
-                <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salva Tutto il Piano del Paziente
+            <button onclick="syncAdminChangesToCloud('Piano nutrizionale salvato sul Cloud e aggiornato sul dispositivo del paziente!')" class="w-full py-4 rounded-3xl bg-emerald-800 hover:bg-emerald-900 text-white font-extrabold text-base shadow-lg">
+                <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Salva e Pubblica Piano Alimentare
             </button>
         </div>
     </section>
@@ -335,31 +301,27 @@
     <!-- ========================================================== -->
     <!-- PORTALE 2: AREA PERSONAL TRAINER (EDITOR SCHEDE COMPLETO)  -->
     <!-- ========================================================== -->
-    <section id="screen-admin-pt" class="app-padding px-5 space-y-5 hidden">
+    <section id="screen-admin-pt" class="app-container px-5 space-y-5 hidden">
         <header class="flex justify-between items-start border-b border-stone-200 pb-4">
             <div>
                 <span class="text-xs font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2.5 py-1 rounded-lg" id="pt-studio-badge">Club / PT</span>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-1.5">Costruttore Schede Palestra</h1>
-                <p class="text-xs text-stone-500 mt-0.5">Seleziona un tuo atleta per creare o modificare esercizi, serie, Kg e ripetizioni.</p>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-1.5">Costruttore Schede Allenamento</h1>
+                <p class="text-xs text-stone-500 mt-0.5">Vedi solo i tuoi atleti. Il codice atleta è unico e condiviso con l'area nutrizione.</p>
             </div>
             <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold shrink-0">Esci</button>
         </header>
 
         <!-- 1. SELETTORE ATLETI ESCLUSIVI DI QUESTO PT -->
         <div class="soft-card rounded-3xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-base font-extrabold text-stone-900">1. Atleti del Tuo Club</h2>
-                <span class="text-xs font-extrabold text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200" id="pt-prefix-label">Sigla: KNX</span>
-            </div>
+            <h2 class="text-base font-extrabold text-stone-900">1. Seleziona un Tuo Atleta</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5" id="pt-athlete-list"></div>
 
-            <div class="grid grid-cols-2 gap-2" id="pt-athlete-list"></div>
-
-            <div class="grid grid-cols-1 gap-2 pt-2 border-t border-stone-100">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2 border-t border-stone-100">
                 <button onclick="createNewClientForPro('pt')" class="w-full py-3 rounded-2xl bg-amber-600 text-white text-xs font-extrabold shadow-sm">
-                    + Crea Nuovo Atleta (Genera Codice con la tua Sigla)
+                    + Crea Nuovo Atleta (Genera Codice Unico ID-XXXX)
                 </button>
-                <button onclick="linkExistingClientToPro('pt')" class="w-full py-2.5 rounded-2xl bg-stone-100 text-stone-700 text-xs font-bold border border-stone-200">
-                    🔗 Aggancia Codice Atleta già seguito da un Nutrizionista
+                <button onclick="linkExistingClientToPro('pt')" class="w-full py-3 rounded-2xl bg-stone-100 text-stone-800 text-xs font-bold border border-stone-200">
+                    🔗 Aggancia Codice di un Atleta già registrato dal Nutrizionista
                 </button>
             </div>
         </div>
@@ -368,15 +330,13 @@
         <div id="pt-editor-box" class="space-y-4">
             <div class="soft-card rounded-3xl p-5 space-y-4">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-base font-extrabold text-stone-900">2. Seleziona Giornata Scheda</h2>
-                    <span class="text-xs font-extrabold text-amber-900 bg-amber-100 px-2.5 py-1 rounded-lg" id="pt-editing-badge">ID</span>
+                    <h2 class="text-base font-extrabold text-stone-900">2. Seleziona Seduta di Allenamento</h2>
+                    <span class="text-xs font-extrabold text-amber-900 bg-amber-100 px-3 py-1 rounded-lg" id="pt-editing-badge">ID</span>
                 </div>
 
-                <!-- Tab Scheda A / B / C -->
                 <div class="grid grid-cols-3 gap-2" id="adm-pt-day-tabs"></div>
 
-                <!-- Titolo e Sottotitolo della Giornata di Allenamento -->
-                <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-stone-100 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-stone-100 text-xs">
                     <div>
                         <label class="font-bold text-stone-500 block mb-1">Giorno / Etichetta</label>
                         <input type="text" id="adm-wo-daylabel" onchange="updateWorkoutDayHeader()" placeholder="Es. Martedì" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
@@ -385,173 +345,179 @@
                         <label class="font-bold text-stone-500 block mb-1">Focus Muscolare</label>
                         <input type="text" id="adm-wo-title" onchange="updateWorkoutDayHeader()" placeholder="Es. Upper Body & Spinta" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-extrabold text-stone-900">
                     </div>
-                    <div class="col-span-2">
+                    <div>
                         <label class="font-bold text-stone-500 block mb-1">Sottotitolo / Note Seduta</label>
-                        <input type="text" id="adm-wo-subtitle" onchange="updateWorkoutDayHeader()" placeholder="Es. Martedì • Ore 07:00 • Durata 55 min" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-medium text-stone-900">
+                        <input type="text" id="adm-wo-subtitle" onchange="updateWorkoutDayHeader()" placeholder="Es. Ore 07:00 • Durata 55 min" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3 py-2 font-medium text-stone-900">
                     </div>
                 </div>
             </div>
 
-            <!-- Lista Esercizi Modificabili della Giornata -->
-            <div id="adm-pt-exercises-list" class="space-y-4"></div>
+            <!-- Lista Esercizi Modificabili -->
+            <div id="adm-pt-exercises-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-            <!-- Bottone Aggiungi Nuovo Esercizio -->
             <button onclick="addNewExerciseToWorkoutDay()" class="w-full py-3.5 rounded-2xl bg-white border-2 border-dashed border-amber-600 text-amber-900 font-extrabold text-xs">
-                + Aggiungi Nuovo Esercizio a questa Scheda
+                + Aggiungi Nuovo Esercizio a questa Seduta
             </button>
 
-            <!-- Bottone Salva Scheda sul Cloud -->
-            <button onclick="syncAdminChangesToCloud('Scheda di allenamento salvata e inviata al telefono dell\'atleta!')" class="w-full py-4 rounded-3xl bg-stone-900 text-white font-extrabold text-base shadow-lg">
-                <i class="fa-solid fa-cloud-arrow-up mr-2 text-amber-400"></i>Salva Tutta la Scheda dell'Atleta
+            <button onclick="syncAdminChangesToCloud('Scheda di allenamento salvata sul Cloud e inviata al dispositivo dell\'atleta!')" class="w-full py-4 rounded-3xl bg-stone-900 hover:bg-stone-800 text-white font-extrabold text-base shadow-lg">
+                <i class="fa-solid fa-cloud-arrow-up mr-2 text-amber-400"></i>Salva e Pubblica Scheda Allenamento
             </button>
         </div>
     </section>
 
     <!-- ========================================== -->
-    <!-- SCHERMATA 1: HUB DI SCELTA UTENTE          -->
+    <!-- SCHERMATA 1: HUB DI SCELTA CLIENTE FINALE  -->
     <!-- ========================================== -->
-    <section id="screen-hub" class="min-h-screen flex flex-col justify-between px-5 py-10 hidden" style="padding-top: calc(var(--safe-top) + 20px);">
+    <section id="screen-hub" class="app-container min-h-screen flex flex-col justify-between px-5 py-8 hidden">
         <div class="space-y-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg" id="hub-user-code">ID</span>
-                    <h1 class="text-3xl font-extrabold text-stone-900 mt-1.5" id="hub-user-greeting">Ciao 👋</h1>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-lg" id="hub-user-code">ID</span>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mt-2" id="hub-user-greeting">Ciao 👋</h1>
                 </div>
-                <button onclick="logout()" class="px-3.5 py-2 rounded-2xl bg-white border border-stone-200 text-stone-600 text-xs font-bold shadow-sm">
+                <button onclick="logout()" class="px-4 py-2.5 rounded-2xl bg-white border border-stone-200 text-stone-600 text-xs font-bold shadow-sm">
                     <i class="fa-solid fa-right-from-bracket mr-1"></i>Esci
                 </button>
             </div>
 
             <p class="text-sm text-stone-500 font-semibold" id="hub-user-bio"></p>
 
-            <!-- CARD 1: SCHEDA ALLENAMENTO -->
-            <div onclick="openModule('workout')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-amber-500/30 relative overflow-hidden">
-                <div class="flex items-start justify-between">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0">
-                        <i class="fa-solid fa-dumbbell"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                <!-- CARD 1: SCHEDA ALLENAMENTO -->
+                <div onclick="openModule('workout')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-amber-500/30 hover:border-amber-500 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shrink-0">
+                                <i class="fa-solid fa-dumbbell"></i>
+                            </div>
+                            <span class="bg-amber-100 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-xl">Simulatore 3D Integrato</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-stone-900 mt-5">Scheda Allenamento</h2>
+                        <p class="text-sm text-stone-500 mt-1.5 leading-relaxed">
+                            Programma sala pesi con carichi serie per serie (Kg + Reps), storico sessioni precedenti, animazione biomeccanica interna e recupero automatico.
+                        </p>
                     </div>
-                    <span class="bg-amber-100 text-amber-950 text-xs font-extrabold px-3 py-1 rounded-xl">Simulatore 3D Interno</span>
+                    <div class="mt-6 flex items-center text-sm font-extrabold text-amber-800">
+                        <span>Apri Scheda Palestra</span>
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
                 </div>
-                <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Scheda Allenamento</h2>
-                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Tracking carichi per singola serie, storico pesi precedenti, simulazione biomeccanica interna e timer recupero.
-                </p>
-                <div class="mt-5 flex items-center text-sm font-extrabold text-amber-800">
-                    <span>Apri Scheda Sala Pesi</span>
-                    <i class="fa-solid fa-arrow-right ml-2"></i>
-                </div>
-            </div>
 
-            <!-- CARD 2: NUTRIZIONE -->
-            <div onclick="openModule('nutrition')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-transparent hover:border-emerald-700/30 relative overflow-hidden">
-                <div class="flex items-start justify-between">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-2xl shrink-0">
-                        <i class="fa-solid fa-utensils"></i>
+                <!-- CARD 2: NUTRIZIONE -->
+                <div onclick="openModule('nutrition')" class="soft-card rounded-3xl p-6 cursor-pointer active:scale-98 transition border-2 border-emerald-700/20 hover:border-emerald-700 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-2xl shrink-0">
+                                <i class="fa-solid fa-utensils"></i>
+                            </div>
+                            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold px-3 py-1 rounded-xl" id="hub-kcal-badge">1.960 Kcal</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-stone-900 mt-5">Piano Alimentare</h2>
+                        <p class="text-sm text-stone-500 mt-1.5 leading-relaxed">
+                            Menu giornaliero con ricette passo-passo, sostituzioni equivalenti in 1-tap, calcolo automatico della spesa e guida fuori casa.
+                        </p>
                     </div>
-                    <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold px-3 py-1 rounded-xl" id="hub-kcal-badge">1.960 Kcal</span>
-                </div>
-                <h2 class="text-2xl font-extrabold text-stone-900 mt-4">Piano Alimentare</h2>
-                <p class="text-sm text-stone-500 mt-1 leading-relaxed">
-                    Menu giornaliero, ricette passo-passo, sostituzioni rapide, lista della spesa automatica e guida fuori casa.
-                </p>
-                <div class="mt-5 flex items-center text-sm font-extrabold text-emerald-800">
-                    <span>Apri Alimentazione</span>
-                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <div class="mt-6 flex items-center text-sm font-extrabold text-emerald-800">
+                        <span>Apri Piano Alimentare</span>
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="text-center text-xs text-stone-400 font-semibold pt-8">
-            Fit & Nutri Pro • Sincronizzazione Cloud Attiva
+            Fit & Nutri Pro • Piattaforma Cloud Sincronizzata
         </div>
     </section>
 
     <!-- ========================================================= -->
     <!-- MODULO B: SCHEDA ALLENAMENTO ATLETA                       -->
     <!-- ========================================================= -->
-    <div id="module-workout" class="app-padding hidden">
-        <header class="px-5 mb-4 flex justify-between items-center">
+    <div id="module-workout" class="app-container hidden">
+        <header class="px-5 mb-5 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
                     <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 truncate" id="wo-header-user">Sala Pesi Pro</span>
                 </div>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate">Allenamento</h1>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-0.5 truncate">Scheda Allenamento</h1>
             </div>
-            <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition shrink-0">
+            <button onclick="backToHub()" class="h-11 px-4 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-2 shadow-sm active:scale-95 transition shrink-0">
                 <i class="fa-solid fa-table-cells-large"></i>
-                <span>Hub</span>
+                <span>Menu Hub</span>
             </button>
         </header>
 
-        <main class="px-5 space-y-4">
-            <div class="grid grid-cols-3 gap-2" id="workout-day-selector"></div>
+        <main class="px-5 space-y-5">
+            <div class="grid grid-cols-3 gap-2.5" id="workout-day-selector"></div>
 
             <div class="soft-card rounded-3xl p-5 space-y-3">
                 <div class="flex justify-between items-start gap-2">
                     <div class="min-w-0">
                         <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800" id="wo-subtitle">Martedì</span>
-                        <h2 class="text-xl font-extrabold text-stone-900 mt-0.5 truncate" id="wo-title">Scheda A</h2>
+                        <h2 class="text-xl md:text-2xl font-extrabold text-stone-900 mt-0.5 truncate" id="wo-title">Scheda A</h2>
                     </div>
-                    <span class="bg-emerald-100 text-emerald-900 text-xs font-extrabold px-2.5 py-1 rounded-xl shrink-0" id="wo-progress">0%</span>
+                    <span class="bg-emerald-100 text-emerald-900 text-xs font-extrabold px-3 py-1 rounded-xl shrink-0" id="wo-progress">0%</span>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-center">
-                    <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
+                <div class="grid grid-cols-3 gap-2.5 pt-2 border-t border-stone-100 text-center">
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60">
                         <span class="block text-[10px] font-bold uppercase text-stone-400">Volume Oggi</span>
-                        <span class="text-sm font-extrabold text-stone-900" id="wo-volume">0 kg</span>
+                        <span class="text-base font-extrabold text-stone-900" id="wo-volume">0 kg</span>
                     </div>
-                    <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60">
                         <span class="block text-[10px] font-bold uppercase text-stone-400">Serie Fatte</span>
-                        <span class="text-sm font-extrabold text-emerald-800" id="wo-sets-count">0 / 0</span>
+                        <span class="text-base font-extrabold text-emerald-800" id="wo-sets-count">0 / 0</span>
                     </div>
-                    <div class="bg-stone-50 p-2.5 rounded-2xl border border-stone-200/60">
-                        <span class="block text-[10px] font-bold uppercase text-stone-400">Intensità</span>
-                        <span class="text-sm font-extrabold text-amber-800">RPE 8.5</span>
+                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60">
+                        <span class="block text-[10px] font-bold uppercase text-stone-400">Target</span>
+                        <span class="text-base font-extrabold text-amber-800">Ipertrofia</span>
                     </div>
                 </div>
             </div>
 
-            <div id="exercises-container" class="space-y-4"></div>
+            <div id="exercises-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
             <div class="pt-2 pb-4">
-                <button onclick="finishAndSaveWorkout()" class="w-full py-4 rounded-3xl bg-emerald-800 text-white font-extrabold text-base shadow-lg flex items-center justify-center space-x-2 active:scale-98 transition">
+                <button onclick="finishAndSaveWorkout()" class="w-full py-4 rounded-3xl bg-emerald-800 hover:bg-emerald-900 text-white font-extrabold text-base shadow-lg flex items-center justify-center space-x-2 active:scale-98 transition">
                     <i class="fa-solid fa-flag-checkered"></i>
                     <span>Concludi e Salva Carichi nello Storico</span>
                 </button>
             </div>
         </main>
 
-        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3 flex justify-between items-center">
-            <button onclick="startTimer(1.5, 'Recupero Libero 90s')" class="flex-1 mr-2 py-3 rounded-2xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
-                <i class="fa-solid fa-stopwatch text-amber-400"></i>
-                <span>Timer 90s</span>
-            </button>
-            <button onclick="openModule('nutrition')" class="flex-1 ml-2 py-3 rounded-2xl bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
-                <i class="fa-solid fa-utensils"></i>
-                <span>Vai alla Dieta</span>
-            </button>
+        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-5 py-3">
+            <div class="max-w-3xl mx-auto flex justify-between items-center gap-3">
+                <button onclick="startTimer(1.5, 'Recupero Libero 90s')" class="flex-1 py-3 rounded-2xl bg-stone-900 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+                    <i class="fa-solid fa-stopwatch text-amber-400"></i>
+                    <span>Timer 90s</span>
+                </button>
+                <button onclick="openModule('nutrition')" class="flex-1 py-3 rounded-2xl bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center space-x-2 active:scale-95 transition">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Passa alla Dieta</span>
+                </button>
+            </div>
         </nav>
     </div>
 
     <!-- ========================================== -->
     <!-- MODULO A: NUTRIZIONE PAZIENTE              -->
     <!-- ========================================== -->
-    <div id="module-nutrition" class="app-padding hidden">
+    <div id="module-nutrition" class="app-container hidden">
         <header class="px-5 mb-5 flex justify-between items-center">
             <div class="min-w-0 pr-2">
                 <div class="flex items-center space-x-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
                     <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 truncate" id="current-date-label">Piano Giornaliero</span>
                 </div>
-                <h1 class="text-2xl font-extrabold text-stone-900 mt-0.5 truncate" id="nutri-header-title">Alimentazione</h1>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-0.5 truncate" id="nutri-header-title">Alimentazione</h1>
             </div>
             <div class="flex items-center space-x-2 shrink-0">
-                <button onclick="backToHub()" class="h-11 px-3.5 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
+                <button onclick="backToHub()" class="h-11 px-4 rounded-2xl bg-stone-900 text-white text-xs font-extrabold flex items-center space-x-2 shadow-sm active:scale-95 transition">
                     <i class="fa-solid fa-table-cells-large"></i>
-                    <span>Hub</span>
+                    <span>Menu Hub</span>
                 </button>
-                <button onclick="resetProgress()" class="w-11 h-11 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center text-stone-500 shadow-sm active:scale-95 transition">
+                <button onclick="resetProgress()" class="w-11 h-11 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center text-stone-500 shadow-sm active:scale-95 transition" title="Ricomincia settimana">
                     <i class="fa-solid fa-rotate-right text-sm"></i>
                 </button>
             </div>
@@ -570,28 +536,28 @@
                         <p class="text-xs text-amber-900 font-medium mt-0.5 leading-snug" id="workout-desc"></p>
                     </div>
                 </div>
-                <button onclick="openModule('workout')" class="px-3 py-2 rounded-xl bg-amber-600 text-white text-xs font-extrabold shrink-0 self-center">Scheda</button>
+                <button onclick="openModule('workout')" class="px-3.5 py-2 rounded-xl bg-amber-600 text-white text-xs font-extrabold shrink-0 self-center">Scheda</button>
             </div>
 
             <div class="soft-card rounded-3xl p-5 space-y-4">
                 <div class="flex justify-between items-center gap-2">
                     <div class="min-w-0">
                         <span class="text-xs font-bold uppercase tracking-wider text-stone-400">Target Giornaliero</span>
-                        <div class="text-2xl font-extrabold text-stone-900 mt-0.5" id="macro-kcal">1.960 Kcal</div>
+                        <div class="text-2xl md:text-3xl font-extrabold text-stone-900 mt-0.5" id="macro-kcal">1.960 Kcal</div>
                         <span class="inline-block mt-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-xl" id="meals-progress-text">0 completati</span>
                     </div>
                     <div class="flex space-x-1.5 shrink-0">
-                        <div class="px-2.5 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
+                        <div class="px-3 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
                             <span class="block text-[10px] font-bold text-stone-500 uppercase">Carbo</span>
-                            <span class="text-sm font-extrabold text-stone-900" id="macro-c">175g</span>
+                            <span class="text-sm md:text-base font-extrabold text-stone-900" id="macro-c">175g</span>
                         </div>
-                        <div class="px-2.5 py-2 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-center">
+                        <div class="px-3 py-2 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-center">
                             <span class="block text-[10px] font-bold text-emerald-800 uppercase">Prot</span>
-                            <span class="text-sm font-extrabold text-emerald-900" id="macro-p">158g</span>
+                            <span class="text-sm md:text-base font-extrabold text-emerald-900" id="macro-p">158g</span>
                         </div>
-                        <div class="px-2.5 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
+                        <div class="px-3 py-2 rounded-2xl bg-stone-50 border border-stone-200/70 text-center">
                             <span class="block text-[10px] font-bold text-stone-500 uppercase">Grassi</span>
-                            <span class="text-sm font-extrabold text-stone-900" id="macro-g">68g</span>
+                            <span class="text-sm md:text-base font-extrabold text-stone-900" id="macro-g">68g</span>
                         </div>
                     </div>
                 </div>
@@ -613,7 +579,7 @@
                 </div>
             </div>
 
-            <div id="meals-container" class="space-y-4"></div>
+            <div id="meals-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </main>
 
         <!-- VISTA 2: SPESA -->
@@ -624,9 +590,9 @@
                         <h2 class="text-xl font-extrabold text-stone-900">Dispensa & Spesa</h2>
                         <p class="text-xs text-stone-500 mt-0.5">Somma automatica delle quantità del tuo piano.</p>
                     </div>
-                    <button onclick="shareShoppingListWhatsApp()" class="bg-emerald-700 text-white text-xs font-extrabold px-3.5 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
+                    <button onclick="shareShoppingListWhatsApp()" class="bg-emerald-700 text-white text-xs font-extrabold px-4 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm active:scale-95 transition">
                         <i class="fa-brands fa-whatsapp text-sm"></i>
-                        <span>Invia</span>
+                        <span>Invia su WhatsApp</span>
                     </button>
                 </div>
 
@@ -639,18 +605,18 @@
                 </div>
 
                 <div class="grid grid-cols-3 gap-1.5 bg-stone-100 p-1.5 rounded-2xl">
-                    <button onclick="setPantryFilter('missing')" id="filter-missing" class="py-2 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">Manca</button>
+                    <button onclick="setPantryFilter('missing')" id="filter-missing" class="py-2 text-xs font-extrabold rounded-xl bg-white text-stone-900 shadow-sm transition">Da Comprare</button>
                     <button onclick="setPantryFilter('home')" id="filter-home" class="py-2 text-xs font-semibold rounded-xl text-stone-500 transition">In Casa</button>
                     <button onclick="setPantryFilter('all')" id="filter-all" class="py-2 text-xs font-semibold rounded-xl text-stone-500 transition">Tutti</button>
                 </div>
 
                 <div class="flex space-x-2">
-                    <input type="text" id="custom-item-input" placeholder="Aggiungi altro..." class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-3.5 py-2.5 text-sm text-stone-900 focus:outline-none focus:border-emerald-600">
+                    <input type="text" id="custom-item-input" placeholder="Aggiungi altro alla spesa..." class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-3.5 py-2.5 text-sm text-stone-900 focus:outline-none focus:border-emerald-600">
                     <button onclick="addCustomItem()" class="bg-stone-900 text-white font-extrabold px-4 rounded-2xl text-xs shrink-0">Aggiungi</button>
                 </div>
             </div>
 
-            <div id="pantry-container" class="space-y-4"></div>
+            <div id="pantry-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </main>
 
         <!-- VISTA 3: GUIDA & PREP -->
@@ -661,7 +627,7 @@
                 <button onclick="setGuideSubTab('sos')" id="gsub-sos" class="py-2.5 text-xs font-bold rounded-xl text-stone-600 transition">⚡ SOS Fame</button>
             </div>
 
-            <div id="guide-section-out" class="space-y-4">
+            <div id="guide-section-out" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="soft-card rounded-3xl p-5 space-y-2">
                     <h3 class="text-lg font-extrabold text-stone-900">🍔 Al Pub / Hamburgeria</h3>
                     <p class="text-sm text-stone-600 leading-relaxed">Ordina Hamburger al piatto o Tagliata con verdure grigliate o patate al forno. Se prendi il panino, evita bacon/doppio formaggio e chiedi le salse a parte.</p>
@@ -700,117 +666,100 @@
 
         <!-- VISTA 4: PROGRESSI -->
         <main id="view-weight" class="px-5 space-y-4 hidden">
-            <div class="soft-card rounded-3xl p-5 space-y-4">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-extrabold text-stone-900">Andamento Peso</h2>
-                    <span class="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-xl" id="adherence-badge">Costanza: 0%</span>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60 text-center">
-                        <span class="text-[10px] font-bold uppercase text-stone-400">Inizio</span>
-                        <div class="text-base font-extrabold text-stone-800 mt-0.5" id="start-weight-display">110.0 kg</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="soft-card rounded-3xl p-5 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-extrabold text-stone-900">Andamento Peso</h2>
+                        <span class="text-xs font-extrabold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-xl" id="adherence-badge">Costanza: 0%</span>
                     </div>
-                    <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 text-center">
-                        <span class="text-[10px] font-bold uppercase text-emerald-800">Attuale</span>
-                        <div class="text-base font-extrabold text-emerald-950 mt-0.5" id="current-weight-display">110.0 kg</div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60 text-center">
+                            <span class="text-[10px] font-bold uppercase text-stone-400">Inizio</span>
+                            <div class="text-base font-extrabold text-stone-800 mt-0.5" id="start-weight-display">110.0 kg</div>
+                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-200 text-center">
+                            <span class="text-[10px] font-bold uppercase text-emerald-800">Attuale</span>
+                            <div class="text-base font-extrabold text-emerald-950 mt-0.5" id="current-weight-display">110.0 kg</div>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60 text-center">
+                            <span class="text-[10px] font-bold uppercase text-stone-400">Delta</span>
+                            <div class="text-base font-extrabold text-emerald-700 mt-0.5" id="diff-weight-display">0.0 kg</div>
+                        </div>
                     </div>
-                    <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/60 text-center">
-                        <span class="text-[10px] font-bold uppercase text-stone-400">Delta</span>
-                        <div class="text-base font-extrabold text-emerald-700 mt-0.5" id="diff-weight-display">0.0 kg</div>
+
+                    <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200/60">
+                        <div id="weight-chart-container" class="w-full h-24 flex items-center justify-center"></div>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 108.5)" class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-900">
+                        <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-extrabold px-5 rounded-2xl text-xs shrink-0">Salva</button>
                     </div>
                 </div>
 
-                <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200/60">
-                    <div id="weight-chart-container" class="w-full h-24 flex items-center justify-center"></div>
+                <div class="space-y-4">
+                    <div class="soft-card rounded-3xl p-5 space-y-3">
+                        <h3 class="text-base font-extrabold text-stone-900">Traguardi Fisici Raggiunti</h3>
+                        <div id="nsv-container" class="space-y-2"></div>
+                    </div>
+
+                    <div class="soft-card rounded-3xl p-5">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">Storico Pesate</h3>
+                        <div id="weight-history" class="divide-y divide-stone-100 text-sm"></div>
+                    </div>
                 </div>
-
-                <div class="flex space-x-2">
-                    <input type="number" step="0.1" id="weight-input" placeholder="Nuovo peso (es. 108.5)" class="flex-1 min-w-0 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-3 text-sm text-stone-900">
-                    <button onclick="addWeightEntry()" class="bg-emerald-700 text-white font-extrabold px-5 rounded-2xl text-xs shrink-0">Salva</button>
-                </div>
-            </div>
-
-            <div class="soft-card rounded-3xl p-5 space-y-3">
-                <h3 class="text-base font-extrabold text-stone-900">Traguardi Fisici Raggiunti</h3>
-                <div id="nsv-container" class="space-y-2"></div>
-            </div>
-
-            <div class="soft-card rounded-3xl p-5">
-                <h3 class="text-xs font-extrabold uppercase tracking-wider text-stone-400 mb-2">Storico Pesate</h3>
-                <div id="weight-history" class="divide-y divide-stone-100 text-sm"></div>
             </div>
         </main>
 
-        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5 grid grid-cols-4 gap-1">
-            <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-700 py-1 rounded-2xl transition">
-                <i class="fa-solid fa-utensils text-base"></i>
-                <span class="text-[11px] font-extrabold">Oggi</span>
-            </button>
-            <button onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition relative">
-                <i class="fa-solid fa-basket-shopping text-base"></i>
-                <span class="text-[11px] font-bold">Spesa</span>
-                <span id="missing-badge" class="absolute top-0 right-4 bg-amber-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
-            </button>
-            <button onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
-                <i class="fa-solid fa-compass text-base"></i>
-                <span class="text-[11px] font-bold">Guida</span>
-            </button>
-            <button onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
-                <i class="fa-solid fa-chart-line text-base"></i>
-                <span class="text-[11px] font-bold">Progressi</span>
-            </button>
+        <nav class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5">
+            <div class="max-w-3xl mx-auto grid grid-cols-4 gap-1">
+                <button onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-emerald-700 py-1 rounded-2xl transition">
+                    <i class="fa-solid fa-utensils text-base"></i>
+                    <span class="text-[11px] font-extrabold">Oggi</span>
+                </button>
+                <button onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition relative">
+                    <i class="fa-solid fa-basket-shopping text-base"></i>
+                    <span class="text-[11px] font-bold">Spesa</span>
+                    <span id="missing-badge" class="absolute top-0 right-4 bg-amber-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
+                </button>
+                <button onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
+                    <i class="fa-solid fa-compass text-base"></i>
+                    <span class="text-[11px] font-bold">Guida</span>
+                </button>
+                <button onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-stone-400 py-1 rounded-2xl transition">
+                    <i class="fa-solid fa-chart-line text-base"></i>
+                    <span class="text-[11px] font-bold">Progressi</span>
+                </button>
+            </div>
         </nav>
     </div>
 
     <script>
         // =========================================================================
-        // 1. CONNESSIONE CLOUD SUPABASE (INSERISCI QUI OPPURE DALLA FINESTRA IN-APP)
+        // 1. CREDENZIALI SUPABASE CABLATE DIRETTAMENTE NEL CODICE (INVISIBILI AGLI UTENTI)
         // =========================================================================
-        const DEFAULT_SB_URL = ''; 
-        const DEFAULT_SB_KEY = '';
+        const SUPABASE_URL = 'https://ltzujfpwibiugredvpjl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0enVqZnB3aWJpdWdyZWR2cGpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNDA4MTQsImV4cCI6MjEwNzYxNjgxNH0.SuM4fC0c56UJpf0n1j8eZjbchbkOCIQf2zjtbaEz3do';
 
-        let sbUrl = localStorage.getItem('fitNutri_sbUrl') || DEFAULT_SB_URL;
-        let sbKey = localStorage.getItem('fitNutri_sbKey') || DEFAULT_SB_KEY;
         let sbClient = null;
-
-        function initSupabase() {
-            if (sbUrl && sbKey && window.supabase) {
-                try {
-                    sbClient = window.supabase.createClient(sbUrl, sbKey);
-                    document.getElementById('cloud-status-indicator').innerHTML = '<i class="fa-solid fa-cloud-check text-emerald-600 mr-1"></i>Cloud Supabase Attivo e Sincronizzato';
-                } catch (e) {
-                    console.error('Errore init Supabase:', e);
-                }
+        if (window.supabase) {
+            try {
+                sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            } catch (e) {
+                console.error('Supabase init error:', e);
             }
-        }
-        initSupabase();
-
-        function toggleSupabaseModal() {
-            const modal = document.getElementById('supabase-modal');
-            modal.classList.toggle('hidden');
-            document.getElementById('sb-url-input').value = sbUrl;
-            document.getElementById('sb-key-input').value = sbKey;
-        }
-
-        function saveSupabaseConfig() {
-            sbUrl = document.getElementById('sb-url-input').value.trim();
-            sbKey = document.getElementById('sb-key-input').value.trim();
-            localStorage.setItem('fitNutri_sbUrl', sbUrl);
-            localStorage.setItem('fitNutri_sbKey', sbKey);
-            initSupabase();
-            alert('✅ Connessione Supabase salvata!');
         }
 
         async function seedSupabaseDatabase() {
-            if (!sbClient) return alert('Inserisci prima Project URL e Anon Key e clicca il bottone 1!');
+            if (!sbClient) return alert('Client Supabase non inizializzato.');
             try {
                 for (const pro of Object.values(masterState.professionals)) {
                     await sbClient.from('professionals').upsert({
                         pro_code: pro.proCode,
                         role: pro.role,
                         studio_name: pro.studioName,
-                        prefix: pro.prefix
+                        prefix: 'ID'
                     });
                 }
                 for (const u of Object.values(masterState.users)) {
@@ -822,15 +771,14 @@
                         profile_data: u
                     });
                 }
-                alert('🚀 Database Cloud Supabase popolato con tutti i profili e gli studi!');
-                toggleSupabaseModal();
+                alert('🚀 Sincronizzazione completata! Tutti i profili e gli studi sono ora salvati sul tuo database Supabase.');
             } catch (err) {
-                alert('Errore durante il caricamento su Supabase. Verifica di aver eseguito la query SQL.');
+                alert('Assicurati di aver eseguito la query SQL per creare le tabelle professionals e clients nel tuo SQL Editor di Supabase!');
             }
         }
 
         // =========================================================================
-        // 2. SIMULATORE BIOMECCANICO 3D VETTORIALE INTERNO (ZERO YOUTUBE)
+        // 2. SIMULATORE BIOMECCANICO 3D VETTORIALE INTERNO
         // =========================================================================
         function getInternalBiomechanicsSimulator(animType, primaryMuscle) {
             const hl = '#ea580c';
@@ -850,7 +798,7 @@
                             </g>
                         </svg>
                         <div class="space-y-1.5 text-xs">
-                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore 3D Interno</span>
                             <div class="font-extrabold text-sm text-white">Biomeccanica di Spinta</div>
                             <div class="text-stone-300">• <strong>Concentrica (1s):</strong> Espira spingendo il carico.</div>
                             <div class="text-stone-300">• <strong>Eccentrica (2s):</strong> Inspira frenando con <strong>${primaryMuscle}</strong>.</div>
@@ -872,7 +820,7 @@
                             </g>
                         </svg>
                         <div class="space-y-1.5 text-xs">
-                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore 3D Interno</span>
                             <div class="font-extrabold text-sm text-white">Biomeccanica di Trazione</div>
                             <div class="text-stone-300">• <strong>Trazione (1s):</strong> Espira guidando il movimento coi gomiti.</div>
                             <div class="text-stone-300">• <strong>Rilascio (2s):</strong> Allunga <strong>${primaryMuscle}</strong> senza perdere le scapole.</div>
@@ -894,7 +842,7 @@
                             </g>
                         </svg>
                         <div class="space-y-1.5 text-xs">
-                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                            <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore 3D Interno</span>
                             <div class="font-extrabold text-sm text-white">Estensione d'Anca & Core</div>
                             <div class="text-stone-300">• <strong>Picco (2s):</strong> Contrai <strong>${primaryMuscle}</strong> in isometria al vertice.</div>
                             <div class="text-stone-300">• <strong>Eccentrica (2s):</strong> Scendi controllando il bacino.</div>
@@ -913,7 +861,7 @@
                         </g>
                     </svg>
                     <div class="space-y-1.5 text-xs">
-                        <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore Interno</span>
+                        <span class="inline-block bg-amber-500/20 text-amber-300 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase">Simulatore 3D Interno</span>
                         <div class="font-extrabold text-sm text-white">Spinta / Estensione Gambe</div>
                         <div class="text-stone-300">• <strong>Attivazione:</strong> Tensione costante su <strong>${primaryMuscle}</strong>.</div>
                         <div class="text-stone-300">• <strong>Controllo:</strong> Ritorno lento in 2-3 secondi senza bloccare l'articolazione.</div>
@@ -923,7 +871,7 @@
         }
 
         // =========================================================================
-        // 3. GENERATORI DI DEFAULT (GIOVANNI & RAGAZZA)
+        // 3. GENERATORI DI DEFAULT (PIANI E SCHEDE)
         // =========================================================================
         function buildSyncedWeekPlan(isFemaleActive) {
             const pPasta = isFemaleActive ? 75 : 80;
@@ -1163,18 +1111,18 @@
         ];
 
         // =========================================================================
-        // 4. DATABASE MULTI-TENANT (ISOLAMENTO TOTALE PER STUDIO E SIGLA)
+        // 4. DATABASE CON CODICE UNICO PER IL CLIENTE (ID-XXXX) E ISOLAMENTO STUDI
         // =========================================================================
         const initialProfessionals = {
-            'PT-KINEXIA': { proCode: 'PT-KINEXIA', role: 'pt', studioName: 'Club Kinexia Fitness', prefix: 'KNX' },
-            'PT-IRON': { proCode: 'PT-IRON', role: 'pt', studioName: 'Iron Gym Club (Studio 2)', prefix: 'IRN' },
-            'NUT-FORLENZA': { proCode: 'NUT-FORLENZA', role: 'nutri', studioName: 'Studio Nutrizione Principale', prefix: 'FOR' },
-            'NUT-ROSSI': { proCode: 'NUT-ROSSI', role: 'nutri', studioName: 'Studio Dott. Rossi (Studio 2)', prefix: 'ROS' }
+            'PT-KINEXIA': { proCode: 'PT-KINEXIA', role: 'pt', studioName: 'Club Kinexia Fitness' },
+            'PT-IRON': { proCode: 'PT-IRON', role: 'pt', studioName: 'Iron Gym Club (Studio 2)' },
+            'NUT-FORLENZA': { proCode: 'NUT-FORLENZA', role: 'nutri', studioName: 'Studio Nutrizione Principale' },
+            'NUT-ROSSI': { proCode: 'NUT-ROSSI', role: 'nutri', studioName: 'Studio Dott. Rossi (Studio 2)' }
         };
 
         const initialUsers = {
-            'KNX-8492': {
-                code: 'KNX-8492',
+            'ID-8492': {
+                code: 'ID-8492',
                 name: 'Giovanni',
                 bio: '25 anni • 174 cm • Lavoro al PC • Palestra Mar/Gio/Sab',
                 ptCode: 'PT-KINEXIA',
@@ -1188,8 +1136,8 @@
                 weights: [{ date: 'Inizio', val: 110.0 }],
                 prepDone: {}, nsvDone: {}, workoutLogs: {}, workoutHistory: {}
             },
-            'KNX-3105': {
-                code: 'KNX-3105',
+            'ID-3105': {
+                code: 'ID-3105',
                 name: 'La Tua Ragazza',
                 bio: '23 anni • 170 cm • 67 kg • Lavoro attivo in piedi (Supermercato) + Palestra Mar/Gio/Sab',
                 ptCode: 'PT-KINEXIA',
@@ -1205,10 +1153,10 @@
             }
         };
 
-        let masterState = JSON.parse(localStorage.getItem('fitNutriSaaS_v12')) || {
+        let masterState = JSON.parse(localStorage.getItem('fitNutriUnified_v13')) || {
             activeCode: null,
             activeProCode: null,
-            adminSelectedCode: 'KNX-8492',
+            adminSelectedCode: 'ID-8492',
             adminNutriDayIdx: 0,
             adminPtDayIdx: 0,
             professionals: initialProfessionals,
@@ -1216,10 +1164,8 @@
         };
 
         if (!masterState.professionals) masterState.professionals = initialProfessionals;
-        if (!masterState.users['KNX-8492']) masterState.users['KNX-8492'] = initialUsers['KNX-8492'];
-        if (!masterState.users['KNX-3105']) masterState.users['KNX-3105'] = initialUsers['KNX-3105'];
-        if (masterState.adminNutriDayIdx === undefined) masterState.adminNutriDayIdx = 0;
-        if (masterState.adminPtDayIdx === undefined) masterState.adminPtDayIdx = 0;
+        if (!masterState.users['ID-8492']) masterState.users['ID-8492'] = initialUsers['ID-8492'];
+        if (!masterState.users['ID-3105']) masterState.users['ID-3105'] = initialUsers['ID-3105'];
 
         let currentDayIndex = (new Date().getDay() + 6) % 7;
         let currentWorkoutIndex = 0;
@@ -1234,11 +1180,11 @@
         let timerSecondsLeft = 0;
 
         function currentUser() {
-            return masterState.users[masterState.activeCode] || masterState.users['KNX-8492'];
+            return masterState.users[masterState.activeCode] || masterState.users['ID-8492'];
         }
 
         async function saveState(targetClientCode = null) {
-            localStorage.setItem('fitNutriSaaS_v12', JSON.stringify(masterState));
+            localStorage.setItem('fitNutriUnified_v13', JSON.stringify(masterState));
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
                 updateMissingBadge();
                 updateAdherence();
@@ -1255,7 +1201,7 @@
                         profile_data: u,
                         updated_at: new Date().toISOString()
                     });
-                } catch (e) { console.error('Sync error:', e); }
+                } catch (e) {}
             }
         }
 
@@ -1265,7 +1211,7 @@
         }
 
         // =========================================================================
-        // 5. SISTEMA DI LOGIN (SUPER-ADMIN, NUTRIZIONISTA, PT, CLIENTE)
+        // 5. SISTEMA DI LOGIN UNIFICATO
         // =========================================================================
         function hideAllScreens() {
             ['screen-login', 'screen-super-admin', 'screen-hub', 'screen-admin-nutri', 'screen-admin-pt', 'module-nutrition', 'module-workout'].forEach(id => {
@@ -1273,17 +1219,27 @@
             });
         }
 
-        function checkAuthOnLoad() {
+        async function checkAuthOnLoad() {
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
+                // Aggiorna silenziosamente dal cloud Supabase se disponibile
+                if (sbClient) {
+                    try {
+                        const { data } = await sbClient.from('clients').select('*').eq('client_code', masterState.activeCode).maybeSingle();
+                        if (data && data.profile_data) masterState.users[masterState.activeCode] = data.profile_data;
+                    } catch (e) {}
+                }
                 loadUserHub(masterState.activeCode);
             }
         }
 
         async function handleLogin() {
-            const raw = document.getElementById('login-code-input').value.trim().toUpperCase();
+            let raw = document.getElementById('login-code-input').value.trim().toUpperCase();
             document.getElementById('login-error').classList.add('hidden');
 
-            // 1. Accesso Console Proprietario Piattaforma (Giovanni)
+            // Supporta anche se l'utente scrive solo '8492' o 'KNX-8492' convertendolo nel codice unico
+            if (raw === '8492' || raw === 'KNX-8492' || raw === 'FN-8492') raw = 'ID-8492';
+            if (raw === '3105' || raw === 'KNX-3105' || raw === 'FN-3105') raw = 'ID-3105';
+
             if (raw === 'ADMIN-MASTER') {
                 hideAllScreens();
                 document.getElementById('screen-super-admin').classList.remove('hidden');
@@ -1291,7 +1247,6 @@
                 return;
             }
 
-            // 2. Se Supabase è attivo, scarica eventuali nuovi professionisti e clienti dal Cloud
             if (sbClient) {
                 try {
                     const { data: proData } = await sbClient.from('professionals').select('*').eq('pro_code', raw).maybeSingle();
@@ -1299,8 +1254,7 @@
                         masterState.professionals[raw] = {
                             proCode: proData.pro_code,
                             role: proData.role,
-                            studioName: proData.studio_name,
-                            prefix: proData.prefix
+                            studioName: proData.studio_name
                         };
                     }
                     const { data: cliData } = await sbClient.from('clients').select('*').eq('client_code', raw).maybeSingle();
@@ -1310,12 +1264,10 @@
                 } catch (e) {}
             }
 
-            // 3. Verifica se è il codice di un Professionista (PT o Nutrizionista)
             if (masterState.professionals[raw]) {
                 const pro = masterState.professionals[raw];
                 masterState.activeProCode = raw;
 
-                // Se Supabase è attivo, scarica tutti i clienti appartenenti a questo professionista
                 if (sbClient) {
                     try {
                         const col = pro.role === 'nutri' ? 'nutri_code' : 'pt_code';
@@ -1339,7 +1291,6 @@
                 return;
             }
 
-            // 4. Verifica se è il codice di un Cliente/Atleta
             if (masterState.users[raw]) {
                 masterState.activeCode = raw;
                 saveState();
@@ -1354,7 +1305,7 @@
             const u = masterState.users[code];
             hideAllScreens();
             document.getElementById('screen-hub').classList.remove('hidden');
-            document.getElementById('hub-user-code').textContent = `CODICE ID: ${u.code}`;
+            document.getElementById('hub-user-code').textContent = `CODICE UNICO: ${u.code}`;
             document.getElementById('hub-user-greeting').textContent = `Ciao ${u.name} 👋`;
             document.getElementById('hub-user-bio').textContent = u.bio;
             document.getElementById('hub-kcal-badge').textContent = `${u.weekData[0].kcal} / die`;
@@ -1391,7 +1342,7 @@
         }
 
         // =========================================================================
-        // 6. CONSOLE SUPER-ADMIN (PER CREARE NUOVI PT E NUTRIZIONISTI)
+        // 6. CONSOLE SUPER-ADMIN
         // =========================================================================
         function renderSuperAdmin() {
             const list = document.getElementById('sa-pro-list');
@@ -1399,7 +1350,7 @@
                 <div class="py-3 flex justify-between items-center">
                     <div>
                         <span class="font-extrabold text-stone-900">${p.studioName}</span>
-                        <span class="block text-stone-500">Ruolo: ${p.role === 'nutri' ? 'Nutrizionista' : 'PT / Palestra'} • Sigla Clienti: <strong>${p.prefix}-XXXX</strong></span>
+                        <span class="block text-stone-500">Ruolo: ${p.role === 'nutri' ? 'Biologo Nutrizionista' : 'PT / Palestra'}</span>
                     </div>
                     <span class="bg-stone-100 border border-stone-200 px-3 py-1 rounded-xl font-mono font-extrabold text-emerald-800">${p.proCode}</span>
                 </div>
@@ -1408,28 +1359,26 @@
 
         async function createNewProfessional() {
             const role = document.getElementById('sa-role').value;
-            const prefix = document.getElementById('sa-prefix').value.trim().toUpperCase();
             const studioName = document.getElementById('sa-name').value.trim();
             const proCode = document.getElementById('sa-code').value.trim().toUpperCase();
 
-            if (!prefix || !studioName || !proCode) return alert('Compila tutti i campi per creare la licenza.');
+            if (!studioName || !proCode) return alert('Compila nome studio e codice di accesso.');
 
-            masterState.professionals[proCode] = { proCode, role, studioName, prefix };
-            localStorage.setItem('fitNutriSaaS_v12', JSON.stringify(masterState));
+            masterState.professionals[proCode] = { proCode, role, studioName };
+            localStorage.setItem('fitNutriUnified_v13', JSON.stringify(masterState));
 
             if (sbClient) {
-                await sbClient.from('professionals').upsert({ pro_code: proCode, role, studio_name: studioName, prefix });
+                await sbClient.from('professionals').upsert({ pro_code: proCode, role, studio_name: studioName, prefix: 'ID' });
             }
 
-            document.getElementById('sa-prefix').value = '';
             document.getElementById('sa-name').value = '';
             document.getElementById('sa-code').value = '';
             renderSuperAdmin();
-            alert(`✅ Licenza attivata! Il professionista può ora entrare con il codice: ${proCode} e i suoi clienti avranno sigla ${prefix}-XXXX.`);
+            alert(`✅ Professionista attivato! Codice riservato: ${proCode}`);
         }
 
         // =========================================================================
-        // 7. EDITOR COMPLETO NUTRIZIONISTA (GIORNO PER GIORNO, PIATTI, GRAMMATURE)
+        // 7. EDITOR NUTRIZIONISTA (ISOLATO PER STUDIO)
         // =========================================================================
         function getMyClients(role, proCode) {
             return Object.values(masterState.users).filter(u => {
@@ -1442,14 +1391,13 @@
         function renderAdminNutri() {
             const pro = masterState.professionals[masterState.activeProCode];
             document.getElementById('nutri-studio-badge').textContent = `${pro.studioName} (${pro.proCode})`;
-            document.getElementById('nutri-prefix-label').textContent = `Sigla: ${pro.prefix}-XXXX`;
 
             const myClients = getMyClients('nutri', pro.proCode);
             const list = document.getElementById('nutri-patient-list');
             list.innerHTML = '';
 
             if (myClients.length === 0) {
-                list.innerHTML = `<div class="col-span-2 p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun paziente ancora associato al tuo studio (${pro.prefix}). Clicca il bottone verde qui sotto per creare il primo paziente!</div>`;
+                list.innerHTML = `<div class="col-span-full p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun paziente ancora associato al tuo studio. Clicca il bottone verde qui sotto per creare il primo paziente o aggancia il suo codice!</div>`;
                 document.getElementById('nutri-editor-box').classList.add('hidden');
                 return;
             }
@@ -1469,12 +1417,11 @@
             });
 
             const selUser = masterState.users[masterState.adminSelectedCode];
-            document.getElementById('nutri-editing-badge').textContent = `ID: ${selUser.code}`;
+            document.getElementById('nutri-editing-badge').textContent = `CODICE UNICO: ${selUser.code}`;
             document.getElementById('adm-nutri-name').value = selUser.name;
             document.getElementById('adm-nutri-water').value = selUser.waterTarget || 3.0;
             document.getElementById('adm-nutri-bio').value = selUser.bio || '';
 
-            // Renderizza selettore dei 7 giorni (Lun - Dom)
             const dayTabs = document.getElementById('adm-nutri-day-tabs');
             dayTabs.innerHTML = '';
             selUser.weekData.forEach((d, idx) => {
@@ -1494,7 +1441,6 @@
             document.getElementById('adm-day-workout').checked = !!activeDay.workout;
             document.getElementById('adm-day-workout-note').value = activeDay.workoutNote || '';
 
-            // Renderizza Editor di ogni singolo pasto del giorno selezionato
             const mealsList = document.getElementById('adm-nutri-meals-list');
             mealsList.innerHTML = '';
 
@@ -1504,7 +1450,7 @@
 
                 const ingInputsHtml = meal.ingredients.map((ing, iIdx) => `
                     <div class="flex items-center space-x-1.5">
-                        <input type="text" value="${ing.item}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'item', this.value)" placeholder="Alimento (es. Pasta integrale)" class="flex-1 min-w-0 bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs font-bold text-stone-900">
+                        <input type="text" value="${ing.item}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'item', this.value)" placeholder="Alimento" class="flex-1 min-w-0 bg-white border border-stone-200 rounded-xl px-3 py-2 text-xs font-bold text-stone-900">
                         <input type="number" value="${ing.qty}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'qty', this.value)" placeholder="Q.tà" class="w-16 bg-white border border-stone-200 rounded-xl px-2 py-2 text-xs font-extrabold text-center text-stone-900">
                         <input type="text" value="${ing.unit || 'g'}" onchange="updateAdminMealIng(${mIdx}, ${iIdx}, 'unit', this.value)" placeholder="g/ml" class="w-12 bg-white border border-stone-200 rounded-xl px-1.5 py-2 text-xs font-bold text-center text-stone-500">
                         <button onclick="removeAdminMealIng(${mIdx}, ${iIdx})" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-trash-can text-xs"></i></button>
@@ -1517,7 +1463,7 @@
                             <input type="text" value="${meal.time}" onchange="updateAdminMealField(${mIdx}, 'time', this.value)" class="w-16 bg-emerald-50 border border-emerald-200 rounded-lg px-2 py-1 text-xs font-extrabold text-emerald-900 text-center">
                             <input type="text" value="${meal.type}" onchange="updateAdminMealField(${mIdx}, 'type', this.value)" class="flex-1 bg-stone-50 border border-stone-200 rounded-lg px-2.5 py-1 text-xs font-extrabold uppercase text-stone-700">
                         </div>
-                        <button onclick="deleteAdminMeal(${mIdx})" class="text-xs font-bold text-rose-600 px-2 py-1 rounded-lg bg-rose-50">Elimina Pasto</button>
+                        <button onclick="deleteAdminMeal(${mIdx})" class="text-xs font-bold text-rose-600 px-2 py-1 rounded-lg bg-rose-50">Elimina</button>
                     </div>
 
                     <div class="grid grid-cols-1 gap-2 text-xs">
@@ -1531,7 +1477,6 @@
                         </div>
                     </div>
 
-                    <!-- Ingredienti e Grammature del Pasto -->
                     <div class="bg-stone-50 p-3 rounded-2xl border border-stone-200/70 space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] font-extrabold uppercase text-stone-500">Ingredienti & Grammature</span>
@@ -1540,9 +1485,8 @@
                         <div class="space-y-2">${ingInputsHtml}</div>
                     </div>
 
-                    <!-- Procedimento / Ricetta Passo-Passo -->
                     <div>
-                        <label class="font-bold text-stone-400 text-[10px] uppercase block mb-1">Ricetta / Preparazione Passo-Passo (1 passaggio per riga)</label>
+                        <label class="font-bold text-stone-400 text-[10px] uppercase block mb-1">Ricetta Passo-Passo (1 passaggio per riga)</label>
                         <textarea rows="3" onchange="updateAdminMealSteps(${mIdx}, this.value)" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-2.5 text-xs text-stone-700 leading-relaxed">${(meal.steps || []).join('\n')}</textarea>
                     </div>
                 `;
@@ -1645,19 +1589,18 @@
         }
 
         // =========================================================================
-        // 8. EDITOR COMPLETO PERSONAL TRAINER (SCHEDE A/B/C, ESERCIZI, SERIE, KG)
+        // 8. EDITOR PERSONAL TRAINER (ISOLATO PER CLUB)
         // =========================================================================
         function renderAdminPt() {
             const pro = masterState.professionals[masterState.activeProCode];
             document.getElementById('pt-studio-badge').textContent = `${pro.studioName} (${pro.proCode})`;
-            document.getElementById('pt-prefix-label').textContent = `Sigla: ${pro.prefix}-XXXX`;
 
             const myClients = getMyClients('pt', pro.proCode);
             const list = document.getElementById('pt-athlete-list');
             list.innerHTML = '';
 
             if (myClients.length === 0) {
-                list.innerHTML = `<div class="col-span-2 p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun atleta associato al tuo club (${pro.prefix}). Clicca il bottone arancione qui sotto per creare il primo codice atleta!</div>`;
+                list.innerHTML = `<div class="col-span-full p-4 rounded-2xl bg-stone-50 text-center text-xs text-stone-500">Nessun atleta associato al tuo club. Clicca il bottone arancione qui sotto per generare un nuovo codice unico o aggancia il codice di un cliente!</div>`;
                 document.getElementById('pt-editor-box').classList.add('hidden');
                 return;
             }
@@ -1677,7 +1620,7 @@
             });
 
             const selUser = masterState.users[masterState.adminSelectedCode];
-            document.getElementById('pt-editing-badge').textContent = `ID: ${selUser.code}`;
+            document.getElementById('pt-editing-badge').textContent = `CODICE UNICO: ${selUser.code}`;
 
             const dayTabs = document.getElementById('adm-pt-day-tabs');
             dayTabs.innerHTML = '';
@@ -1785,7 +1728,6 @@
             const selUser = masterState.users[masterState.adminSelectedCode];
             const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
             ex.defaultSets[sIdx][field] = (field === 'kg' || field === 'reps') ? (parseFloat(val) || 0) : val;
-            // Aggiorna anche i log attivi dell'atleta
             if (selUser.workoutLogs && selUser.workoutLogs[ex.id] && selUser.workoutLogs[ex.id][sIdx]) {
                 selUser.workoutLogs[ex.id][sIdx][field] = ex.defaultSets[sIdx][field];
             }
@@ -1797,7 +1739,7 @@
             const ex = selUser.workoutProgram[masterState.adminPtDayIdx].exercises[exIdx];
             const last = ex.defaultSets[ex.defaultSets.length - 1] || { type: 'N', kg: 20, reps: 10 };
             ex.defaultSets.push({ ...last });
-            delete selUser.workoutLogs[ex.id]; // rigenera con la nuova serie
+            delete selUser.workoutLogs[ex.id];
             saveState(selUser.code);
             renderAdminPt();
         }
@@ -1847,8 +1789,8 @@
         function createNewClientForPro(role) {
             const pro = masterState.professionals[masterState.activeProCode];
             const randNum = Math.floor(1000 + Math.random() * 9000);
-            const newCode = `${pro.prefix}-${randNum}`;
-            const clientName = prompt(`Generazione nuovo Codice Cliente con la tua sigla (${newCode}).\nInserisci il nome del cliente:`);
+            const newCode = `ID-${randNum}`;
+            const clientName = prompt(`Generazione Codice Unico Cliente (${newCode}).\nInserisci il nome del cliente:`);
             if (!clientName) return;
 
             masterState.users[newCode] = {
@@ -1869,14 +1811,25 @@
             masterState.adminSelectedCode = newCode;
             saveState(newCode);
             if (role === 'nutri') renderAdminNutri(); else renderAdminPt();
-            alert(`✅ Creato! Il codice personale esclusivo per ${clientName} è: ${newCode}`);
+            alert(`✅ Creato! Il Codice Unico per ${clientName} (valido sia per Nutrizione che per Palestra) è: ${newCode}`);
         }
 
-        function linkExistingClientToPro(role) {
+        async function linkExistingClientToPro(role) {
             const pro = masterState.professionals[masterState.activeProCode];
-            const existingCode = prompt('Inserisci il Codice ID che il cliente possiede già (es. KNX-8492) per associarlo anche al tuo studio:');
+            const existingCode = prompt('Inserisci il Codice Unico che il cliente possiede già (es. ID-8492) per associarlo anche al tuo studio:');
             if (!existingCode) return;
-            const clean = existingCode.trim().toUpperCase();
+            let clean = existingCode.trim().toUpperCase();
+            if (clean === '8492') clean = 'ID-8492';
+            if (clean === '3105') clean = 'ID-3105';
+
+            // Cerca anche su Supabase se non è ancora in cache locale
+            if (sbClient && !masterState.users[clean]) {
+                try {
+                    const { data } = await sbClient.from('clients').select('*').eq('client_code', clean).maybeSingle();
+                    if (data && data.profile_data) masterState.users[clean] = data.profile_data;
+                } catch (e) {}
+            }
+
             const targetUser = masterState.users[clean];
             if (!targetUser) return alert('Codice cliente non trovato.');
 
@@ -1886,7 +1839,7 @@
             masterState.adminSelectedCode = clean;
             saveState(clean);
             if (role === 'nutri') renderAdminNutri(); else renderAdminPt();
-            alert(`🔗 Cliente ${clean} (${targetUser.name}) collegato al tuo studio!`);
+            alert(`🔗 Codice ${clean} (${targetUser.name}) collegato! Ora il cliente vedrà sia il tuo lavoro sia quello dell'altro professionista entrando con il suo singolo codice.`);
         }
 
         // =========================================================================
@@ -2117,7 +2070,7 @@
 
             saveState();
             stopTimer();
-            alert('🏆 Allenamento salvato nello Storico del tuo profilo!');
+            alert('🏆 Allenamento salvato nello Storico del tuo profilo Cloud!');
             renderWorkout();
         }
 
@@ -2160,7 +2113,7 @@
             const u = currentUser();
             renderDaySelector();
             const day = u.weekData[currentDayIndex];
-            document.getElementById('current-date-label').textContent = `${day.name} • ID: ${u.code}`;
+            document.getElementById('current-date-label').textContent = `${day.name} • ${u.code}`;
 
             const banner = document.getElementById('workout-banner');
             if (day.workout) {
