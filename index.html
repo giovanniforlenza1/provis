@@ -4,76 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="NutriPlan">
-    <meta name="theme-color" content="#09090B">
+    <meta name="theme-color" content="#FFFFFF">
     <title>NutriPlan — Clinical Nutrition & Performance</title>
 
-    <!-- 1. ICONA STATICA DIRETTA PER SAFARI iOS & ANDROID (LEGGE IL FILE icon.png SU GITHUB) -->
-    <link rel="apple-touch-icon" href="/icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icon.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/icon.png">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%2309090B'/%3E%3Cpath d='M34 86V34H48L72 68V34H86V86H72L48 52V86H34Z' fill='%23FFFFFF'/%3E%3Ccircle cx='86' cy='26' r='6' fill='%2310B981'/%3E%3C/svg%3E">
+    <!-- ICONA UFFICIALE DAL TUO FILE icon.png SU GITHUB (SAFARI iOS, ANDROID E BROWSER) -->
+    <link rel="icon" type="image/png" href="./icon.png">
+    <link rel="apple-touch-icon" href="./icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icon.png">
     <link id="manifest-link" rel="manifest" href="">
 
-    <!-- 2. GENERATORE PNG 512x512 + FUNZIONE DOWNLOAD DIRETTO DI icon.png -->
     <script>
-        window.downloadOfficialAppIcon = function() {
-            const canvas = document.getElementById('hidden-icon-canvas');
-            if (!canvas) return;
-            const link = document.createElement('a');
-            link.download = 'icon.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        };
-
         window.addEventListener('DOMContentLoaded', function() {
             try {
-                const size = 512;
-                const canvas = document.createElement('canvas');
-                canvas.id = 'hidden-icon-canvas';
-                canvas.width = size;
-                canvas.height = size;
-                canvas.style.display = 'none';
-                document.body.appendChild(canvas);
-                const ctx = canvas.getContext('2d');
-
-                // Sfondo Nero Antracite (#09090B)
-                ctx.fillStyle = '#09090B';
-                ctx.fillRect(0, 0, size, size);
-
-                // Monogramma "N" Bianco Puro (#FFFFFF)
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(136, 140, 60, 232);
-                ctx.fillRect(316, 140, 60, 232);
-                ctx.beginPath();
-                ctx.moveTo(196, 140);
-                ctx.lineTo(316, 300);
-                ctx.lineTo(316, 372);
-                ctx.lineTo(196, 212);
-                ctx.closePath();
-                ctx.fill();
-
-                // Accento Verde Smeraldo (#10B981)
-                ctx.fillStyle = '#10B981';
-                ctx.beginPath();
-                ctx.arc(346, 102, 26, 0, Math.PI * 2);
-                ctx.fill();
-
-                const pngUrl = canvas.toDataURL('image/png');
-
-                // Web App Manifest dinamico per Android
+                const iconFullUrl = new URL('./icon.png', window.location.href).href;
                 const manifest = {
-                    name: "NutriPlan",
+                    name: "NutriPlan — Clinical Nutrition & Performance",
                     short_name: "NutriPlan",
-                    start_url: "/",
+                    start_url: "./",
                     display: "standalone",
-                    background_color: "#09090B",
+                    background_color: "#FFFFFF",
                     theme_color: "#09090B",
                     icons: [
-                        { src: "/icon.png", sizes: "192x192", type: "image/png" },
-                        { src: "/icon.png", sizes: "512x512", type: "image/png" },
-                        { src: pngUrl, sizes: "512x512", type: "image/png" }
+                        { src: iconFullUrl, sizes: "192x192", type: "image/png", purpose: "any maskable" },
+                        { src: iconFullUrl, sizes: "512x512", type: "image/png", purpose: "any maskable" }
                     ]
                 };
                 const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
@@ -183,12 +138,8 @@
     <section id="screen-login" class="min-h-screen flex flex-col justify-center px-6 py-12 bg-white">
         <div class="max-w-sm mx-auto w-full space-y-8">
             <div class="text-center space-y-3">
-                <div class="w-20 h-20 rounded-2xl bg-zinc-950 flex items-center justify-center mx-auto shadow-md">
-                    <svg viewBox="0 0 120 120" class="w-12 h-12">
-                        <path d="M28 90V30H44L76 72V30H92V90H76L44 48V90H28Z" fill="#FFFFFF"/>
-                        <circle cx="92" cy="22" r="7" fill="#10B981"/>
-                    </svg>
-                </div>
+                <!-- IL TUO LOGO UFFICIALE DA icon.png -->
+                <img src="./icon.png" alt="NutriPlan Logo" class="w-20 h-20 rounded-2xl mx-auto shadow-md object-cover border border-zinc-200">
                 <div class="pt-2">
                     <h1 class="text-3xl font-black tracking-tight text-zinc-950 uppercase">NutriPlan</h1>
                     <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mt-1">Clinical Nutrition & Training System</p>
@@ -431,15 +382,10 @@
     <!-- ========================================================== -->
     <section id="screen-hub" class="app-container min-h-screen flex flex-col justify-between px-4 sm:px-6 py-6 hidden">
         <div class="space-y-6">
-            <!-- Header Utente -->
+            <!-- Header Utente con il tuo icon.png -->
             <div class="flex justify-between items-center border-b border-zinc-200 pb-5">
                 <div class="flex items-center space-x-3.5">
-                    <div class="w-12 h-12 rounded-2xl bg-zinc-950 flex items-center justify-center shrink-0">
-                        <svg viewBox="0 0 120 120" class="w-7 h-7">
-                            <path d="M28 90V30H44L76 72V30H92V90H76L44 48V90H28Z" fill="#FFFFFF"/>
-                            <circle cx="92" cy="22" r="7" fill="#10B981"/>
-                        </svg>
-                    </div>
+                    <img src="./icon.png" alt="NutriPlan" class="w-12 h-12 rounded-2xl object-cover shrink-0 shadow-sm border border-zinc-200">
                     <div>
                         <span class="text-xs font-extrabold uppercase tracking-widest text-zinc-500 block" id="hub-user-code">ID</span>
                         <h1 class="text-2xl sm:text-3xl font-black text-zinc-950 leading-tight" id="hub-user-greeting">Benvenuto</h1>
