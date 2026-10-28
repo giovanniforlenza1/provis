@@ -907,152 +907,188 @@
         }
 
         // =========================================================================
-        // 3. NUOVO PIANO SETTIMANALE GIOVANNI (ID-8492) CON PIÙ PESCE + PARTNER (ID-3105)
+        // 3. PIANI COMPLETI PRECARICATI PER GIOVANNI (ID-8492) E PARTNER (ID-3105)
         // =========================================================================
         const defaultPantry = [
-            { id: 'p1', name: 'Albume liquido', cat: 'Proteine & Freschi', inStock: false, packSize: 500, packName: 'brick da 500g' },
-            { id: 'p2', name: 'Uova fresche', cat: 'Proteine & Freschi', inStock: false, packSize: 6, packName: 'confezione da 6' },
-            { id: 'p3', name: 'Yogurt Greco 0% / Skyr / Budino HiPro', cat: 'Proteine & Freschi', inStock: false, packSize: 170, packName: 'vasetti' },
-            { id: 'p16', name: 'Latte proteico', cat: 'Proteine & Freschi', inStock: false, packSize: 1000, packName: 'litro' },
-            { id: 'p4', name: 'Petto di pollo / Sovracoscia disossata', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p5', name: 'Macinato magro di manzo / Straccetti / Tagliata', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p6', name: 'Lonza / Filetto di maiale magro', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p7', name: 'Filetti di Orata / Merluzzo / Pesce Spada', cat: 'Pesce & Mare', inStock: false },
-            { id: 'p8', name: 'Mazzancolle / Gamberoni puliti', cat: 'Pesce & Mare', inStock: false },
-            { id: 'p9', name: 'Trancio di Salmone fresco / Salmone affumicato', cat: 'Pesce & Mare', inStock: false },
-            { id: 'c9', name: 'Tonno al naturale in scatola', cat: 'Pesce & Mare', inStock: false, packSize: 80, packName: 'scatolette' },
-            { id: 'p10', name: 'Fesa di tacchino (affettato e petto)', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p11', name: 'Bresaola della Valtellina', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p12', name: 'Prosciutto crudo magro / Cotto magro', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p14', name: 'Parmigiano Reggiano / Scamorza light / Mozzarella light', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'p15', name: 'Philadelphia Light / Fiocchi di latte', cat: 'Proteine & Freschi', inStock: false },
-            { id: 'c2', name: 'Cornflakes / Fiocchi d\'avena / Biscotti secchi', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c3', name: 'Pasta corta di semola', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c4', name: 'Riso Basmati', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c5', name: 'Gnocchi di patate / Patate fresche', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c6', name: 'Pane / Pancarré / Panino Burger / Piadina 75g', cat: 'Carboidrati & Dispensa', inStock: false },
-            { id: 'c7', name: 'Crackers / Taralli / Salatini / Gallette', cat: 'Carboidrati & Dispensa', inStock: false },
+            { id: 'p1', name: 'Albume liquido', cat: 'Banco Frigo & Salumi', inStock: false, packSize: 500, packName: 'brick da 500g' },
+            { id: 'p2', name: 'Uova fresche', cat: 'Banco Frigo & Salumi', inStock: false, packSize: 6, packName: 'confezione da 6' },
+            { id: 'p3', name: 'Yogurt Greco bianco o Yogurt classico', cat: 'Banco Frigo & Salumi', inStock: false, packSize: 170, packName: 'vasetti' },
+            { id: 'p16', name: 'Latte parzialmente scremato', cat: 'Banco Frigo & Salumi', inStock: false, packSize: 1000, packName: 'litro' },
+            { id: 'p4', name: 'Petto di pollo / Sovracoscia', cat: 'Macelleria', inStock: false },
+            { id: 'p5', name: 'Macinato magro di manzo / Straccetti / Tagliata', cat: 'Macelleria', inStock: false },
+            { id: 'p6', name: 'Lonza / Arista di maiale / Fettine di vitello', cat: 'Macelleria', inStock: false },
+            { id: 'p7', name: 'Filetti di Merluzzo / Orata / Pesce Spada', cat: 'Pescheria & Mare', inStock: false },
+            { id: 'p8', name: 'Gamberoni / Mazzancolle / Calamari puliti', cat: 'Pescheria & Mare', inStock: false },
+            { id: 'p9', name: 'Trancio di Salmone', cat: 'Pescheria & Mare', inStock: false },
+            { id: 'c9', name: 'Tonno in scatola (al naturale o ben sgocciolato)', cat: 'Pescheria & Mare', inStock: false, packSize: 80, packName: 'scatolette' },
+            { id: 'p10', name: 'Fesa di tacchino (affettato e fettine)', cat: 'Banco Frigo & Salumi', inStock: false },
+            { id: 'p11', name: 'Bresaola della Valtellina', cat: 'Banco Frigo & Salumi', inStock: false },
+            { id: 'p12', name: 'Prosciutto crudo magro / Prosciutto cotto', cat: 'Banco Frigo & Salumi', inStock: false },
+            { id: 'p13', name: 'Prosciutto cotto magro', cat: 'Banco Frigo & Salumi', inStock: false },
+            { id: 'p14', name: 'Parmigiano Reggiano / Scamorza / Mozzarella', cat: 'Banco Frigo & Salumi', inStock: false },
+            { id: 'p15', name: 'Philadelphia / Stracchino', cat: 'Banco Frigo & Salumi', inStock: false },
+            { id: 'c1', name: 'Farina d\'avena', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c2', name: 'Biscotti secchi (es. Oro Saiwa) / Fette biscottate / Pangrattato', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c3', name: 'Pasta corta di semola / Integrale', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c4', name: 'Riso (Basmati o classico)', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c5', name: 'Gnocchi di patate / Patate normali', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c6', name: 'Pane comune / Pancarré / Panino Hamburger / Piadina', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c7', name: 'Crackers / Taralli / Grissini', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c8', name: 'Cereali / Cornflakes', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c10', name: 'Ceci cotti', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c11', name: 'Fagioli cannellini / borlotti', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c12', name: 'Lenticchie cotte', cat: 'Dispensa & Panetteria', inStock: false },
+            { id: 'c13', name: 'Piselli', cat: 'Dispensa & Panetteria', inStock: false },
             { id: 'v1', name: 'Zucchine / Melanzane / Peperoni / Fagiolini', cat: 'Frutta & Verdura', inStock: false },
-            { id: 'v2', name: 'Pomodorini / Insalata / Rucola / Spinaci', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v2', name: 'Pomodorini / Passata di pomodoro / Insalata / Rucola', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v3', name: 'Zucca', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v4', name: 'Spinaci / Verdura a foglia', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v5', name: 'Peperoni', cat: 'Frutta & Verdura', inStock: false },
+            { id: 'v7', name: 'Avocado', cat: 'Frutta & Verdura', inStock: false },
             { id: 'v9', name: 'Frutta fresca (Mele, Pere, Banane)', cat: 'Frutta & Verdura', inStock: false },
-            { id: 'g1', name: 'Gocce di cioccolato fondente / Gallette fondente', cat: 'Grassi & Condimenti', inStock: false },
-            { id: 'g5', name: 'Mandorle / Nocciole / Olio EVO', cat: 'Grassi & Condimenti', inStock: false }
+            { id: 'g1', name: 'Cioccolato fondente / Marmellata', cat: 'Condimenti & Frutta Secca', inStock: false },
+            { id: 'g2', name: 'Burro d\'arachidi', cat: 'Condimenti & Frutta Secca', inStock: false },
+            { id: 'g3', name: 'Crema spalmabile', cat: 'Condimenti & Frutta Secca', inStock: false },
+            { id: 'g4', name: 'Marmellata', cat: 'Condimenti & Frutta Secca', inStock: false },
+            { id: 'g5', name: 'Mandorle / Noci / Olio Extravergine d\'Oliva', cat: 'Condimenti & Frutta Secca', inStock: false },
+            { id: 'g6', name: 'Olio EVO / Olive', cat: 'Condimenti & Frutta Secca', inStock: false }
         ];
 
         const interactiveSwaps = {
-            // COLAZIONE, SPUNTINO E MERENDA FISSI (DA LUNEDÌ A DOMENICA)
-            col_fissa: [
-                { title: 'Sostituto 1 (Salata veloce): Pane tostato, Tacchino, Philadelphia e Frutto', macros: '42g C • 28g P • 8g G', timer: 2, ingredients: [{ qty: 60, unit: 'g', item: 'Pane tostato', pId: 'c6' }, { qty: 80, unit: 'g', item: 'Fesa di tacchino o cotto magro', pId: 'p10' }, { qty: 20, unit: 'g', item: 'Philadelphia light', pId: 'p15' }, { qty: 1, unit: 'pz', item: 'Frutto fresco', pId: 'v9' }], steps: ['Tostare il pane, spalmare il Philadelphia light, aggiungere l\'affettato e accompagnare col frutto.'] },
-                { title: 'Sostituto 2 (Da inzuppo): Latte Proteico, Biscotti secchi e Mandorle', macros: '42g C • 28g P • 8g G', timer: 0, ingredients: [{ qty: 250, unit: 'ml', item: 'Latte proteico (~25g prot)', pId: 'p16' }, { qty: 40, unit: 'g', item: 'Biscotti secchi semplici (es. Oro Saiwa)', pId: 'c2' }, { qty: 10, unit: 'g', item: 'Mandorle', pId: 'g5' }], steps: ['Colazione rapida da inzuppo pronta in 1 minuto.'] }
+            // SOSTITUTI GENERICI PARTNER (ID-3105)
+            breakfast: [
+                { title: 'Zero Fornelli: Yogurt Greco, Biscotti e Mandorle', macros: '42g C • 24g P • 14g G', timer: 0, ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 45, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 15, unit: 'g', item: 'Mandorle o Noci', pId: 'g5' }], steps: ['Sbriciola i biscotti e le mandorle nello yogurt o inzuppali nel caffè/tè caldo.'] },
+                { title: 'Porridge Caldo Mela, Cannella e Fondente', macros: '55g C • 24g P • 12g G', timer: 5, ingredients: [{ qty: 55, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' }, { qty: 150, unit: 'ml', item: 'Latte di soia o scremato', pId: 'p16' }, { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 120, unit: 'g', item: 'Mela a dadini', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Cuoci i fiocchi d\'avena nel latte con la mela per 4 min, unisci l\'albume sul fuoco per 1 min e guarnisci col fondente.'] }
             ],
-            spuntino_fisso: [
-                { title: 'Sostituto 1 (In bustina): Parmigiano a cubetti e Taralli/Grissini', macros: '18g C • 16g P • 5g G', timer: 0, ingredients: [{ qty: 30, unit: 'g', item: 'Parmigiano Reggiano a cubetti', pId: 'p14' }, { qty: 25, unit: 'g', item: 'Taralli o grissini', pId: 'c7' }], steps: ['Zero frigo: comodissimo da tenere nello zaino a lavoro.'] },
-                { title: 'Sostituto 2 (Tutto in uno): Barretta Proteica o Drink + Mela', macros: '18g C • 20g P • 5g G', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Barretta proteica morbida (20g prot) o Drink', pId: 'p3' }, { qty: 1, unit: 'pz', item: 'Mela', pId: 'v9' }], steps: ['Soluzione immediata senza preparazione.'] }
+            snack_am: [
+                { title: 'Parmigiano Reggiano e Mandorle', macros: '2g C • 13g P • 16g G', timer: 0, ingredients: [{ qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }, { qty: 15, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }], steps: ['Pratico e saziante.'] },
+                { title: 'Involtini Bresaola, Philadelphia e Gallette', macros: '14g C • 25g P • 6g G', timer: 0, ingredients: [{ qty: 65, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' }, { qty: 40, unit: 'g', item: 'Philadelphia Light', pId: 'p15' }, { qty: 20, unit: 'g', item: 'Gallette di riso o Pane segale', pId: 'c6' }], steps: ['Spalma il Philadelphia sulle fette di bresaola, arrotola e accompagna con le gallette.'] }
             ],
-            merenda_fissa: [
-                { title: 'Sostituto 1 (Dolce col cucchiaino): Yogurt Greco 0% e Gallette al Fondente', macros: '20g C • 22g P • 5g G', timer: 0, ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt greco 0% o Skyr', pId: 'p3' }, { qty: 2, unit: 'pz', item: 'Gallette ricoperte di cioccolato fondente', pId: 'g1' }], steps: ['Merenda dolce e saziante.'] },
-                { title: 'Sostituto 2 (Zero frigo): Barretta Proteica tecnica, Frutto e Nocciole', macros: '20g C • 22g P • 5g G', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Barretta proteica tecnica (22g prot)', pId: 'p3' }, { qty: 1, unit: 'pz', item: 'Frutto piccolo', pId: 'v9' }, { qty: 5, unit: 'g', item: 'Nocciole', pId: 'g5' }], steps: ['Pronta da mangiare ovunque senza bisogno di frigorifero.'] }
+            lunch: [
+                { title: 'Zero Voglia (2 min): Toast Segale, Tonno e Pomodorini', macros: '55g C • 32g P • 12g G', timer: 0, ingredients: [{ qty: 90, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }, { qty: 100, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }], steps: ['Tosta il pane di segale e farcisci con tonno, pomodorini, origano e 1 cucchiaino d\'olio.'] },
+                { title: 'Gnocchi Lampo (2 min) con Legumi e Tonno', macros: '60g C • 30g P • 10g G', timer: 3, ingredients: [{ qty: 180, unit: 'g', item: 'Gnocchi di sole patate', pId: 'c5' }, { qty: 100, unit: 'g', item: 'Fagioli borlotti o cannellini', pId: 'c11' }, { qty: 60, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }], steps: ['Cuoci gli gnocchi 2 minuti in acqua bollente e saltali in padella con pomodorini, legumi e tonno.'] }
+            ],
+            snack_pm: [
+                { title: 'Yogurt Greco 0% e Scaglie di Fondente', macros: '12g C • 18g P • 8g G', timer: 0, ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Trita il cioccolato fondente nello yogurt freddo.'] },
+                { title: 'Frutta Fresca, Fesa di Tacchino e Fondente', macros: '18g C • 18g P • 6g G', timer: 0, ingredients: [{ qty: 150, unit: 'g', item: 'Mela, Pera o Arancia', pId: 'v9' }, { qty: 50, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Spuntino completo anti-fame serale.'] }
+            ],
+            dinner: [
+                { title: 'Straccetti di Pollo al Limone con Verdure e Pane', macros: '38g C • 48g P • 14g G', timer: 8, ingredients: [{ qty: 180, unit: 'g', item: 'Petto di pollo', pId: 'p4' }, { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }, { qty: 50, unit: 'g', item: 'Pane', pId: 'c6' }], steps: ['Saltare gli straccetti in padella con limone e contorno di zucchine.'] },
+                { title: 'Carpaccio di Bresaola, Grana e Pane Tostato', macros: '36g C • 44g P • 14g G', timer: 2, ingredients: [{ qty: 100, unit: 'g', item: 'Bresaola', pId: 'p11' }, { qty: 20, unit: 'g', item: 'Scaglie di Grana', pId: 'p14' }, { qty: 50, unit: 'g', item: 'Pane tostato', pId: 'c6' }], steps: ['Piatto freddo veloce senza fornelli.'] }
             ],
 
-            // PRANZI E CENE GIORNO PER GIORNO (CON PIÙ PESCE INTEGRATO)
+            // SOSTITUTI GIOVANNI (ID-8492) — 100% PRODOTTI BASE DI PAESE
+            col_fissa: [
+                { title: 'Sostituto 1 (Salata): Pane tostato, Prosciutto cotto/Tacchino, Philadelphia e Frutto', macros: '42g C • 28g P • 8g G', timer: 2, ingredients: [{ qty: 60, unit: 'g', item: 'Pane comune tostato', pId: 'c6' }, { qty: 80, unit: 'g', item: 'Prosciutto cotto magro o fesa di tacchino', pId: 'p12' }, { qty: 20, unit: 'g', item: 'Philadelphia o stracchino', pId: 'p15' }, { qty: 1, unit: 'pz', item: 'Frutto fresco', pId: 'v9' }], steps: ['Tostare il pane, spalmare un velo di formaggio, aggiungere l\'affettato e mangiare il frutto.'] },
+                { title: 'Sostituto 2 (Fette biscottate): 4 Fette biscottate con Marmellata + 2 Uova (o 70g Affettato)', macros: '42g C • 26g P • 9g G', timer: 3, ingredients: [{ qty: 4, unit: 'fette', item: 'Fette biscottate con 20g marmellata', pId: 'c2' }, { qty: 2, unit: 'pz', item: 'Uova (oppure 70g cotto/crudo)', pId: 'p2' }], steps: ['Colazione classica con prodotti normali che hai sempre in dispensa.'] }
+            ],
+            spuntino_fisso: [
+                { title: 'Sostituto 1 (Paninetto): Mezzo Panino piccolo (40g) con Prosciutto Crudo (50g)', macros: '20g C • 16g P • 5g G', timer: 0, ingredients: [{ qty: 40, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 50, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' }], steps: ['Avvolto nella stagnola: non serve frigo ed è buonissimo a metà mattina.'] },
+                { title: 'Sostituto 2 (Frutta e Affettato): 1 Mela/Banana + 50g Tacchino/Bresaola + 5 Mandorle', macros: '20g C • 16g P • 4g G', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Mela o banana', pId: 'v9' }, { qty: 50, unit: 'g', item: 'Fesa di tacchino o bresaola', pId: 'p10' }, { qty: 5, unit: 'pz', item: 'Mandorle', pId: 'g5' }], steps: ['Zero preparazione.'] }
+            ],
+            merenda_fissa: [
+                { title: 'Sostituto 1 (Paninetto e Grana): 40g Pane + 50g Bresaola/Crudo + 15g Grana', macros: '20g C • 24g P • 6g G', timer: 0, ingredients: [{ qty: 40, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 50, unit: 'g', item: 'Bresaola o prosciutto crudo', pId: 'p11' }, { qty: 15, unit: 'g', item: 'Scaglie di Parmigiano/Grana', pId: 'p14' }], steps: ['Merenda salata semplicissima da portare al lavoro.'] },
+                { title: 'Sostituto 2 (Dolce): 1 Yogurt Greco (170g) + 1 Frutto + 2 Quadratini di Fondente (10g)', macros: '22g C • 20g P • 5g G', timer: 0, ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt greco bianco', pId: 'p3' }, { qty: 1, unit: 'pz', item: 'Frutto fresco', pId: 'v9' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente', pId: 'g1' }], steps: ['Merenda fresca con cioccolato e frutta.'] }
+            ],
+
             lun_pra: [
-                { title: 'Sostituto 1 (Pesce): Insalata di Riso Basmati, Tonno e Piselli/Mais', macros: '65g C • 45g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Riso basmati', pId: 'c4' }, { qty: 120, unit: 'g', item: 'Tonno al naturale sgocciolato', pId: 'c9' }, { qty: 50, unit: 'g', item: 'Mais o piselli', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Perfetta da preparare la sera prima per la schiscetta.'] },
-                { title: 'Sostituto 2: Piadina arrotolata Bresaola, Philadelphia e Rucola', macros: '62g C • 46g P • 15g G', timer: 2, ingredients: [{ qty: 75, unit: 'g', item: 'Piadina (1 pezzo)', pId: 'c6' }, { qty: 100, unit: 'g', item: 'Bresaola', pId: 'p11' }, { qty: 30, unit: 'g', item: 'Philadelphia light', pId: 'p15' }, { qty: 50, unit: 'g', item: 'Rucola', pId: 'v2' }], steps: ['Spalmare, arrotolare e avvolgere nella stagnola per il lavoro.'] }
+                { title: 'Sostituto 1 (Pesce): Insalata di Riso, Tonno in scatola e Piselli/Mais', macros: '65g C • 45g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Riso', pId: 'c4' }, { qty: 120, unit: 'g', item: 'Tonno in scatola sgocciolato', pId: 'c9' }, { qty: 50, unit: 'g', item: 'Mais o piselli', pId: 'c13' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Perfetta da preparare la sera prima per la schiscetta.'] },
+                { title: 'Sostituto 2: Piadina con Bresaola (o Crudo), Philadelphia/Stracchino e Insalata', macros: '62g C • 46g P • 15g G', timer: 2, ingredients: [{ qty: 1, unit: 'pz', item: 'Piadina normale (75g)', pId: 'c6' }, { qty: 100, unit: 'g', item: 'Bresaola o crudo magro', pId: 'p11' }, { qty: 30, unit: 'g', item: 'Philadelphia o stracchino', pId: 'p15' }, { qty: 50, unit: 'g', item: 'Insalata o rucola', pId: 'v2' }], steps: ['Spalmare, arrotolare e avvolgere nella stagnola per il lavoro.'] }
             ],
             lun_cen: [
-                { title: 'Sostituto 1: Cotoletta Croccante al Forno/Airfryer e Patate', macros: '45g C • 52g P • 18g G', timer: 16, ingredients: [{ qty: 200, unit: 'g', item: 'Petto di pollo o vitello', pId: 'p4' }, { qty: 30, unit: 'g', item: 'Pangrattato o cornflakes sbriciolati', pId: 'c2' }, { qty: 150, unit: 'g', item: 'Patate in friggitrice ad aria', pId: 'c5' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Passare la carne nell\'albume e nei cornflakes/pangrattato e cuocere 15 min a 195°C con le patate.'] },
-                { title: 'Sostituto 2: Tagliata di Manzo con Rucola, Pomodorini e Pane', macros: '42g C • 52g P • 20g G', timer: 8, ingredients: [{ qty: 200, unit: 'g', item: 'Tagliata di manzo magra', pId: 'p5' }, { qty: 100, unit: 'g', item: 'Rucola e pomodorini', pId: 'v2' }, { qty: 60, unit: 'g', item: 'Pane', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Scottare la tagliata in padella caldissima per 3-4 minuti per lato.'] }
+                { title: 'Sostituto 1: Cotoletta Fatta in Casa al Forno/Airfryer e Patate', macros: '45g C • 52g P • 18g G', timer: 16, ingredients: [{ qty: 200, unit: 'g', item: 'Petto di pollo o fettine di vitello', pId: 'p4' }, { qty: 30, unit: 'g', item: 'Pangrattato normale', pId: 'c2' }, { qty: 150, unit: 'g', item: 'Patate al forno o airfryer', pId: 'c5' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Passare la carne in un goccio d\'uovo/olio e nel pangrattato e cuocere 15 min a 195°C con le patate.'] },
+                { title: 'Sostituto 2: Tagliata di Manzo in Padella con Rucola, Pomodorini e Pane', macros: '42g C • 52g P • 20g G', timer: 8, ingredients: [{ qty: 200, unit: 'g', item: 'Tagliata di manzo magra', pId: 'p5' }, { qty: 100, unit: 'g', item: 'Rucola e pomodorini', pId: 'v2' }, { qty: 60, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Scottare la tagliata sulla piastra o padella caldissima per 3-4 minuti per lato.'] }
             ],
 
             mar_pra: [
-                { title: 'Sostituto 1 (Pesce): Pasta corta al Tonno, Olive e Pomodorini', macros: '64g C • 45g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' }, { qty: 120, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 15, unit: 'g', item: 'Olive e pomodorini', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Ottima sia tiepida che fredda da portare a lavoro.'] },
-                { title: 'Sostituto 2: Piatto Freddo Fiocchi di Latte, Bresaola e Taralli', macros: '55g C • 46g P • 16g G', timer: 0, ingredients: [{ qty: 150, unit: 'g', item: 'Fiocchi di latte', pId: 'p15' }, { qty: 50, unit: 'g', item: 'Bresaola', pId: 'p11' }, { qty: 45, unit: 'g', item: 'Crostini o taralli', pId: 'c7' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Zero cottura: apri le confezioni e componi il piatto.'] }
+                { title: 'Sostituto 1 (Pesce): Pasta corta al Tonno, Olive e Pomodorini', macros: '64g C • 45g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' }, { qty: 120, unit: 'g', item: 'Tonno in scatola sgocciolato', pId: 'c9' }, { qty: 15, unit: 'g', item: 'Olive e pomodorini', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Ottima sia tiepida che fredda da portare a lavoro.'] },
+                { title: 'Sostituto 2: Mozzarella, Prosciutto Crudo e Pane/Taralli', macros: '55g C • 46g P • 18g G', timer: 0, ingredients: [{ qty: 125, unit: 'g', item: 'Mozzarella (1 pezzo)', pId: 'p14' }, { qty: 50, unit: 'g', item: 'Prosciutto crudo magro', pId: 'p12' }, { qty: 60, unit: 'g', item: 'Pane o taralli (45g)', pId: 'c6' }], steps: ['Zero cottura: apri e mangi direttamente a lavoro.'] }
             ],
             mar_cen: [
-                { title: 'Sostituto 1: Polpette di Manzo al Sugo con Pane per la Scarpetta', macros: '45g C • 52g P • 18g G', timer: 15, ingredients: [{ qty: 200, unit: 'g', item: 'Macinato magro di manzo', pId: 'p5' }, { qty: 150, unit: 'g', item: 'Passata di pomodoro', pId: 'v2' }, { qty: 65, unit: 'g', item: 'Pane', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Formare le polpette e cuocerle direttamente nella passata di pomodoro con basilico.'] },
-                { title: 'Sostituto 2: Hamburger di Tacchino alla Piastra e Patate Airfryer', macros: '48g C • 54g P • 18g G', timer: 15, ingredients: [{ qty: 220, unit: 'g', item: 'Hamburger di tacchino', pId: 'p10' }, { qty: 250, unit: 'g', item: 'Patate al forno/airfryer', pId: 'c5' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere le patate a spicchi in airfryer e l\'hamburger sulla piastra.'] }
+                { title: 'Sostituto 1: Polpette della Nonna al Sugo con Pane per la Scarpetta', macros: '45g C • 52g P • 18g G', timer: 15, ingredients: [{ qty: 200, unit: 'g', item: 'Macinato magro di manzo', pId: 'p5' }, { qty: 150, unit: 'g', item: 'Passata di pomodoro', pId: 'v2' }, { qty: 65, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Formare le polpette e cuocerle direttamente nella passata di pomodoro con basilico.'] },
+                { title: 'Sostituto 2: 2 Hamburger di Pollo/Tacchino alla Piastra e Patate al Forno', macros: '48g C • 54g P • 18g G', timer: 15, ingredients: [{ qty: 200, unit: 'g', item: 'Hamburger di tacchino o pollo (2 pezzi)', pId: 'p10' }, { qty: 250, unit: 'g', item: 'Patate al forno/airfryer', pId: 'c5' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere le patate a spicchi e gli hamburger sulla piastra.'] }
             ],
 
             mer_pra: [
-                { title: 'Sostituto 1 (Pesce): Bagel / Pane Tostato con Salmone Affumicato e Philadelphia', macros: '60g C • 44g P • 16g G', timer: 2, ingredients: [{ qty: 85, unit: 'g', item: 'Pane ciabatta o Bagel', pId: 'c6' }, { qty: 110, unit: 'g', item: 'Salmone affumicato', pId: 'p9' }, { qty: 35, unit: 'g', item: 'Philadelphia light', pId: 'p15' }, { qty: 50, unit: 'g', item: 'Rucola o zucchine', pId: 'v2' }], steps: ['Panino gourmet velocissimo e ricco di Omega-3 per l\'ufficio.'] },
-                { title: 'Sostituto 2: Carpaccio di Bresaola, Scaglie di Grana e Pane', macros: '60g C • 48g P • 18g G', timer: 0, ingredients: [{ qty: 100, unit: 'g', item: 'Bresaola', pId: 'p11' }, { qty: 20, unit: 'g', item: 'Scaglie di Grana', pId: 'p14' }, { qty: 80, unit: 'g', item: 'Pane', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Pronto in 2 minuti senza accendere i fornelli.'] }
+                { title: 'Sostituto 1: Panino al Prosciutto Crudo e Pomodori', macros: '60g C • 44g P • 15g G', timer: 2, ingredients: [{ qty: 85, unit: 'g', item: 'Pane comune (rosetta o ciabatta)', pId: 'c6' }, { qty: 110, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' }, { qty: 100, unit: 'g', item: 'Pomodori a fette o insalata', pId: 'v2' }], steps: ['Il panino più semplice e veloce del mondo per il lavoro.'] },
+                { title: 'Sostituto 2: Bresaola (o Arrosto di Tacchino), Scaglie di Grana e Pane', macros: '60g C • 48g P • 18g G', timer: 0, ingredients: [{ qty: 100, unit: 'g', item: 'Bresaola o fesa di tacchino', pId: 'p11' }, { qty: 20, unit: 'g', item: 'Scaglie di Grana/Parmigiano', pId: 'p14' }, { qty: 80, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Pronto in 2 minuti senza accendere i fornelli.'] }
             ],
             mer_cen: [
-                { title: 'Sostituto 1: Straccetti di Manzo Filanti in Padella con Scamorza e Pane', macros: '44g C • 54g P • 20g G', timer: 10, ingredients: [{ qty: 200, unit: 'g', item: 'Straccetti di manzo', pId: 'p5' }, { qty: 30, unit: 'g', item: 'Scamorza light o Grana', pId: 'p14' }, { qty: 65, unit: 'g', item: 'Pane tostato', pId: 'c6' }, { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Saltare gli straccetti con le zucchine e far sciogliere la scamorza a fine cottura.'] },
-                { title: 'Sostituto 2: Frittata Soffice Uova, Albumi, Cotto e Spinaci', macros: '42g C • 50g P • 20g G', timer: 8, ingredients: [{ qty: 2, unit: 'pz', item: 'Uova intere', pId: 'p2' }, { qty: 150, unit: 'g', item: 'Albumi', pId: 'p1' }, { qty: 30, unit: 'g', item: 'Prosciutto cotto magro', pId: 'p12' }, { qty: 200, unit: 'g', item: 'Spinaci', pId: 'v2' }, { qty: 70, unit: 'g', item: 'Pane', pId: 'c6' }], steps: ['Cuocere in padella antiaderente con coperchio per 8 minuti.'] }
+                { title: 'Sostituto 1: Straccetti di Manzo Filanti in Padella con Scamorza e Pane', macros: '44g C • 54g P • 20g G', timer: 10, ingredients: [{ qty: 200, unit: 'g', item: 'Straccetti di manzo', pId: 'p5' }, { qty: 30, unit: 'g', item: 'Scamorza o Grana', pId: 'p14' }, { qty: 65, unit: 'g', item: 'Pane tostato', pId: 'c6' }, { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Saltare gli straccetti con le zucchine e far sciogliere la scamorza a fine cottura.'] },
+                { title: 'Sostituto 2: Frittata Classica Uova e Prosciutto Cotto con Pane', macros: '42g C • 48g P • 22g G', timer: 8, ingredients: [{ qty: 2, unit: 'pz', item: 'Uova intere', pId: 'p2' }, { qty: 100, unit: 'g', item: 'Prosciutto cotto magro a dadini', pId: 'p12' }, { qty: 200, unit: 'g', item: 'Insalata o zucchine', pId: 'v2' }, { qty: 70, unit: 'g', item: 'Pane comune', pId: 'c6' }], steps: ['Sbattere le 2 uova col prosciutto cotto a dadini e cuocere in padella antiaderente.'] }
             ],
 
             gio_pra: [
-                { title: 'Sostituto 1 (Pesce): Riso Basmati, Tonno, Uova Sode e Pomodorini', macros: '65g C • 48g P • 16g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Riso basmati', pId: 'c4' }, { qty: 80, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 2, unit: 'pz', item: 'Uova sode', pId: 'p2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Comodissimo da preparare la sera prima per il contenitore da lavoro.'] },
-                { title: 'Sostituto 2: Insalatona di Patate lesse e Pollo grigliato', macros: '64g C • 48g P • 14g G', timer: 10, ingredients: [{ qty: 250, unit: 'g', item: 'Patate lesse a cubetti', pId: 'c5' }, { qty: 160, unit: 'g', item: 'Petto di pollo grigliato', pId: 'p4' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Tagliare a cubetti e condire con olio e origano.'] }
+                { title: 'Sostituto 1 (Pesce): Riso, Tonno in scatola, Uova Sode e Pomodorini', macros: '65g C • 48g P • 16g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Riso', pId: 'c4' }, { qty: 80, unit: 'g', item: 'Tonno in scatola sgocciolato', pId: 'c9' }, { qty: 2, unit: 'pz', item: 'Uova sode', pId: 'p2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Comodissimo da preparare la sera prima per il contenitore da lavoro.'] },
+                { title: 'Sostituto 2: Insalatona di Patate lesse e Pollo alla piastra', macros: '64g C • 48g P • 14g G', timer: 10, ingredients: [{ qty: 250, unit: 'g', item: 'Patate lesse a cubetti', pId: 'c5' }, { qty: 160, unit: 'g', item: 'Petto di pollo alla piastra', pId: 'p4' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Tagliare a cubetti e condire con olio, sale e origano.'] }
             ],
             gio_cen: [
-                { title: 'Sostituto 1: Sovracoscia di Pollo al Forno con Patate al Rosmarino', macros: '48g C • 54g P • 20g G', timer: 20, ingredients: [{ qty: 220, unit: 'g', item: 'Sovracoscia disossata o petto', pId: 'p4' }, { qty: 250, unit: 'g', item: 'Patate al rosmarino', pId: 'c5' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere tutto insieme in forno o airfryer a 195°C per 18-20 minuti.'] },
-                { title: 'Sostituto 2: Arista di Maiale in Padella alla Senape con Peperoni', macros: '44g C • 52g P • 18g G', timer: 10, ingredients: [{ qty: 220, unit: 'g', item: 'Lonza/Arista di maiale', pId: 'p6' }, { qty: 200, unit: 'g', item: 'Peperoni in padella', pId: 'v1' }, { qty: 70, unit: 'g', item: 'Pane', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Spennellare la carne con un velo di senape e rosolare 4 minuti per lato.'] }
+                { title: 'Sostituto 1: Pollo al Forno con Patate al Rosmarino', macros: '48g C • 54g P • 20g G', timer: 20, ingredients: [{ qty: 220, unit: 'g', item: 'Sovracoscia (senza pelle) o petto di pollo', pId: 'p4' }, { qty: 250, unit: 'g', item: 'Patate al rosmarino', pId: 'c5' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere tutto insieme in forno o airfryer a 195°C per 18-20 minuti.'] },
+                { title: 'Sostituto 2: Fettine di Lonza di Maiale in Padella con Peperoni e Pane', macros: '44g C • 52g P • 18g G', timer: 10, ingredients: [{ qty: 220, unit: 'g', item: 'Fettine di lonza di maiale', pId: 'p6' }, { qty: 200, unit: 'g', item: 'Peperoni in padella', pId: 'v1' }, { qty: 70, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Rosolare le fettine di maiale con rosmarino e un goccio di vino bianco per 4 minuti per lato.'] }
             ],
 
             ven_pra: [
-                { title: 'Sostituto 1: Panino da Ufficio con Fesa di Tacchino e Spalmabile Light', macros: '60g C • 46g P • 14g G', timer: 2, ingredients: [{ qty: 90, unit: 'g', item: 'Pane integrale o ciabatta', pId: 'c6' }, { qty: 120, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 30, unit: 'g', item: 'Formaggio spalmabile light', pId: 'p15' }, { qty: 50, unit: 'g', item: 'Insalata', pId: 'v2' }], steps: ['Zero cottura, pronto in 2 minuti per la pausa pranzo.'] },
-                { title: 'Sostituto 2: Riso Basmati con Straccetti di Manzo e Zucchine', macros: '64g C • 48g P • 15g G', timer: 12, ingredients: [{ qty: 80, unit: 'g', item: 'Riso basmati', pId: 'c4' }, { qty: 160, unit: 'g', item: 'Straccetti di manzo', pId: 'p5' }, { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Preparabile la sera prima.'] }
+                { title: 'Sostituto 1: Panino da Ufficio con Tacchino/Cotto e Philadelphia/Stracchino', macros: '60g C • 46g P • 14g G', timer: 2, ingredients: [{ qty: 90, unit: 'g', item: 'Pane comune (ciabatta o rosetta)', pId: 'c6' }, { qty: 120, unit: 'g', item: 'Fesa di tacchino o cotto magro', pId: 'p10' }, { qty: 30, unit: 'g', item: 'Philadelphia o stracchino', pId: 'p15' }, { qty: 50, unit: 'g', item: 'Insalata', pId: 'v2' }], steps: ['Zero cottura, pronto in 2 minuti per la pausa pranzo.'] },
+                { title: 'Sostituto 2: Riso con Straccetti di Manzo e Zucchine', macros: '64g C • 48g P • 15g G', timer: 12, ingredients: [{ qty: 80, unit: 'g', item: 'Riso', pId: 'c4' }, { qty: 160, unit: 'g', item: 'Straccetti di manzo', pId: 'p5' }, { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Preparabile la sera prima.'] }
             ],
             ven_cen: [
-                { title: 'Sostituto 1 (Pesce): Gamberoni / Mazzancolle in Padella al Limone con Pane Tostato', macros: '44g C • 52g P • 16g G', timer: 8, ingredients: [{ qty: 250, unit: 'g', item: 'Mazzancolle o Gamberoni puliti', pId: 'p8' }, { qty: 70, unit: 'g', item: 'Pane tostato / Crostoni', pId: 'c6' }, { qty: 200, unit: 'g', item: 'Zucchine saltate', pId: 'v1' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Saltare i gamberoni in padella 5 minuti con olio, aglio, prezzemolo e succo di limone.'] },
-                { title: 'Sostituto 2: Tagliata di Fesa di Tacchino alla Piastra con Melanzane', macros: '42g C • 56g P • 18g G', timer: 10, ingredients: [{ qty: 220, unit: 'g', item: 'Fesa di tacchino alla piastra', pId: 'p10' }, { qty: 250, unit: 'g', item: 'Melanzane grigliate', pId: 'v1' }, { qty: 65, unit: 'g', item: 'Pane', pId: 'c6' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Grigliare la fesa con erbe aromatiche e servire con le melanzane.'] }
+                { title: 'Sostituto 1 (Pesce): Gamberoni o Calamari in Padella al Limone con Pane Tostato', macros: '44g C • 52g P • 16g G', timer: 8, ingredients: [{ qty: 250, unit: 'g', item: 'Gamberoni o calamari puliti', pId: 'p8' }, { qty: 70, unit: 'g', item: 'Pane tostato', pId: 'c6' }, { qty: 200, unit: 'g', item: 'Insalata o zucchine', pId: 'v1' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Saltare in padella 5-6 minuti con olio, aglio, prezzemolo e succo di limone.'] },
+                { title: 'Sostituto 2: Fettine di Tacchino o Vitello alla Pizzaiola con Pane', macros: '42g C • 56g P • 18g G', timer: 10, ingredients: [{ qty: 220, unit: 'g', item: 'Fettine di tacchino o vitello', pId: 'p10' }, { qty: 150, unit: 'g', item: 'Passata di pomodoro e origano', pId: 'v2' }, { qty: 65, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere le fettine nel sugo di pomodoro con aglio e origano per 8 minuti e fare la scarpetta col pane.'] }
             ],
 
             sab_pra: [
-                { title: 'Sostituto 1 (Pesce): Pasta al Pomodoro Fresco e Tonno al Naturale', macros: '64g C • 46g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' }, { qty: 120, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 100, unit: 'g', item: 'Sugo semplice di pomodoro', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Pranzo veloce del sabato post-allenamento.'] },
-                { title: 'Sostituto 2: Riso Basmati e Straccetti di Pollo Grigliati', macros: '64g C • 48g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Riso basmati', pId: 'c4' }, { qty: 160, unit: 'g', item: 'Straccetti di pollo', pId: 'p4' }, { qty: 150, unit: 'g', item: 'Verdure grigliate', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Classico piatto pulito pre-serata libera.'] }
+                { title: 'Sostituto 1 (Pesce): Pasta al Sugo Semplice e Tonno', macros: '64g C • 46g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' }, { qty: 120, unit: 'g', item: 'Tonno in scatola sgocciolato', pId: 'c9' }, { qty: 100, unit: 'g', item: 'Sugo di pomodoro', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Pranzo veloce del sabato.'] },
+                { title: 'Sostituto 2: Riso e Petto di Pollo alla Piastra', macros: '64g C • 48g P • 14g G', timer: 10, ingredients: [{ qty: 80, unit: 'g', item: 'Riso', pId: 'c4' }, { qty: 160, unit: 'g', item: 'Petto di pollo alla piastra', pId: 'p4' }, { qty: 150, unit: 'g', item: 'Verdure a scelta', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Classico piatto leggero pre-serata libera.'] }
             ],
             sab_cen: [
-                { title: 'Sostituto 1: Hamburgeria / Pub (Doppio Burger con Patatine)', macros: 'Pasto Libero Settimanale', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Doppio Burger con patatine e bevanda zero', pId: 'c6' }], steps: ['Goditi la serata libera senza pensieri!'] },
-                { title: 'Sostituto 2: Braceria / Ristorante di Mare o Carne', macros: 'Pasto Libero Settimanale', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Grigliata di carne o pesce con patate e 1 calice', pId: 'p5' }], steps: ['Ricordati solo di bere abbondante acqua.'] }
+                { title: 'Sostituto 1: Panino al Pub / Hamburgeria con Patatine', macros: 'Pasto Libero Settimanale', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Hamburger con patatine e bibita', pId: 'c6' }], steps: ['Goditi la serata libera senza pensieri!'] },
+                { title: 'Sostituto 2: Braceria / Ristorante', macros: 'Pasto Libero Settimanale', timer: 0, ingredients: [{ qty: 1, unit: 'pz', item: 'Grigliata di carne o pesce con contorno e 1 calice', pId: 'p5' }], steps: ['Buon sabato sera!'] }
             ],
 
             dom_pra: [
-                { title: 'Sostituto 1: Gnocchi alla Sorrentina Fit con Mozzarella Light', macros: '70g C • 44g P • 16g G', timer: 6, ingredients: [{ qty: 220, unit: 'g', item: 'Gnocchi di patate', pId: 'c5' }, { qty: 125, unit: 'g', item: 'Mozzarella light a cubetti', pId: 'p14' }, { qty: 150, unit: 'g', item: 'Passata di pomodoro e basilico', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere gli gnocchi 2 minuti e mantecarli nel sugo caldo facendo filare la mozzarella.'] },
-                { title: 'Sostituto 2: Pasta al Forno Leggera con Ragù Magro e Mozzarella', macros: '68g C • 48g P • 18g G', timer: 15, ingredients: [{ qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' }, { qty: 100, unit: 'g', item: 'Macinato magro di manzo', pId: 'p5' }, { qty: 50, unit: 'g', item: 'Mozzarella light', pId: 'p14' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Pranzo domenicale sfizioso.'] }
+                { title: 'Sostituto 1: Gnocchi alla Sorrentina con Pomodoro e Mozzarella', macros: '70g C • 44g P • 16g G', timer: 6, ingredients: [{ qty: 220, unit: 'g', item: 'Gnocchi di patate', pId: 'c5' }, { qty: 125, unit: 'g', item: 'Mozzarella a cubetti', pId: 'p14' }, { qty: 150, unit: 'g', item: 'Passata di pomodoro e basilico', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere gli gnocchi 2 minuti e mantecarli nel sugo caldo facendo filare la mozzarella.'] },
+                { title: 'Sostituto 2: Pasta al Forno della Domenica con Ragù e Mozzarella', macros: '68g C • 48g P • 18g G', timer: 15, ingredients: [{ qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' }, { qty: 100, unit: 'g', item: 'Macinato magro di manzo', pId: 'p5' }, { qty: 50, unit: 'g', item: 'Mozzarella', pId: 'p14' }, { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Pranzo domenicale classico di casa.'] }
             ],
             dom_cen: [
-                { title: 'Sostituto 1: Bocconcini di Pollo Croccanti al Forno con Patate a Spicchi', macros: '42g C • 54g P • 20g G', timer: 18, ingredients: [{ qty: 220, unit: 'g', item: 'Pollo a bocconcini', pId: 'p4' }, { qty: 200, unit: 'g', item: 'Patate a spicchi', pId: 'c5' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere in forno o airfryer con rosmarino e paprika.'] },
-                { title: 'Sostituto 2: Tagliere Rustico Bresaola/Crudo, Scaglie di Grana e Pane Tostato', macros: '38g C • 48g P • 18g G', timer: 2, ingredients: [{ qty: 120, unit: 'g', item: 'Bresaola o crudo magro', pId: 'p11' }, { qty: 25, unit: 'g', item: 'Scaglie di Grana', pId: 'p14' }, { qty: 60, unit: 'g', item: 'Pane tostato', pId: 'c6' }, { qty: 5, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cena domenicale zero fornelli.'] }
+                { title: 'Sostituto 1: Bocconcini di Pollo al Forno con Patate a Spicchi', macros: '42g C • 54g P • 20g G', timer: 18, ingredients: [{ qty: 220, unit: 'g', item: 'Pollo a bocconcini', pId: 'p4' }, { qty: 200, unit: 'g', item: 'Patate a spicchi', pId: 'c5' }, { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cuocere in forno o airfryer con rosmarino e sale.'] },
+                { title: 'Sostituto 2: Tagliere di Prosciutto Crudo/Bresaola, Parmigiano e Pane', macros: '38g C • 48g P • 18g G', timer: 2, ingredients: [{ qty: 120, unit: 'g', item: 'Prosciutto crudo sgrassato o bresaola', pId: 'p12' }, { qty: 25, unit: 'g', item: 'Parmigiano Reggiano a pezzetti', pId: 'p14' }, { qty: 60, unit: 'g', item: 'Pane comune', pId: 'c6' }, { qty: 5, unit: 'g', item: 'Olio EVO', pId: 'g5' }], steps: ['Cena domenicale veloce senza sporcare pentole.'] }
             ]
         };
 
         function buildGiovanniSimplifiedPlan() {
             const fixedBreakfast = (dayId) => ({
                 id: `${dayId}-col`, time: '07:30', type: 'Colazione', swapCat: 'col_fissa', timer: 0,
-                title: 'Yogurt Greco 0%, Cornflakes e Gocce di Fondente',
+                title: 'Latte Parz. Scremato, Biscotti Secchi + Yogurt Greco',
                 macros: '42g C • 28g P • 8g G (~350 Kcal)',
                 ingredients: [
-                    { qty: 200, unit: 'g', item: 'Yogurt greco 0%', pId: 'p3' },
-                    { qty: 40, unit: 'g', item: 'Cornflakes (o fiocchi d\'avena)', pId: 'c2' },
-                    { qty: 10, unit: 'g', item: 'Gocce di cioccolato fondente', pId: 'g1' }
+                    { qty: 200, unit: 'ml', item: 'Latte parzialmente scremato', pId: 'p16' },
+                    { qty: 40, unit: 'g', item: 'Biscotti secchi (es. Oro Saiwa)', pId: 'c2' },
+                    { qty: 150, unit: 'g', item: 'Yogurt greco bianco (o yogurt normale)', pId: 'p3' }
                 ],
-                steps: ['Versare i cornflakes e le gocce di cioccolato nello yogurt greco freddo.']
+                steps: ['Colazione classica da inzuppo con latte, biscotti e yogurt.']
             });
 
             const fixedMorningSnack = (dayId) => ({
                 id: `${dayId}-spu`, time: '10:30', type: 'Spuntino Lavoro', swapCat: 'spuntino_fisso', timer: 0,
-                title: 'Budino / Mousse Proteica + 1 Frutto',
-                macros: '18g C • 16g P • 5g G (~180 Kcal)',
+                title: 'Parmigiano Reggiano a Pezzetti + Taralli o Crackers',
+                macros: '18g C • 16g P • 6g G (~185 Kcal)',
                 ingredients: [
-                    { qty: 200, unit: 'g', item: 'Budino o mousse proteica (tipo HiPro)', pId: 'p3' },
-                    { qty: 1, unit: 'pz', item: 'Frutto (mela, pera o banana)', pId: 'v9' }
+                    { qty: 35, unit: 'g', item: 'Parmigiano Reggiano (o Grana) a cubetti', pId: 'p14' },
+                    { qty: 25, unit: 'g', item: 'Taralli, grissini o 1 pacchetto di crackers', pId: 'c7' }
                 ],
-                steps: ['Zero preparazione: pronto da mettere nello zaino in 5 secondi.']
+                steps: ['Zero frigo e zero preparazione: lo metti in un sacchettino e lo mangi al lavoro in 2 minuti.']
             });
 
             const fixedAfternoonSnack = (dayId) => ({
                 id: `${dayId}-mer`, time: '16:30', type: 'Merenda Lavoro', swapCat: 'merenda_fissa', timer: 0,
-                title: 'Fesa di Tacchino (o Bresaola), Crackers e Mandorle',
+                title: 'Fesa di Tacchino (o Cotto/Bresaola), Crackers e Mandorle',
                 macros: '20g C • 24g P • 5g G (~220 Kcal)',
                 ingredients: [
-                    { qty: 60, unit: 'g', item: 'Fesa di tacchino (o 50g bresaola)', pId: 'p10' },
-                    { qty: 30, unit: 'g', item: 'Pacchetto di crackers o salatini', pId: 'c7' },
-                    { qty: 10, unit: 'g', item: 'Mandorle', pId: 'g5' }
+                    { qty: 60, unit: 'g', item: 'Fesa di tacchino o cotto magro (o 50g bresaola)', pId: 'p10' },
+                    { qty: 30, unit: 'g', item: 'Pacchetto di crackers', pId: 'c7' },
+                    { qty: 10, unit: 'g', item: 'Mandorle o noci', pId: 'g5' }
                 ],
-                steps: ['Merenda salata pronta da sgranocchiare direttamente dalla vaschetta.']
+                steps: ['Merenda salata pronta con affettato normale del banco salumi e crackers.']
             });
 
             return [
@@ -1076,49 +1112,49 @@
                         },
                         fixedAfternoonSnack('lun'),
                         {
-                            id: 'lun-cen', time: '20:00', type: 'Cena (Pesce Croccante)', swapCat: 'lun_cen', timer: 14,
-                            title: 'Trancio di Salmone Croccante in Airfryer con Fagiolini e Pane',
+                            id: 'lun-cen', time: '20:00', type: 'Cena (Pesce 1)', swapCat: 'lun_cen', timer: 14,
+                            title: 'Trancio di Salmone al Forno/Airfryer con Fagiolini e Pane',
                             macros: '42g C • 52g P • 24g G',
                             ingredients: [
-                                { qty: 200, unit: 'g', item: 'Trancio di salmone fresco', pId: 'p9' },
-                                { qty: 200, unit: 'g', item: 'Fagiolini lessi o saltati', pId: 'v1' },
-                                { qty: 60, unit: 'g', item: 'Pane', pId: 'c6' },
+                                { qty: 200, unit: 'g', item: 'Trancio di salmone', pId: 'p9' },
+                                { qty: 200, unit: 'g', item: 'Fagiolini o insalata', pId: 'v1' },
+                                { qty: 60, unit: 'g', item: 'Pane comune', pId: 'c6' },
                                 { qty: 5, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
-                            steps: ['Cuocere il trancio di salmone in friggitrice ad aria a 195°C per 12-14 minuti (viene croccantissimo fuori e morbido dentro) e accompagnare con fagiolini e pane.']
+                            steps: ['Cuocere il salmone in forno o friggitrice ad aria a 195°C per 12-14 minuti con un pizzico di sale e accompagnare con fagiolini e pane.']
                         }
                     ]
                 },
                 {
-                    id: 'mar', short: 'Mar', name: 'Martedì', workout: true, workoutNote: 'Giornata di Allenamento (Seduta A) • Cena Tex-Mex ad alto apporto proteico.',
+                    id: 'mar', short: 'Mar', name: 'Martedì', workout: true, workoutNote: 'Giornata di Allenamento (Seduta A) • Cena sfiziosa con Piadina Ricca.',
                     kcal: '1.980 Kcal', c: '188g', p: '172g', g: '58g',
                     meals: [
                         fixedBreakfast('mar'),
                         fixedMorningSnack('mar'),
                         {
                             id: 'mar-pra', time: '13:00', type: 'Pranzo (Schiscetta)', swapCat: 'mar_pra', timer: 4,
-                            title: 'Doppio Toast Ricco Tacchino e Scamorza Light',
+                            title: 'Doppio Toast Ricco Cotto/Tacchino e Scamorza',
                             macros: '58g C • 46g P • 14g G',
                             ingredients: [
-                                { qty: 80, unit: 'g', item: 'Pancarré integrale o classico (4 fette)', pId: 'c6' },
-                                { qty: 100, unit: 'g', item: 'Fesa di tacchino o cotto magro', pId: 'p10' },
-                                { qty: 40, unit: 'g', item: 'Scamorza o mozzarella light', pId: 'p14' }
+                                { qty: 80, unit: 'g', item: 'Pancarré (4 fette)', pId: 'c6' },
+                                { qty: 100, unit: 'g', item: 'Prosciutto cotto magro o fesa di tacchino', pId: 'p12' },
+                                { qty: 40, unit: 'g', item: 'Scamorza o provola a fette', pId: 'p14' }
                             ],
                             steps: ['Farcire i 2 toast, scaldarli sulla piastra e portarli a lavoro avvolti nella stagnola.']
                         },
                         fixedAfternoonSnack('mar'),
                         {
-                            id: 'mar-cen', time: '20:00', type: 'Cena (Tex-Mex)', swapCat: 'mar_cen', timer: 10,
-                            title: 'Fajitas / Piadina con Straccetti di Pollo, Peperoni e Scamorza Filante',
+                            id: 'mar-cen', time: '20:00', type: 'Cena Sfiziosa', swapCat: 'mar_cen', timer: 10,
+                            title: 'Piadina Calda con Straccetti di Pollo, Peperoni e Scamorza Filante',
                             macros: '48g C • 56g P • 18g G',
                             ingredients: [
-                                { qty: 75, unit: 'g', item: 'Piadina o 2 tortillas', pId: 'c6' },
-                                { qty: 200, unit: 'g', item: 'Straccetti di pollo', pId: 'p4' },
-                                { qty: 200, unit: 'g', item: 'Peperoni a listarelle + paprika', pId: 'v1' },
-                                { qty: 30, unit: 'g', item: 'Scamorza light filante', pId: 'p14' },
+                                { qty: 1, unit: 'pz', item: 'Piadina normale (75g)', pId: 'c6' },
+                                { qty: 200, unit: 'g', item: 'Straccetti di petto di pollo', pId: 'p4' },
+                                { qty: 200, unit: 'g', item: 'Peperoni a listarelle', pId: 'v1' },
+                                { qty: 30, unit: 'g', item: 'Scamorza a dadini', pId: 'p14' },
                                 { qty: 5, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
-                            steps: ['Saltare pollo e peperoni in padella con paprika, farcire la piadina calda con la scamorza e arrotolare.']
+                            steps: ['Saltare pollo e peperoni in padella, farcire la piadina calda con la scamorza e piegarla a metà.']
                         }
                     ]
                 },
@@ -1130,11 +1166,11 @@
                         fixedMorningSnack('mer'),
                         {
                             id: 'mer-pra', time: '13:00', type: 'Pranzo (Schiscetta)', swapCat: 'mer_pra', timer: 10,
-                            title: 'Riso Basmati con Bocconcini di Pollo al Limone e Zucchine',
+                            title: 'Riso con Bocconcini di Pollo al Limone e Zucchine',
                             macros: '64g C • 46g P • 14g G',
                             ingredients: [
-                                { qty: 80, unit: 'g', item: 'Riso basmati', pId: 'c4' },
-                                { qty: 150, unit: 'g', item: 'Bocconcini di pollo/tacchino al limone', pId: 'p4' },
+                                { qty: 80, unit: 'g', item: 'Riso', pId: 'c4' },
+                                { qty: 150, unit: 'g', item: 'Bocconcini di pollo al limone', pId: 'p4' },
                                 { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' },
                                 { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
@@ -1142,50 +1178,50 @@
                         },
                         fixedAfternoonSnack('mer'),
                         {
-                            id: 'mer-cen', time: '20:00', type: 'Cena (Pesce Gratinato)', swapCat: 'mer_cen', timer: 15,
-                            title: 'Filetti di Orata o Merluzzo Gratinati in Airfryer con Zucchine e Pane',
+                            id: 'mer-cen', time: '20:00', type: 'Cena (Pesce 2)', swapCat: 'mer_cen', timer: 15,
+                            title: 'Filetti di Merluzzo o Orata Gratinati al Forno con Zucchine e Pane',
                             macros: '44g C • 52g P • 18g G',
                             ingredients: [
-                                { qty: 220, unit: 'g', item: 'Filetti di Orata o Merluzzo', pId: 'p7' },
-                                { qty: 15, unit: 'g', item: 'Pangrattato con prezzemolo e aromi', pId: 'c2' },
-                                { qty: 60, unit: 'g', item: 'Pane tostato', pId: 'c6' },
-                                { qty: 200, unit: 'g', item: 'Zucchine o verdura a scelta', pId: 'v1' },
+                                { qty: 220, unit: 'g', item: 'Filetti di Merluzzo o Orata (anche surgelati)', pId: 'p7' },
+                                { qty: 15, unit: 'g', item: 'Pangrattato con prezzemolo e sale', pId: 'c2' },
+                                { qty: 60, unit: 'g', item: 'Pane comune', pId: 'c6' },
+                                { qty: 200, unit: 'g', item: 'Zucchine o insalata', pId: 'v1' },
                                 { qty: 15, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
-                            steps: ['Spennellare i filetti di pesce con olio, coprire con pangrattato aromatizzato e cuocere 14 min a 195°C in friggitrice ad aria o forno.']
+                            steps: ['Mettere un filo d\'olio e pangrattato sui filetti di merluzzo/orata e cuocere 15 min a 195°C in forno o friggitrice ad aria.']
                         }
                     ]
                 },
                 {
-                    id: 'gio', short: 'Gio', name: 'Giovedì', workout: true, workoutNote: 'Giornata di Allenamento (Seduta B) • Serata Smash Burger Fit.',
+                    id: 'gio', short: 'Gio', name: 'Giovedì', workout: true, workoutNote: 'Giornata di Allenamento (Seduta B) • Serata Hamburger fatto in casa.',
                     kcal: '2.000 Kcal', c: '190g', p: '175g', g: '60g',
                     meals: [
                         fixedBreakfast('gio'),
                         fixedMorningSnack('gio'),
                         {
                             id: 'gio-pra', time: '13:00', type: 'Pranzo (Schiscetta)', swapCat: 'gio_pra', timer: 12,
-                            title: 'Pasta Corta al Ragù Rapido di Manzo/Tacchino Magro',
+                            title: 'Pasta Corta al Ragù di Manzo Magro',
                             macros: '65g C • 48g P • 16g G',
                             ingredients: [
                                 { qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' },
-                                { qty: 150, unit: 'g', item: 'Macinato magro di manzo o tacchino', pId: 'p5' },
+                                { qty: 150, unit: 'g', item: 'Macinato magro di manzo', pId: 'p5' },
                                 { qty: 150, unit: 'g', item: 'Passata di pomodoro', pId: 'v2' },
                                 { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
-                            steps: ['Preparare la sera prima: in ufficio basta scaldarla 1 minuto (o mangiarla tiepida).']
+                            steps: ['Preparare la sera prima per il contenitore da ufficio.']
                         },
                         fixedAfternoonSnack('gio'),
                         {
-                            id: 'gio-cen', time: '20:00', type: 'Cena (Burger Night)', swapCat: 'gio_cen', timer: 8,
-                            title: 'Smash Burger Fit in Panino Burger con Lattuga, Pomodoro e Salsa Zero',
+                            id: 'gio-cen', time: '20:00', type: 'Cena (Serata Burger)', swapCat: 'gio_cen', timer: 8,
+                            title: 'Panino con Doppio Hamburger di Manzo alla Piastra, Scamorza e Insalata',
                             macros: '45g C • 56g P • 20g G',
                             ingredients: [
-                                { qty: 70, unit: 'g', item: 'Panino burger (1 pezzo)', pId: 'c6' },
-                                { qty: 200, unit: 'g', item: 'Macinato magro di manzo (diviso in 2 smash burger)', pId: 'p5' },
-                                { qty: 100, unit: 'g', item: 'Lattuga, pomodoro e velo di salsa zero', pId: 'v2' },
-                                { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }
+                                { qty: 70, unit: 'g', item: 'Panino da hamburger (o rosetta)', pId: 'c6' },
+                                { qty: 200, unit: 'g', item: 'Macinato magro di manzo (schiacciato sulla piastra)', pId: 'p5' },
+                                { qty: 20, unit: 'g', item: 'Fetta di scamorza o sottiletta', pId: 'p14' },
+                                { qty: 100, unit: 'g', item: 'Insalata, pomodoro e un velo di ketchup/maionese', pId: 'v2' }
                             ],
-                            steps: ['Schiacciare le 2 palline di manzo sulla piastra rovente per 3 minuti per lato, scaldare il pane e comporre il burger.']
+                            steps: ['Cuocere gli hamburger sulla piastra ben calda, far sciogliere il formaggio sopra e comporre il panino caldo.']
                         }
                     ]
                 },
@@ -1196,29 +1232,29 @@
                         fixedBreakfast('ven'),
                         fixedMorningSnack('ven'),
                         {
-                            id: 'ven-pra', time: '13:00', type: 'Pranzo (Schiscetta Pesce)', swapCat: 'ven_pra', timer: 10,
-                            title: 'Pasta Fredda Mediterranea con Tonno, Pomodorini e Olive',
+                            id: 'ven-pra', time: '13:00', type: 'Pranzo (Pesce 3)', swapCat: 'ven_pra', timer: 10,
+                            title: 'Pasta Fredda con Tonno, Pomodorini e Olive',
                             macros: '64g C • 45g P • 14g G',
                             ingredients: [
                                 { qty: 80, unit: 'g', item: 'Pasta corta', pId: 'c3' },
-                                { qty: 120, unit: 'g', item: 'Tonno al naturale sgocciolato', pId: 'c9' },
-                                { qty: 150, unit: 'g', item: 'Pomodorini e olive taggiasche', pId: 'v2' },
+                                { qty: 120, unit: 'g', item: 'Tonno in scatola ben sgocciolato', pId: 'c9' },
+                                { qty: 150, unit: 'g', item: 'Pomodorini e olive', pId: 'v2' },
                                 { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
-                            steps: ['Comodissima da portare a lavoro il venerdì senza bisogno di scaldarla.']
+                            steps: ['Comodissima da portare a lavoro senza bisogno di scaldarla.']
                         },
                         fixedAfternoonSnack('ven'),
                         {
-                            id: 'ven-cen', time: '20:00', type: 'Cena (Sfiziosa)', swapCat: 'ven_cen', timer: 8,
-                            title: 'Piadipizza / Pizza Proteica in Padella con Mozzarella e Tacchino/Cotto',
-                            macros: '44g C • 56g P • 18g G',
+                            id: 'ven-cen', time: '20:00', type: 'Cena Sfiziosa', swapCat: 'ven_cen', timer: 8,
+                            title: 'Piadipizza in Padella con Pomodoro, Mozzarella e Prosciutto Cotto',
+                            macros: '44g C • 54g P • 18g G',
                             ingredients: [
-                                { qty: 75, unit: 'g', item: 'Base piadina (1 pezzo) o pane arabo', pId: 'c6' },
-                                { qty: 100, unit: 'g', item: 'Mozzarella light', pId: 'p14' },
-                                { qty: 100, unit: 'g', item: 'Fesa di tacchino, cotto magro o bresaola', pId: 'p10' },
+                                { qty: 1, unit: 'pz', item: 'Piadina normale (75g)', pId: 'c6' },
+                                { qty: 100, unit: 'g', item: 'Mozzarella ben strizzata', pId: 'p14' },
+                                { qty: 100, unit: 'g', item: 'Prosciutto cotto magro o fesa di tacchino', pId: 'p12' },
                                 { qty: 80, unit: 'g', item: 'Passata di pomodoro e origano', pId: 'v2' }
                             ],
-                            steps: ['Scaldare la piadina in padella, stendere pomodoro, mozzarella e affettato e coprire col coperchio finché fila tutto.']
+                            steps: ['Scaldare la piadina in padella, mettere sopra pomodoro, mozzarella e prosciutto cotto e chiudere col coperchio per 4 minuti finché fila.']
                         }
                     ]
                 },
@@ -1229,24 +1265,24 @@
                         fixedBreakfast('sab'),
                         fixedMorningSnack('sab'),
                         {
-                            id: 'sab-pra', time: '13:30', type: 'Pranzo (Veloce)', swapCat: 'sab_pra', timer: 4,
-                            title: 'Piadina Romagnola con Crudo Magro, Stracchino Light/Fiocchi e Rucola',
+                            id: 'sab-pra', time: '13:30', type: 'Pranzo Veloce', swapCat: 'sab_pra', timer: 4,
+                            title: 'Piadina con Prosciutto Crudo, Stracchino e Rucola',
                             macros: '58g C • 46g P • 16g G',
                             ingredients: [
-                                { qty: 75, unit: 'g', item: 'Piadina (1 pezzo)', pId: 'c6' },
-                                { qty: 100, unit: 'g', item: 'Prosciutto crudo magro o bresaola', pId: 'p12' },
-                                { qty: 40, unit: 'g', item: 'Stracchino light o fiocchi di latte', pId: 'p15' },
-                                { qty: 50, unit: 'g', item: 'Rucola', pId: 'v2' }
+                                { qty: 1, unit: 'pz', item: 'Piadina normale (75g)', pId: 'c6' },
+                                { qty: 100, unit: 'g', item: 'Prosciutto crudo magro', pId: 'p12' },
+                                { qty: 40, unit: 'g', item: 'Stracchino o scamorza', pId: 'p15' },
+                                { qty: 50, unit: 'g', item: 'Rucola o insalata', pId: 'v2' }
                             ],
                             steps: ['Scaldare la piadina 2 minuti in padella e farcire.']
                         },
                         fixedAfternoonSnack('sab'),
                         {
                             id: 'sab-cen', time: '20:30', type: 'Cena (Pasto Libero)', swapCat: 'sab_cen', timer: 0,
-                            title: 'Pizza a Scelta (es. Diavola, Crudo o Bresaola) + Birra Piccola o Bevanda Zero',
+                            title: 'Pizza a Scelta + 1 Birra Piccola o Bibita',
                             macros: 'Pasto Libero Settimanale',
                             ingredients: [
-                                { qty: 1, unit: 'pz', item: 'Pizza a scelta + 1 birra piccola o bevanda zero', pId: 'c6' }
+                                { qty: 1, unit: 'pz', item: 'Pizza a scelta in pizzeria', pId: 'c6' }
                             ],
                             steps: ['Goditi il sabato sera in compagnia!']
                         }
@@ -1260,7 +1296,7 @@
                         fixedMorningSnack('dom'),
                         {
                             id: 'dom-pra', time: '13:30', type: 'Pranzo della Domenica', swapCat: 'dom_pra', timer: 10,
-                            title: 'Gnocchi di Patate al Ragù Magro di Manzo e Parmigiano',
+                            title: 'Gnocchi di Patate al Ragù di Manzo e Parmigiano',
                             macros: '70g C • 46g P • 18g G',
                             ingredients: [
                                 { qty: 220, unit: 'g', item: 'Gnocchi di patate', pId: 'c5' },
@@ -1268,29 +1304,117 @@
                                 { qty: 5, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' },
                                 { qty: 10, unit: 'g', item: 'Olio EVO', pId: 'g5' }
                             ],
-                            steps: ['Cuocere gli gnocchi 2 minuti in acqua bollente e condirli col ragù magro fatto in casa.']
+                            steps: ['Cuocere gli gnocchi 2 minuti in acqua bollente e condirli col ragù fatto in casa.']
                         },
                         fixedAfternoonSnack('dom'),
                         {
-                            id: 'dom-cen', time: '20:00', type: 'Cena (Pesce alla Griglia)', swapCat: 'dom_cen', timer: 12,
-                            title: 'Trancio di Pesce Spada (o Gamberoni) alla Griglia con Patate al Forno',
+                            id: 'dom-cen', time: '20:00', type: 'Cena (Pesce 4)', swapCat: 'dom_cen', timer: 12,
+                            title: 'Pesce Spada o Orata alla Piastra/Forno con Patate al Forno',
                             macros: '42g C • 52g P • 18g G',
                             ingredients: [
-                                { qty: 220, unit: 'g', item: 'Pesce Spada, Orata o Gamberoni alla griglia', pId: 'p7' },
-                                { qty: 200, unit: 'g', item: 'Patate a spicchi al forno/airfryer', pId: 'c5' },
-                                { qty: 150, unit: 'g', item: 'Insalata mista o pomodorini', pId: 'v2' },
+                                { qty: 220, unit: 'g', item: 'Trancio di Pesce Spada o Orata', pId: 'p7' },
+                                { qty: 200, unit: 'g', item: 'Patate al forno', pId: 'c5' },
+                                { qty: 150, unit: 'g', item: 'Insalata mista', pId: 'v2' },
                                 { qty: 15, unit: 'g', item: 'Olio EVO e limone', pId: 'g5' }
                             ],
-                            steps: ['Cuocere il pesce spada (o i gamberoni) sulla piastra calda con olio, prezzemolo e limone e servire con le patate al forno.']
+                            steps: ['Cuocere il pesce sulla piastra o in forno con olio, prezzemolo e limone e accompagnare con le patate al forno.']
                         }
                     ]
                 }
             ];
         }
 
+        // Piano Partner (ID-3105) mantenuto 100% intatto
         function buildSyncedWeekPlan(isFemaleActive) {
             if (!isFemaleActive) return buildGiovanniSimplifiedPlan();
-            return buildEmptyOrStarterWeekPlan(true);
+
+            const pPasta = 75;
+            const pChicken = 150;
+            const pFish = 170;
+            const pMeat = 140;
+            const pOats = 50;
+            const pEggWhite = 100;
+            const pBreadDinner = 50;
+
+            return [
+                {
+                    id: 'lun', short: 'Lun', name: 'Lunedì', workout: false, workoutNote: '',
+                    kcal: '1.800 Kcal', c: '185g', p: '115g', g: '60g',
+                    meals: [
+                        { id: 'lun-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 4, title: 'Pancake Avena, Albume e Burro di Arachidi', macros: '52g C • 22g P • 13g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Farina d\'avena', pId: 'c1' }, { qty: pEggWhite, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }, { qty: 15, unit: 'g', item: 'Marmellata senza zuccheri', pId: 'g4' }], steps: ['Amalgamare farina d\'avena, albume, 2 cucchiai d\'acqua e cannella.', 'Cuocere in padella antiaderente 2 minuti per lato e farcire a caldo.'] },
+                        { id: 'lun-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Pane di Segale con Fesa di Tacchino e Mandorle', macros: '26g C • 18g P • 4g G', ingredients: [{ qty: 50, unit: 'g', item: 'Pane di segale o integrale', pId: 'c6' }, { qty: 60, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 10, unit: 'g', item: 'Mandorle tostate', pId: 'g5' }], steps: ['Energia a lento rilascio per il lavoro in piedi.'] },
+                        { id: 'lun-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Integrale Salmone, Olive e Datterini', macros: '60g C • 30g P • 15g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: 80, unit: 'g', item: 'Salmone naturale o affumicato', pId: 'p9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }, { qty: 10, unit: 'g', item: 'Olive taggiasche + 5g Olio EVO', pId: 'g6' }], steps: ['Lessare la pasta in acqua salata per 10 minuti.', 'Unire datterini a metà, olive, salmone a listarelle, olio a crudo e scorza di limone.'] },
+                        { id: 'lun-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco 0% con Cioccolato Fondente', macros: '12g C • 18g P • 8g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Tritare il cioccolato fondente a scaglie e unire allo yogurt freddo.'] },
+                        { id: 'lun-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 16, title: 'Bocconcini di Pollo e Ceci Croccanti alla Paprika', macros: '38g C • 52g P • 14g G', ingredients: [{ qty: pChicken, unit: 'g', item: 'Petto di pollo', pId: 'p4' }, { qty: 80, unit: 'g', item: 'Ceci cotti ben asciugati', pId: 'c10' }, { qty: 250, unit: 'g', item: 'Zucchine a bastoncino', pId: 'v1' }], steps: ['Condire pollo, ceci asciugati e zucchine con paprika dolce, rosmarino e 1 cucchiaino d\'olio EVO.', 'Cuocere in forno ventilato o friggitrice ad aria a 195°C per 16 minuti.'] }
+                    ]
+                },
+                {
+                    id: 'mar', short: 'Mar', name: 'Martedì', workout: true, workoutNote: 'Ore 06:30 Pre-Workout leggero • Ore 07:00 Seduta A • Ore 08:30 Colazione Post-Workout.',
+                    kcal: '1.850 Kcal', c: '190g', p: '118g', g: '60g',
+                    meals: [
+                        { id: 'mar-0', time: '06:30', type: 'Pre-Allenamento', swapCat: 'snack_pm', timer: 0, title: 'Caffè Espresso, Frutta e Fondente', macros: '18g C • 2g P • 5g G', ingredients: [{ qty: 100, unit: 'g', item: 'Banana o Mela', pId: 'v9' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Assumere 30 minuti prima dell\'allenamento con 2 bicchieri d\'acqua.'] },
+                        { id: 'mar-1', time: '08:30', type: 'Post-Allenamento', swapCat: 'breakfast', timer: 5, title: 'Porridge Caldo Mela, Cannella e Noci', macros: '48g C • 22g P • 12g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' }, { qty: 150, unit: 'ml', item: 'Latte di soia o scremato', pId: 'p16' }, { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 120, unit: 'g', item: 'Mela a dadini + Cannella', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' }], steps: ['Cuocere i fiocchi d\'avena nel latte con la mela a cubetti e cannella per 4 minuti.', 'Incorporare l\'albume a fuoco minimo mescolando per 1 minuto e completare con le noci.'] },
+                        { id: 'mar-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Integrale Uovo, Crudo Sgrassato e Zucchine', macros: '58g C • 32g P • 15g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: 1, unit: 'pz', item: 'Uovo intero', pId: 'p2' }, { qty: 40, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' }, { qty: 200, unit: 'g', item: 'Zucchine a julienne', pId: 'v1' }, { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Rosolare il crudo a listarelle con le zucchine grattugiate per 3 minuti.', 'Scolare la pasta a fuoco spento e mantecare con l\'uovo sbattuto, pepe e Parmigiano.'] },
+                        { id: 'mar-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Pera, Fesa di Tacchino e Fondente', macros: '18g C • 16g P • 6g G', ingredients: [{ qty: 150, unit: 'g', item: 'Pera o Mela', pId: 'v9' }, { qty: 50, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Spuntino bilanciato per il recupero pomeridiano.'] },
+                        { id: 'mar-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 10, title: 'Filetto di Orata su Vellutata di Cannellini e Spinaci', macros: '38g C • 46g P • 14g G', ingredients: [{ qty: pFish, unit: 'g', item: 'Filetto di Orata o Branzino', pId: 'p7' }, { qty: 100, unit: 'g', item: 'Fagioli cannellini cotti', pId: 'c11' }, { qty: 200, unit: 'g', item: 'Spinaci freschi', pId: 'v4' }], steps: ['Frullare i cannellini con poca acqua calda, rosmarino e 1 cucchiaino d\'olio.', 'Cuocere il filetto di pesce in padella coperta per 10 minuti con pomodorini e capperi e servire sulla crema.'] }
+                    ]
+                },
+                {
+                    id: 'mer', short: 'Mer', name: 'Mercoledì', workout: false, workoutNote: '',
+                    kcal: '1.800 Kcal', c: '185g', p: '115g', g: '58g',
+                    meals: [
+                        { id: 'mer-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 0, title: 'Latte, Cereali Integrali, Biscotti e Yogurt Greco', macros: '52g C • 26g P • 8g G', ingredients: [{ qty: 200, unit: 'ml', item: 'Latte parz. scremato o soia', pId: 'p16' }, { qty: 40, unit: 'g', item: 'Cereali integrali', pId: 'c8' }, { qty: 30, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 150, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }], steps: ['Consumare lo yogurt greco in abbinamento a latte e cereali per mantenere stabile la curva glicemica.'] },
+                        { id: 'mer-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Involtini di Bresaola, Philadelphia Light e Gallette', macros: '18g C • 22g P • 6g G', ingredients: [{ qty: 60, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' }, { qty: 40, unit: 'g', item: 'Philadelphia Light/Protein', pId: 'p15' }, { qty: 30, unit: 'g', item: 'Gallette o Pane di segale', pId: 'c6' }], steps: ['Spalmare il formaggio magro sulle fette di bresaola con rucola, arrotolare e accompagnare con le gallette.'] },
+                        { id: 'mer-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Riso Basmati con Tonno, Zucchine e Limone', macros: '62g C • 30g P • 10g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Riso Basmati', pId: 'c4' }, { qty: 90, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Zucchine', pId: 'v1' }], steps: ['Lessare il riso basmati per 10 minuti e saltarlo con zucchine a rondelle, tonno, olio e scorza di limone.'] },
+                        { id: 'mer-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 1, title: 'Yogurt Greco con Fondente Fuso e Mandorle', macros: '12g C • 18g P • 15g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }, { qty: 10, unit: 'g', item: 'Mandorle', pId: 'g5' }], steps: ['Sciogliere il fondente 30 secondi al microonde e versarlo sullo yogurt freddo.'] },
+                        { id: 'mer-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6, title: 'Straccetti di Vitello al Balsamico con Lenticchie e Zucchine', macros: '34g C • 45g P • 14g G', ingredients: [{ qty: pMeat, unit: 'g', item: 'Fettine di vitello magro', pId: 'p5' }, { qty: 100, unit: 'g', item: 'Lenticchie cotte in vetro', pId: 'c12' }, { qty: 200, unit: 'g', item: 'Zucchine grigliate', pId: 'v1' }], steps: ['Scottare gli straccetti di vitello per 3 minuti a fiamma viva e sfumare con aceto balsamico.', 'Servire con lenticchie calde aromatizzate al rosmarino e zucchine grigliate.'] }
+                    ]
+                },
+                {
+                    id: 'gio', short: 'Gio', name: 'Giovedì', workout: true, workoutNote: 'Ore 06:30 Pre-Workout • Ore 07:00 Seduta B • Ore 08:30 Pancake Post-Workout.',
+                    kcal: '1.850 Kcal', c: '188g', p: '116g', g: '62g',
+                    meals: [
+                        { id: 'gio-0', time: '06:30', type: 'Pre-Allenamento', swapCat: 'snack_pm', timer: 0, title: 'Espresso, Mela/Arancia e Fondente', macros: '18g C • 2g P • 5g G', ingredients: [{ qty: 150, unit: 'g', item: 'Mela o Arancia', pId: 'v9' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Consumare 30 minuti prima dell\'inizio della seduta.'] },
+                        { id: 'gio-1', time: '08:30', type: 'Post-Allenamento', swapCat: 'breakfast', timer: 4, title: 'Pancake Avena e Caffè con Crema Proteica', macros: '46g C • 25g P • 15g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Farina d\'avena', pId: 'c1' }, { qty: pEggWhite, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 15, unit: 'g', item: 'Crema proteica spalmabile', pId: 'g3' }, { qty: 10, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }], steps: ['Unire farina d\'avena, albume e 1 tazzina di caffè freddo.', 'Cuocere in padella 2 minuti per lato e spalmare le creme in superficie.'] },
+                        { id: 'gio-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Integrale con Crema di Zucca e Cotto Rosolato', macros: '65g C • 28g P • 14g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: 150, unit: 'g', item: 'Zucca a cubetti', pId: 'v3' }, { qty: 60, unit: 'g', item: 'Prosciutto cotto magro', pId: 'p13' }, { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Cuocere la zucca 4 minuti al microonde, schiacciarla con Parmigiano, acqua di cottura e olio.', 'Condire la pasta completando col prosciutto cotto rosolato.'] },
+                        { id: 'gio-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco e Anacardi', macros: '10g C • 20g P • 8g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Anacardi o Mandorle', pId: 'g5' }], steps: ['Spuntino proteico pomeridiano.'] },
+                        { id: 'gio-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6, title: 'Mazzancolle agli Agrumi con Ceci e Pane di Segale', macros: '41g C • 48g P • 16g G', ingredients: [{ qty: 190, unit: 'g', item: 'Mazzancolle o Gamberoni puliti', pId: 'p8' }, { qty: 100, unit: 'g', item: 'Ceci cotti in vetro', pId: 'c10' }, { qty: pBreadDinner, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }, { qty: 200, unit: 'g', item: 'Zucchine', pId: 'v1' }], steps: ['Saltare le mazzancolle per 4 minuti con aglio, prezzemolo e succo di limone.', 'Servire con insalata tiepida di ceci, zucchine e pane di segale tostato.'] }
+                    ]
+                },
+                {
+                    id: 'ven', short: 'Ven', name: 'Venerdì', workout: false, workoutNote: '',
+                    kcal: '1.800 Kcal', c: '182g', p: '115g', g: '62g',
+                    meals: [
+                        { id: 'ven-1', time: '07:30', type: 'Colazione', swapCat: 'breakfast', timer: 0, title: 'Tè Caldo, Biscotti Integrali, Mandorle e Yogurt Greco', macros: '38g C • 24g P • 16g G', ingredients: [{ qty: 45, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 20, unit: 'g', item: 'Mandorle', pId: 'g5' }, { qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }], steps: ['Abbinare i biscotti e il tè allo yogurt greco e alle mandorle.'] },
+                        { id: 'ven-2', time: '10:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Fesa di Tacchino e Noci', macros: '15g C • 19g P • 10g G', ingredients: [{ qty: 60, unit: 'g', item: 'Fesa di tacchino arrosto', pId: 'p10' }, { qty: 15, unit: 'g', item: 'Noci', pId: 'g5' }], steps: ['Spuntino salato ad alta sazietà.'] },
+                        { id: 'ven-3', time: '13:00', type: 'Pranzo', swapCat: 'lunch', timer: 4, title: 'Gnocchi di Patate con Fagioli Borlotti e Tonno', macros: '62g C • 30g P • 10g G', ingredients: [{ qty: 180, unit: 'g', item: 'Gnocchi di sole patate', pId: 'c5' }, { qty: 100, unit: 'g', item: 'Fagioli borlotti cotti', pId: 'c11' }, { qty: 60, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }], steps: ['Lessare gli gnocchi per 2 minuti e saltarli in padella con pomodorini, fagioli borlotti, tonno e basilico.'] },
+                        { id: 'ven-4', time: '16:30', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Pera Fresca e Cioccolato Fondente', macros: '24g C • 3g P • 8g G', ingredients: [{ qty: 150, unit: 'g', item: 'Pera o Mela', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Tagliare il frutto a spicchi e accompagnare col cioccolato fondente.'] },
+                        { id: 'ven-5', time: '20:00', type: 'Cena', swapCat: 'dinner', timer: 6, title: 'Toast di Segale con Avocado, Uova e Bresaola', macros: '39g C • 42g P • 24g G', ingredients: [{ qty: 60, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }, { qty: 60, unit: 'g', item: 'Avocado maturo', pId: 'v7' }, { qty: 2, unit: 'pz', item: 'Uova intere', pId: 'p2' }, { qty: 35, unit: 'g', item: 'Bresaola della Valtellina', pId: 'p11' }, { qty: 150, unit: 'g', item: 'Pomodori in insalata', pId: 'v2' }], steps: ['Bollire le uova per 6-8 minuti, spalmare l\'avocado schiacciato con limone sul pane tostato e completare con uova, bresaola e pomodori.'] }
+                    ]
+                },
+                {
+                    id: 'sab', short: 'Sab', name: 'Sabato', workout: true, workoutNote: 'Ore 08:00 Pre-Workout • Ore 09:00 Seduta C • Ore 10:30 Brunch Post-Workout.',
+                    kcal: '1.850 Kcal', c: '190g', p: '118g', g: '62g',
+                    meals: [
+                        { id: 'sab-0', time: '08:00', type: 'Pre-Allenamento', swapCat: 'snack_pm', timer: 0, title: 'Caffè, Biscotti Integrali e Fondente', macros: '22g C • 4g P • 6g G', ingredients: [{ qty: 25, unit: 'g', item: 'Biscotti secchi integrali', pId: 'c7' }, { qty: 10, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Ricarica leggera 60 minuti prima della seduta del sabato.'] },
+                        { id: 'sab-1', time: '10:30', type: 'Brunch Post-Allenamento', swapCat: 'breakfast', timer: 5, title: 'Maxi Pancake Avena e Albume', macros: '50g C • 26g P • 15g G', ingredients: [{ qty: pOats + 5, unit: 'g', item: 'Farina d\'avena', pId: 'c1' }, { qty: pEggWhite + 20, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 15, unit: 'g', item: 'Marmellata senza zuccheri', pId: 'g4' }, { qty: 15, unit: 'g', item: 'Burro d\'arachidi 100%', pId: 'g2' }], steps: ['Cuocere il pancake in padella antiaderente e farcire a caldo.'] },
+                        { id: 'sab-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch', timer: 10, title: 'Pasta Integrale Datterini, Tonno e Basilico', macros: '62g C • 32g P • 10g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Pasta integrale', pId: 'c3' }, { qty: 90, unit: 'g', item: 'Tonno al naturale', pId: 'c9' }, { qty: 150, unit: 'g', item: 'Pomodorini datterini', pId: 'v2' }], steps: ['Condire i datterini a crudo con basilico, tonno e olio; unire la pasta al dente.'] },
+                        { id: 'sab-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco e Mandorle', macros: '8g C • 20g P • 9g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }, { qty: 15, unit: 'g', item: 'Mandorle', pId: 'g5' }], steps: ['Merenda proteica pomeridiana.'] },
+                        { id: 'sab-5', time: '20:30', type: 'Cena', swapCat: 'dinner', timer: 8, title: 'Medaglioni di Arista alla Senape con Piselli e Peperoni', macros: '40g C • 50g P • 16g G', ingredients: [{ qty: pMeat, unit: 'g', item: 'Arista di maiale magra', pId: 'p6' }, { qty: 100, unit: 'g', item: 'Piselli cotti', pId: 'c13' }, { qty: 200, unit: 'g', item: 'Peperoni a listarelle', pId: 'v5' }, { qty: pBreadDinner, unit: 'g', item: 'Pane di segale o Crostoni', pId: 'c6' }], steps: ['Spennellare l\'arista con senape e rosmarino e cuocerla 4 minuti per lato.', 'Saltare peperoni e piselli in padella e servire coi crostoni.'] }
+                    ]
+                },
+                {
+                    id: 'dom', short: 'Dom', name: 'Domenica', workout: false, workoutNote: '',
+                    kcal: 'Giorno Flessibile', c: '~185g', p: '~115g', g: '~65g',
+                    meals: [
+                        { id: 'dom-1', time: '09:00', type: 'Colazione', swapCat: 'breakfast', timer: 5, title: 'Porridge Caldo Pera, Cannella e Fondente', macros: '48g C • 22g P • 12g G', ingredients: [{ qty: pOats, unit: 'g', item: 'Fiocchi d\'avena (cotti in porridge)', pId: 'c2' }, { qty: 100, unit: 'g', item: 'Albume liquido', pId: 'p1' }, { qty: 120, unit: 'g', item: 'Pera o Banana a fettine', pId: 'v9' }, { qty: 15, unit: 'g', item: 'Cioccolato fondente 85%', pId: 'g1' }], steps: ['Cuocere avena e pera in acqua/latte per 4 minuti, incorporare l\'albume e guarnire col fondente.'] },
+                        { id: 'dom-2', time: '11:30', type: 'Spuntino', swapCat: 'snack_am', timer: 0, title: 'Scaglie di Parmigiano Reggiano', macros: '0g C • 10g P • 9g G', ingredients: [{ qty: 30, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Spuntino leggero in vista del pasto libero.'] },
+                        { id: 'dom-3', time: '13:30', type: 'Pranzo', swapCat: 'lunch', timer: 14, title: 'Risotto Cremoso Zucca e Crudo Croccante', macros: '66g C • 26g P • 12g G', ingredients: [{ qty: pPasta, unit: 'g', item: 'Riso Carnaroli o Basmati', pId: 'c4' }, { qty: 150, unit: 'g', item: 'Zucca a dadini', pId: 'v3' }, { qty: 50, unit: 'g', item: 'Prosciutto crudo sgrassato', pId: 'p12' }, { qty: 10, unit: 'g', item: 'Parmigiano Reggiano', pId: 'p14' }], steps: ['Cuocere il riso con la zucca finché diventa cremoso, mantecare col Parmigiano e completare col crudo rosolato.'] },
+                        { id: 'dom-4', time: '17:00', type: 'Merenda', swapCat: 'snack_pm', timer: 0, title: 'Yogurt Greco 0%', macros: '7g C • 18g P • 0g G', ingredients: [{ qty: 170, unit: 'g', item: 'Yogurt Greco 0%', pId: 'p3' }], steps: ['Spuntino proteico leggero prima della serata libera.'] },
+                        { id: 'dom-5', time: '20:30', type: 'Cena / Libero', swapCat: 'dinner', timer: 0, title: 'Carpaccio di Bresaola oppure Pasto Libero', macros: 'Pasto Libero Settimanale', ingredients: [{ qty: 90, unit: 'g', item: 'Bresaola (oppure Cena libera)', pId: 'p11' }, { qty: 20, unit: 'g', item: 'Grana a scaglie', pId: 'p14' }, { qty: 50, unit: 'g', item: 'Pane di segale tostato', pId: 'c6' }], steps: ['Mantenere un corretto apporto idrico durante l\'intera giornata.'] }
+                    ]
+                }
+            ];
         }
 
         function buildWorkoutProgram(isFemale) {
@@ -1324,43 +1448,14 @@
                         ]
                     }
                 ];
-            } else {
-                return [
-                    {
-                        id: 'wo-f-a', dayLabel: 'Martedì', shortTitle: 'Seduta A', title: 'Glutei Focus & Femorali', subtitle: 'Martedì • Ore 07:00 • Lower Body',
-                        exercises: [
-                            { id: 'ex-fa1', name: 'Hip Thrust con Bilanciere o Macchina', primaryMuscle: 'Grande Gluteo', secondaryMuscle: 'Femorali • Core', tut: '2-0-1-2', rest: 90, note: 'Spingere sui talloni mantenendo 2 secondi di contrazione isometrica al picco.', defaultSets: [{ type: 'W', kg: 30, reps: 12 }, { type: 'N', kg: 50, reps: 10 }, { type: 'N', kg: 60, reps: 10 }, { type: 'N', kg: 60, reps: 8 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 12', '45kg x 10', '55kg x 10', '55kg x 8'] }] },
-                            { id: 'ex-fa2', name: 'Leg Press 45° Piedi Alti', primaryMuscle: 'Glutei • Femorali', secondaryMuscle: 'Quadricipiti', tut: '3-0-1-0', rest: 90, note: 'Piedi posizionati nella porzione superiore della pedana per enfatizzare la catena posteriore.', defaultSets: [{ type: 'N', kg: 60, reps: 12 }, { type: 'N', kg: 70, reps: 12 }, { type: 'N', kg: 80, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['60kg x 12', '70kg x 10', '75kg x 10'] }] },
-                            { id: 'ex-fa3', name: 'Stacco Rumeno con Manubri (RDL)', primaryMuscle: 'Catena Posteriore', secondaryMuscle: 'Core', tut: '3-1-1-0', rest: 90, note: 'Arretramento dell\'anca mantenendo i manubri aderenti alle tibie.', defaultSets: [{ type: 'N', kg: 14, reps: 12 }, { type: 'N', kg: 16, reps: 10 }, { type: 'N', kg: 16, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['12kg x 12', '14kg x 10', '16kg x 10'] }] },
-                            { id: 'ex-fa4', name: 'Abductor Machine', primaryMuscle: 'Gluteo Medio', secondaryMuscle: 'Abduttori', tut: '2-0-1-2', rest: 60, note: 'Fermo isometrico di 2 secondi in massima abduzione.', defaultSets: [{ type: 'N', kg: 40, reps: 15 }, { type: 'N', kg: 45, reps: 15 }, { type: 'D', kg: 35, reps: 20 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['35kg x 15', '40kg x 15', '30kg x 20'] }] }
-                        ]
-                    },
-                    {
-                        id: 'wo-f-b', dayLabel: 'Giovedì', shortTitle: 'Seduta B', title: 'Upper Body & Postura', subtitle: 'Giovedì • Ore 07:00 • Tonificazione',
-                        exercises: [
-                            { id: 'ex-fb1', name: 'Lat Machine Avanti Presa Media', primaryMuscle: 'Gran Dorsale', secondaryMuscle: 'Bicipiti', tut: '2-0-1-1', rest: 75, note: 'Depressione scapolare prima di iniziare la trazione.', defaultSets: [{ type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 35, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['25kg x 12', '30kg x 10', '30kg x 10'] }] },
-                            { id: 'ex-fb2', name: 'Pulley Basso con Triangolo', primaryMuscle: 'Centro Schiena', secondaryMuscle: 'Deltoide Post.', tut: '2-0-1-1', rest: 75, note: 'Esercizio fondamentale per il riequilibrio posturale.', defaultSets: [{ type: 'N', kg: 25, reps: 12 }, { type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 30, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['25kg x 12', '25kg x 12', '30kg x 10'] }] },
-                            { id: 'ex-fb3', name: 'Shoulder Press con Manubri', primaryMuscle: 'Deltoidi', secondaryMuscle: 'Tricipiti', tut: '2-0-1-1', rest: 60, note: 'Movimento controllato lungo tutto l\'arco articolare.', defaultSets: [{ type: 'N', kg: 6, reps: 12 }, { type: 'N', kg: 8, reps: 10 }, { type: 'N', kg: 8, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['6kg x 12', '6kg x 12', '8kg x 8'] }] },
-                            { id: 'ex-fb4', name: 'Pushdown Tricipiti ai Cavi', primaryMuscle: 'Tricipiti', secondaryMuscle: 'Spalle', tut: '2-0-1-2', rest: 60, note: 'Estensione completa dell\'avambraccio.', defaultSets: [{ type: 'N', kg: 12, reps: 15 }, { type: 'N', kg: 15, reps: 12 }, { type: 'N', kg: 15, reps: 12 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 15', '12.5kg x 12', '12.5kg x 12'] }] }
-                        ]
-                    },
-                    {
-                        id: 'wo-f-c', dayLabel: 'Sabato', shortTitle: 'Seduta C', title: 'Glutei, Gambe & Core', subtitle: 'Sabato • Ore 09:00 • Full Sculpt',
-                        exercises: [
-                            { id: 'ex-fc1', name: 'Affondi Dietro con Manubri (o Squat Bulgaro)', primaryMuscle: 'Glutei • Quadricipiti', secondaryMuscle: 'Core', tut: '2-1-1-0', rest: 90, note: 'Leggera flessione anteriore del busto per enfatizzare il lavoro sul grande gluteo.', defaultSets: [{ type: 'N', kg: 8, reps: 10 }, { type: 'N', kg: 10, reps: 10 }, { type: 'N', kg: 10, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['8kg x 10', '8kg x 10', '10kg x 8'] }] },
-                            { id: 'ex-fc2', name: 'Slanci Glutei al Cavo Basso', primaryMuscle: 'Grande Gluteo', secondaryMuscle: 'Femorali', tut: '2-0-1-2', rest: 60, note: 'Estensione pura dell\'anca senza inarcare il tratto lombare.', defaultSets: [{ type: 'N', kg: 10, reps: 12 }, { type: 'N', kg: 12.5, reps: 12 }, { type: 'N', kg: 15, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['10kg x 12', '12.5kg x 10', '12.5kg x 10'] }] },
-                            { id: 'ex-fc3', name: 'Leg Curl Seduto', primaryMuscle: 'Ischiocrurali', secondaryMuscle: 'Glutei', tut: '2-0-1-1', rest: 75, note: 'Movimento costante senza strappi.', defaultSets: [{ type: 'N', kg: 30, reps: 12 }, { type: 'N', kg: 35, reps: 12 }, { type: 'N', kg: 35, reps: 10 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['30kg x 12', '30kg x 12', '35kg x 10'] }] },
-                            { id: 'ex-fc4', name: 'Plank Isometrico + Crunch', primaryMuscle: 'Core & Addome', secondaryMuscle: 'Trasverso', tut: 'Isometria', rest: 60, note: 'Tenuta isometrica dell\'addome.', defaultSets: [{ type: 'N', kg: 0, reps: 45 }, { type: 'N', kg: 0, reps: 45 }, { type: 'N', kg: 0, reps: 45 }], defaultHistory: [{ date: 'Sett. Scorsa', sets: ['0kg x 40', '0kg x 40', '0kg x 40'] }] }
-                        ]
-                    }
-                ];
             }
+            return typeof buildStarterWorkoutProgram === 'function' ? buildStarterWorkoutProgram() : [];
         }
 
         const mealPrepSteps = [
             { id: 'mp1', title: 'Pranzi da Ufficio (Sera Prima)', desc: 'Cuocere la sera prima la pasta o il riso per la schiscetta del giorno dopo, così al mattino è già nel contenitore.' },
-            { id: 'mp2', title: 'Kit Spuntini Lavoro (Zero Preparazione)', desc: 'Tenere in dispensa/frigo budini proteici HiPro, crackers, mandorle e fesa di tacchino pronti da infilare nello zaino.' },
-            { id: 'mp3', title: 'Scongelamento Pesce (Lun / Mer / Dom)', desc: 'Passare dal freezer al frigo la sera prima i tranci di salmone, orata o pesce spada.' }
+            { id: 'mp2', title: 'Spuntini Lavoro (Banco Salumi & Dispensa)', desc: 'Tenere a portata di mano Parmigiano, taralli, crackers e affettati magri da mettere nello zaino.' },
+            { id: 'mp3', title: 'Pesce (Lun / Mer / Dom)', desc: 'Passare dal freezer al frigo la sera prima i filetti di merluzzo, orata, salmone o pesce spada.' }
         ];
 
         const nonScaleVictoriesList = [
@@ -1372,7 +1467,7 @@
         ];
 
         // =========================================================================
-        // 4. STATO MULTI-TENANT E AUTO-AGGIORNAMENTO DEL PIANO DI GIOVANNI (v22)
+        // 4. STATO MULTI-TENANT E AUTO-AGGIORNAMENTO DEL PIANO DI GIOVANNI (v24)
         // =========================================================================
         const initialProfessionals = {
             'PT-KINEXIA': { proCode: 'PT-KINEXIA', role: 'pt', studioName: 'Club Kinexia Fitness' },
@@ -1384,14 +1479,14 @@
         const initialUsers = {
             'ID-8492': {
                 code: 'ID-8492',
-                planVersion: 22,
+                planVersion: 24,
                 name: 'Giovanni',
-                bio: 'Piano Semplificato Lavoro & Cene Sfiziose • ~1.980 Kcal • Palestra Mar/Gio/Sab',
+                bio: 'Piano Base di Paese • Schiscetta & Cene Sfiziose • ~1.980 Kcal',
                 ptCode: 'PT-KINEXIA',
                 nutriCode: 'NUT-FORLENZA',
                 startWeight: 110.0,
                 waterTarget: 3.5,
-                weekData: buildGiovanniSimplifiedPlan(),
+                weekData: buildSyncedWeekPlan(false),
                 workoutProgram: buildWorkoutProgram(false),
                 completedMeals: {}, offPlanMeals: {}, swappedMeals: {}, water: {},
                 pantry: JSON.parse(JSON.stringify(defaultPantry)),
@@ -1417,7 +1512,7 @@
 
         let masterState = null;
         try {
-            masterState = JSON.parse(localStorage.getItem('nutriPlanPro_v22'));
+            masterState = JSON.parse(localStorage.getItem('nutriPlanPro_v24'));
         } catch (e) {}
 
         if (!masterState) {
@@ -1435,8 +1530,8 @@
         if (!masterState.professionals) masterState.professionals = initialProfessionals;
         if (!masterState.users) masterState.users = initialUsers;
 
-        // FORZA SEMPRE LA NUOVA DIETA v22 SUL TUO PROFILO ID-8492
-        if (!masterState.users['ID-8492'] || masterState.users['ID-8492'].planVersion !== 22) {
+        // FORZA SEMPRE LA NUOVA DIETA v24 SUL PROFILO ID-8492 (MANTENENDO PESATE E STORICO PALESTRA)
+        if (!masterState.users['ID-8492'] || masterState.users['ID-8492'].planVersion !== 24) {
             const oldWeights = (masterState.users['ID-8492'] && masterState.users['ID-8492'].weights) ? masterState.users['ID-8492'].weights : [{ date: 'Inizio', val: 110.0 }];
             const oldWoHistory = (masterState.users['ID-8492'] && masterState.users['ID-8492'].workoutHistory) ? masterState.users['ID-8492'].workoutHistory : {};
             masterState.users['ID-8492'] = {
@@ -1472,18 +1567,18 @@
         }
 
         // =========================================================================
-        // 5. NAVIGAZIONE & LOGIN LAMPO (0ms LOCAL-FIRST + SYNC IN BACKGROUND)
+        // 5. NAVIGAZIONE & LOGIN LAMPO (CON PROTEZIONE NUOVA DIETA v24 SU SUPABASE)
         // =========================================================================
         function saveState(targetClientCode = null) {
             try {
-                localStorage.setItem('nutriPlanPro_v22', JSON.stringify(masterState));
+                localStorage.setItem('nutriPlanPro_v24', JSON.stringify(masterState));
             } catch (e) {}
             if (masterState.activeCode && masterState.users[masterState.activeCode]) {
-                updateMissingBadge();
-                updateAdherence();
+                if (typeof updateMissingBadge === 'function') updateMissingBadge();
+                if (typeof updateAdherence === 'function') updateAdherence();
             }
             const codeToSync = targetClientCode || masterState.activeCode;
-            if (sbClient && codeToSync && masterState.users[codeToSync]) {
+            if (typeof sbClient !== 'undefined' && sbClient && codeToSync && masterState.users[codeToSync]) {
                 const u = masterState.users[codeToSync];
                 sbClient.from('clients').upsert({
                     client_code: u.code,
@@ -1502,19 +1597,19 @@
         }
 
         async function syncFromCloudInBackground(code) {
-            if (!sbClient) return;
+            if (typeof sbClient === 'undefined' || !sbClient) return;
             try {
                 const { data, error } = await withTimeout(
                     sbClient.from('clients').select('profile_data').eq('client_code', code).maybeSingle(),
                     2000
                 );
                 if (!error && data && data.profile_data) {
-                    if (code === 'ID-8492' && data.profile_data.planVersion !== 22) {
+                    if (code === 'ID-8492' && data.profile_data.planVersion !== 24) {
                         saveState('ID-8492');
                         return;
                     }
                     masterState.users[code] = data.profile_data;
-                    localStorage.setItem('nutriPlanPro_v22', JSON.stringify(masterState));
+                    localStorage.setItem('nutriPlanPro_v24', JSON.stringify(masterState));
                     if (!document.getElementById('screen-hub').classList.contains('hidden')) {
                         loadUserHub(code);
                     }
@@ -1528,7 +1623,6 @@
                 if (el) el.classList.add('hidden');
             });
         }
-
         function checkAuthOnLoad() {
             setThemePalette('neutral');
             saveState('ID-8492');
