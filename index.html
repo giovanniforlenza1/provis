@@ -770,24 +770,150 @@
             </div>
         </main>
 
-        <nav id="nutrition-bottom-nav" class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-3 py-2.5">
-            <div class="max-w-3xl mx-auto grid grid-cols-4 gap-1">
+        <!-- VISTA 5: COMPOSITORE PASTI & CALCOLATORE MACRO GIORNALIERO -->
+        <main id="view-composer" class="px-4 sm:px-6 space-y-4 hidden">
+            <div class="pro-card rounded-2xl p-5 space-y-4">
+                <div class="flex justify-between items-start gap-2">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg">Target del Nutrizionista</span>
+                        <h2 class="text-xl font-black text-zinc-950 mt-2">Compositore Giornaliero</h2>
+                    </div>
+                    <button type="button" onclick="resetComposerDay()" class="h-10 px-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-extrabold transition">
+                        <i class="fa-solid fa-rotate-left mr-1"></i>Azzera
+                    </button>
+                </div>
+
+                <!-- CONTATORE CALORIE PRINCIPALE -->
+                <div class="bg-zinc-50 rounded-xl p-4 border border-zinc-200">
+                    <div class="flex flex-wrap justify-between items-baseline gap-2 mb-2">
+                        <span class="text-xs font-extrabold text-zinc-500 uppercase">Bilancio Calorico</span>
+                        <div class="text-sm font-extrabold text-zinc-950">
+                            <span id="comp-kcal-eaten" class="text-2xl font-black text-emerald-700">0</span> / <span id="comp-kcal-target">1950</span> kcal
+                            <span id="comp-kcal-rem" class="ml-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">Restano: 1950 kcal</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-3 bg-zinc-200 rounded-full overflow-hidden">
+                        <div id="comp-bar-kcal" class="h-full bg-emerald-600 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- BARRE MACRONUTRIENTI -->
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200">
+                        <div class="flex justify-between text-[11px] font-extrabold text-zinc-500">
+                            <span>CARBO</span>
+                            <span id="comp-c-rem" class="text-zinc-900">-200g</span>
+                        </div>
+                        <div class="text-base font-black text-zinc-950 my-1">
+                            <span id="comp-c-eaten">0</span><span class="text-xs font-semibold text-zinc-500"> / <span id="comp-c-target">200</span>g</span>
+                        </div>
+                        <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
+                            <div id="comp-bar-c" class="h-full bg-amber-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200">
+                        <div class="flex justify-between text-[11px] font-extrabold text-zinc-500">
+                            <span>PROTEINE</span>
+                            <span id="comp-p-rem" class="text-emerald-700">-160g</span>
+                        </div>
+                        <div class="text-base font-black text-zinc-950 my-1">
+                            <span id="comp-p-eaten">0</span><span class="text-xs font-semibold text-zinc-500"> / <span id="comp-p-target">160</span>g</span>
+                        </div>
+                        <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
+                            <div id="comp-bar-p" class="h-full bg-emerald-600 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200">
+                        <div class="flex justify-between text-[11px] font-extrabold text-zinc-500">
+                            <span>GRASSI</span>
+                            <span id="comp-g-rem" class="text-zinc-900">-57g</span>
+                        </div>
+                        <div class="text-base font-black text-zinc-950 my-1">
+                            <span id="comp-g-eaten">0</span><span class="text-xs font-semibold text-zinc-500"> / <span id="comp-g-target">57</span>g</span>
+                        </div>
+                        <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
+                            <div id="comp-bar-g" class="h-full bg-orange-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELETTORE PASTO E LIBRERIA PIATTI / INGREDIENTI -->
+            <div class="pro-card rounded-2xl p-5 space-y-4">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider text-zinc-500">1. Scegli Pasto e Aggiungi Alimento</h3>
+
+                <div class="grid grid-cols-5 gap-1.5" id="comp-slot-selector">
+                    <button type="button" onclick="selectComposerSlot('colazione')" id="slot-btn-colazione" class="py-2.5 px-1 rounded-xl text-xs font-extrabold bg-zinc-950 text-white">Colaz.</button>
+                    <button type="button" onclick="selectComposerSlot('spuntino')" id="slot-btn-spuntino" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Spunt.</button>
+                    <button type="button" onclick="selectComposerSlot('pranzo')" id="slot-btn-pranzo" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Pranzo</button>
+                    <button type="button" onclick="selectComposerSlot('merenda')" id="slot-btn-merenda" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Meren.</button>
+                    <button type="button" onclick="selectComposerSlot('cena')" id="slot-btn-cena" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Cena</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 bg-zinc-100 p-1.5 rounded-xl">
+                    <button type="button" onclick="switchComposerMode('dishes')" id="comp-mode-dishes" class="py-2.5 rounded-lg font-extrabold text-xs bg-white text-zinc-950 shadow-sm transition">
+                        Piatti Pronti
+                    </button>
+                    <button type="button" onclick="switchComposerMode('ingredients')" id="comp-mode-ingredients" class="py-2.5 rounded-lg font-semibold text-xs text-zinc-600 transition">
+                        Ingredienti Sfusi (g)
+                    </button>
+                </div>
+
+                <!-- MODALITÀ A: PIATTI PRONTI -->
+                <div id="comp-box-dishes" class="space-y-3">
+                    <select id="comp-dish-select" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-sm font-bold text-zinc-950"></select>
+                    <button type="button" onclick="addSelectedDishToLog()" class="w-full h-12 rounded-xl bg-zinc-950 text-white font-extrabold text-sm shadow-sm active:scale-98 transition">
+                        + Aggiungi Piatto al Pasto
+                    </button>
+                </div>
+
+                <!-- MODALITÀ B: INGREDIENTI AL GRAMMO -->
+                <div id="comp-box-ingredients" class="space-y-3 hidden">
+                    <select id="comp-ing-select" onchange="updateIngredientPreview()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-sm font-bold text-zinc-950"></select>
+                    <div class="grid grid-cols-2 gap-3 items-center">
+                        <div>
+                            <label class="block text-xs font-bold text-zinc-500 mb-1">Quantità (g / ml / pz)</label>
+                            <input type="number" id="comp-ing-qty" value="100" oninput="updateIngredientPreview()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-base font-black text-zinc-950">
+                        </div>
+                        <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 text-xs">
+                            <div class="font-black text-sm text-zinc-950" id="comp-ing-preview-kcal">0 kcal</div>
+                            <div class="text-zinc-600 font-bold mt-0.5" id="comp-ing-preview-macros">0g C • 0g P • 0g G</div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addSelectedIngredientToLog()" class="w-full h-12 rounded-xl bg-zinc-950 text-white font-extrabold text-sm shadow-sm active:scale-98 transition">
+                        + Aggiungi Ingrediente al Pasto
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIEPILOGO PASTI DI OGGI -->
+            <div id="comp-meals-log-container" class="space-y-3"></div>
+        </main>
+
+        <nav id="nutrition-bottom-nav" class="fixed bottom-0 left-0 right-0 glass-bar z-40 px-2 py-2.5">
+            <div class="max-w-3xl mx-auto grid grid-cols-5 gap-1">
                 <button type="button" onclick="switchTab('plan')" id="tab-plan" class="flex flex-col items-center space-y-1 text-zinc-950 py-1.5 rounded-xl transition">
                     <i class="fa-solid fa-utensils text-base"></i>
-                    <span class="text-xs font-extrabold">Piano</span>
+                    <span class="text-[11px] font-extrabold">Piano</span>
+                </button>
+                <button type="button" onclick="switchTab('composer')" id="tab-composer" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition">
+                    <i class="fa-solid fa-calculator text-base"></i>
+                    <span class="text-[11px] font-bold">Componi</span>
                 </button>
                 <button type="button" onclick="switchTab('pantry')" id="tab-pantry" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition relative">
                     <i class="fa-solid fa-basket-shopping text-base"></i>
-                    <span class="text-xs font-bold">Spesa</span>
-                    <span id="missing-badge" class="absolute top-0.5 right-3.5 bg-zinc-950 text-white text-[11px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
+                    <span class="text-[11px] font-bold">Spesa</span>
+                    <span id="missing-badge" class="absolute top-0.5 right-2.5 bg-zinc-950 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
                 </button>
                 <button type="button" onclick="switchTab('guide')" id="tab-guide" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition">
                     <i class="fa-solid fa-book-open text-base"></i>
-                    <span class="text-xs font-bold">Guida</span>
+                    <span class="text-[11px] font-bold">Guida</span>
                 </button>
                 <button type="button" onclick="switchTab('weight')" id="tab-weight" class="flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition">
                     <i class="fa-solid fa-chart-line text-base"></i>
-                    <span class="text-xs font-bold">Progressi</span>
+                    <span class="text-[11px] font-bold">Progressi</span>
                 </button>
             </div>
         </nav>
@@ -2228,6 +2354,7 @@
                     document.getElementById('view-pantry').classList.add('hidden');
                     document.getElementById('view-guide').classList.add('hidden');
                     document.getElementById('view-weight').classList.add('hidden');
+                    document.getElementById('view-composer').classList.add('hidden');
                     document.getElementById('nutrition-bottom-nav').classList.add('hidden');
                 } else {
                     document.getElementById('nutrition-locked-box').classList.add('hidden');
@@ -3730,15 +3857,302 @@
             }
         }
 
+        // =========================================================================
+        // 9. MODULO COMPOSITORE LIBERO & CONTATORE MACRO GIORNALIERO
+        // =========================================================================
+        let activeComposerSlot = 'colazione';
+        let activeComposerMode = 'dishes';
+
+        const composerMealSlots = [
+            { id: 'colazione', label: 'Colazione' },
+            { id: 'spuntino', label: 'Spuntino Mattina' },
+            { id: 'pranzo', label: 'Pranzo' },
+            { id: 'merenda', label: 'Merenda Pomeriggio' },
+            { id: 'cena', label: 'Cena' }
+        ];
+
+        const readyDishesLibrary = [
+            { id: 'd1', cat: 'Colazione', name: 'Yogurt Greco 0% (170g) + Cornflakes (30g) + Gocce Fondente', kcal: 300, c: 38, p: 22, g: 6 },
+            { id: 'd2', cat: 'Colazione', name: 'Latte Parz. Scremato (200ml) + 4 Fette Biscottate e Marmellata', kcal: 295, c: 42, p: 12, g: 6 },
+            { id: 'd3', cat: 'Colazione', name: 'Toast Salato (60g Pane + 50g Tacchino/Cotto + Velo Philadelphia)', kcal: 305, c: 34, p: 23, g: 8 },
+            { id: 'd4', cat: 'Colazione', name: 'Pancake Proteici (60g Farina Avena + 120g Albume + 15g Burro Arachidi)', kcal: 390, c: 44, p: 26, g: 11 },
+            { id: 'd5', cat: 'Spuntino', name: 'Budino o Mousse Proteica (200g)', kcal: 160, c: 12, p: 20, g: 3 },
+            { id: 'd6', cat: 'Spuntino', name: 'Pacchetto Crackers/3 Gallette + 50g Fesa di Tacchino o Bresaola', kcal: 170, c: 19, p: 16, g: 3 },
+            { id: 'd7', cat: 'Spuntino', name: '1 Frutto medio (Mela/Banana/Pera) + 20g Parmigiano Reggiano', kcal: 165, c: 22, p: 7, g: 6 },
+            { id: 'd8', cat: 'Spuntino', name: 'Barretta Proteica senza frutta secca (50g)', kcal: 180, c: 18, p: 18, g: 4 },
+            { id: 'd9', cat: 'Pranzo', name: 'Pasta Cremosa Tonno (120g), Philadelphia Light (30g) e Pomodorini', kcal: 540, c: 65, p: 44, g: 11 },
+            { id: 'd10', cat: 'Pranzo', name: 'Maxi Piadina Tacchino (100g), Mozzarella Light (60g) e Insalata', kcal: 520, c: 46, p: 42, g: 18 },
+            { id: 'd11', cat: 'Pranzo', name: 'Pasta (80g) Crema di Zucchine, Cotto Magro (80g) e Parmigiano', kcal: 550, c: 66, p: 32, g: 16 },
+            { id: 'd12', cat: 'Pranzo', name: 'Club Sandwich Pane Tostato (100g), Bresaola (90g) e Scaglie Grana', kcal: 530, c: 52, p: 46, g: 14 },
+            { id: 'd13', cat: 'Pranzo', name: 'Gnocchi (200g) al Ragù Bianco di Pollo/Tacchino (130g)', kcal: 545, c: 68, p: 41, g: 11 },
+            { id: 'd14', cat: 'Pranzo', name: 'Uova Strapazzate (2 Uova + 100ml Albume), Cotto (50g) e Pane (90g)', kcal: 560, c: 48, p: 44, g: 20 },
+            { id: 'd15', cat: 'Pranzo', name: 'Carbonara Fit (80g Pasta + Uovo + Cotto/Fesa 60g + Pecorino)', kcal: 570, c: 64, p: 36, g: 18 },
+            { id: 'd16', cat: 'Cena', name: 'Burger di Pollo Crispy (160g) in Panino Burger + Zucchine', kcal: 560, c: 48, p: 48, g: 18 },
+            { id: 'd17', cat: 'Cena', name: 'Straccetti di Tacchino (170g) Pizzaiola con Mozzarella Light e Pane (80g)', kcal: 580, c: 46, p: 54, g: 18 },
+            { id: 'd18', cat: 'Cena', name: 'Piadina-Pizza Express in Padella con Uovo, Albume e Mozzarella Light', kcal: 550, c: 44, p: 46, g: 19 },
+            { id: 'd19', cat: 'Cena', name: 'Fish & Chips Fit (200g Merluzzo panato + 300g Patate al forno)', kcal: 590, c: 68, p: 46, g: 14 },
+            { id: 'd20', cat: 'Cena', name: 'Salmone Teriyaki (150g) con Patate al Forno (250g) e Zucchine', kcal: 585, c: 48, p: 38, g: 24 },
+            { id: 'd21', cat: 'Cena', name: 'Fajitas Messicane (2 Tortillas + 160g Manzo/Pollo + Peperoni + Yogurt Greco)', kcal: 590, c: 52, p: 48, g: 20 },
+            { id: 'd22', cat: 'Cena', name: 'Smash Burger Fit Fatto in Casa (Panino + 200g Manzo magro + Scamorza)', kcal: 630, c: 42, p: 56, g: 24 }
+        ];
+
+        const rawIngredientsDB = [
+            { id: 'i1', cat: 'Carboidrati', name: 'Pasta di semola / Integrale (cruda)', unit: 'g', refQty: 100, kcal: 355, c: 73, p: 12, g: 1.5 },
+            { id: 'i2', cat: 'Carboidrati', name: 'Riso Basmati / Riso classico (crudo)', unit: 'g', refQty: 100, kcal: 350, c: 78, p: 8, g: 1 },
+            { id: 'i3', cat: 'Carboidrati', name: 'Gnocchi di patate', unit: 'g', refQty: 100, kcal: 155, c: 33, p: 4, g: 0.5 },
+            { id: 'i4', cat: 'Carboidrati', name: 'Patate crude (al forno / airfryer / lesse)', unit: 'g', refQty: 100, kcal: 80, c: 18, p: 2, g: 0.1 },
+            { id: 'i5', cat: 'Carboidrati', name: 'Pane comune / Ciabatta / Rosetta', unit: 'g', refQty: 100, kcal: 265, c: 54, p: 8.5, g: 1.5 },
+            { id: 'i6', cat: 'Carboidrati', name: 'Pane in cassetta / Pancarré / Panino Burger', unit: 'g', refQty: 100, kcal: 275, c: 50, p: 9, g: 4 },
+            { id: 'i7', cat: 'Carboidrati', name: 'Piadina sfogliata / Tortillas di grano', unit: 'g', refQty: 100, kcal: 310, c: 52, p: 8, g: 7.5 },
+            { id: 'i8', cat: 'Carboidrati', name: 'Cornflakes / Fiocchi d\'avena / Farina d\'avena', unit: 'g', refQty: 100, kcal: 370, c: 75, p: 10, g: 3 },
+            { id: 'i9', cat: 'Carboidrati', name: 'Crackers / Taralli / Fette biscottate / Biscotti secchi', unit: 'g', refQty: 100, kcal: 410, c: 72, p: 10, g: 9 },
+            { id: 'i10', cat: 'Proteine', name: 'Petto di Pollo / Petto di Tacchino (crudo)', unit: 'g', refQty: 100, kcal: 110, c: 0, p: 23, g: 1.5 },
+            { id: 'i11', cat: 'Proteine', name: 'Macinato magro di Manzo / Tagliata / Straccetti', unit: 'g', refQty: 100, kcal: 135, c: 0, p: 21, g: 5.5 },
+            { id: 'i12', cat: 'Proteine', name: 'Lonza / Arista di Maiale magra', unit: 'g', refQty: 100, kcal: 130, c: 0, p: 22, g: 4.5 },
+            { id: 'i13', cat: 'Proteine', name: 'Filetto di Merluzzo / Platessa / Orata / Pesce Spada', unit: 'g', refQty: 100, kcal: 85, c: 0, p: 18, g: 1.2 },
+            { id: 'i14', cat: 'Proteine', name: 'Trancio di Salmone (fresco o affumicato)', unit: 'g', refQty: 100, kcal: 185, c: 0, p: 20, g: 12 },
+            { id: 'i15', cat: 'Proteine', name: 'Tonno al naturale sgocciolato', unit: 'g', refQty: 100, kcal: 105, c: 0, p: 24, g: 1 },
+            { id: 'i16', cat: 'Proteine', name: 'Fesa di Tacchino arrosto (affettato)', unit: 'g', refQty: 100, kcal: 105, c: 1, p: 22, g: 1.5 },
+            { id: 'i17', cat: 'Proteine', name: 'Bresaola della Valtellina', unit: 'g', refQty: 100, kcal: 150, c: 0, p: 32, g: 2.5 },
+            { id: 'i18', cat: 'Proteine', name: 'Prosciutto Cotto magro / Crudo sgrassato', unit: 'g', refQty: 100, kcal: 145, c: 1, p: 22, g: 6 },
+            { id: 'i19', cat: 'Proteine', name: 'Uovo intero medio (inserisci numero uova)', unit: 'pz', refQty: 1, kcal: 75, c: 0.5, p: 6.5, g: 5.2 },
+            { id: 'i20', cat: 'Proteine', name: 'Albume d\'uovo liquido', unit: 'ml', refQty: 100, kcal: 48, c: 0.8, p: 11, g: 0 },
+            { id: 'i21', cat: 'Latticini', name: 'Mozzarella Light / Fiocchi di Latte', unit: 'g', refQty: 100, kcal: 160, c: 2, p: 19, g: 8.5 },
+            { id: 'i22', cat: 'Latticini', name: 'Philadelphia Light / Spalmabile Light', unit: 'g', refQty: 100, kcal: 150, c: 4, p: 10, g: 10 },
+            { id: 'i23', cat: 'Latticini', name: 'Parmigiano Reggiano / Grana / Scamorza', unit: 'g', refQty: 100, kcal: 390, c: 0, p: 32, g: 29 },
+            { id: 'i24', cat: 'Latticini', name: 'Yogurt Greco 0% / Skyr', unit: 'g', refQty: 100, kcal: 58, c: 4, p: 10.3, g: 0 },
+            { id: 'i25', cat: 'Latticini', name: 'Latte parzialmente scremato', unit: 'ml', refQty: 100, kcal: 46, c: 5, p: 3.3, g: 1.6 },
+            { id: 'i26', cat: 'Legumi & Altro', name: 'Ceci / Fagioli / Lenticchie / Piselli (cotti)', unit: 'g', refQty: 100, kcal: 110, c: 17, p: 7, g: 1.5 },
+            { id: 'i27', cat: 'Legumi & Altro', name: 'Frutta fresca (Mela, Pera, Banana, Arancia)', unit: 'g', refQty: 100, kcal: 60, c: 14, p: 0.5, g: 0.2 },
+            { id: 'i28', cat: 'Legumi & Altro', name: 'Verdura mista (Zucchine, Pomodori, Peperoni, Insalata)', unit: 'g', refQty: 100, kcal: 22, c: 4, p: 1.2, g: 0.2 },
+            { id: 'i29', cat: 'Grassi & Extra', name: 'Olio Extravergine d\'Oliva (5g = 1 cucchiaino, 10g = 1 cucchiaio)', unit: 'g', refQty: 100, kcal: 900, c: 0, p: 0, g: 100 },
+            { id: 'i30', cat: 'Grassi & Extra', name: 'Cioccolato Fondente / Burro d\'Arachidi / Frutta Secca', unit: 'g', refQty: 100, kcal: 580, c: 25, p: 15, g: 48 }
+        ];
+
+        function parseMacroNumber(str, fallback) {
+            if (!str) return fallback;
+            const cleaned = String(str).replace(/\./g, '').replace(',', '.');
+            const m = cleaned.match(/\d+(\.\d+)?/);
+            return m ? Math.round(parseFloat(m[0])) : fallback;
+        }
+
+        function getComposerTargets(u) {
+            const dayObj = (u.weekData && u.weekData[currentDayIndex]) ? u.weekData[currentDayIndex] : null;
+            return {
+                kcal: dayObj ? parseMacroNumber(dayObj.kcal, 1950) : 1950,
+                c: dayObj ? parseMacroNumber(dayObj.c, 200) : 200,
+                p: dayObj ? parseMacroNumber(dayObj.p, 160) : 160,
+                g: dayObj ? parseMacroNumber(dayObj.g, 57) : 57
+            };
+        }
+
+        function ensureUserComposerLog(u) {
+            if (!u.customDailyLogs) u.customDailyLogs = {};
+            const dayKey = (u.weekData && u.weekData[currentDayIndex]) ? u.weekData[currentDayIndex].id : 'today';
+            if (!u.customDailyLogs[dayKey]) {
+                u.customDailyLogs[dayKey] = { colazione: [], spuntino: [], pranzo: [], merenda: [], cena: [] };
+            }
+            return u.customDailyLogs[dayKey];
+        }
+
+        function initComposerSelectors() {
+            const dishSel = document.getElementById('comp-dish-select');
+            if (dishSel && dishSel.options.length === 0) {
+                dishSel.innerHTML = readyDishesLibrary.map(d =>
+                    `<option value="${d.id}">[${d.cat}] ${d.name} (${d.kcal} kcal • ${d.c}C ${d.p}P ${d.g}G)</option>`
+                ).join('');
+            }
+            const ingSel = document.getElementById('comp-ing-select');
+            if (ingSel && ingSel.options.length === 0) {
+                ingSel.innerHTML = rawIngredientsDB.map(ing =>
+                    `<option value="${ing.id}">[${ing.cat}] ${ing.name}</option>`
+                ).join('');
+                updateIngredientPreview();
+            }
+        }
+
+        function selectComposerSlot(slotId) {
+            activeComposerSlot = slotId;
+            composerMealSlots.forEach(s => {
+                const btn = document.getElementById(`slot-btn-${s.id}`);
+                if (!btn) return;
+                btn.className = s.id === slotId
+                    ? 'py-2.5 px-1 rounded-xl text-xs font-extrabold bg-zinc-950 text-white shadow-sm'
+                    : 'py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700';
+            });
+        }
+
+        function switchComposerMode(mode) {
+            activeComposerMode = mode;
+            const dishBox = document.getElementById('comp-box-dishes');
+            const ingBox = document.getElementById('comp-box-ingredients');
+            const btnDish = document.getElementById('comp-mode-dishes');
+            const btnIng = document.getElementById('comp-mode-ingredients');
+            if (mode === 'dishes') {
+                dishBox.classList.remove('hidden');
+                ingBox.classList.add('hidden');
+                btnDish.className = 'py-2.5 rounded-lg font-extrabold text-xs bg-white text-zinc-950 shadow-sm transition';
+                btnIng.className = 'py-2.5 rounded-lg font-semibold text-xs text-zinc-600 transition';
+            } else {
+                dishBox.classList.add('hidden');
+                ingBox.classList.remove('hidden');
+                btnIng.className = 'py-2.5 rounded-lg font-extrabold text-xs bg-white text-zinc-950 shadow-sm transition';
+                btnDish.className = 'py-2.5 rounded-lg font-semibold text-xs text-zinc-600 transition';
+                updateIngredientPreview();
+            }
+        }
+
+        function updateIngredientPreview() {
+            const ingId = document.getElementById('comp-ing-select')?.value;
+            const qty = parseFloat(document.getElementById('comp-ing-qty')?.value) || 0;
+            const ing = rawIngredientsDB.find(x => x.id === ingId);
+            if (!ing) return;
+            const ratio = qty / ing.refQty;
+            document.getElementById('comp-ing-preview-kcal').textContent = `${Math.round(ing.kcal * ratio)} kcal (${qty}${ing.unit})`;
+            document.getElementById('comp-ing-preview-macros').textContent = `${Math.round(ing.c * ratio)}g C • ${Math.round(ing.p * ratio)}g P • ${Math.round(ing.g * ratio)}g G`;
+        }
+
+        function addSelectedDishToLog() {
+            const u = currentUser();
+            const log = ensureUserComposerLog(u);
+            const dishId = document.getElementById('comp-dish-select').value;
+            const dish = readyDishesLibrary.find(d => d.id === dishId);
+            if (!dish) return;
+            log[activeComposerSlot].push({ uid: Date.now() + Math.random(), name: dish.name, kcal: dish.kcal, c: dish.c, p: dish.p, g: dish.g });
+            saveState();
+            renderComposerView();
+        }
+
+        function addSelectedIngredientToLog() {
+            const u = currentUser();
+            const log = ensureUserComposerLog(u);
+            const ingId = document.getElementById('comp-ing-select').value;
+            const qty = parseFloat(document.getElementById('comp-ing-qty').value) || 0;
+            const ing = rawIngredientsDB.find(x => x.id === ingId);
+            if (!ing || qty <= 0) return;
+            const ratio = qty / ing.refQty;
+            log[activeComposerSlot].push({
+                uid: Date.now() + Math.random(),
+                name: `${qty}${ing.unit} ${ing.name.replace(' (cruda)', '').replace(' (crudo)', '').replace(' (inserisci numero uova)', '')}`,
+                kcal: Math.round(ing.kcal * ratio),
+                c: Math.round(ing.c * ratio),
+                p: Math.round(ing.p * ratio),
+                g: Math.round(ing.g * ratio)
+            });
+            saveState();
+            renderComposerView();
+        }
+
+        function removeComposerEntry(slotId, idx) {
+            const u = currentUser();
+            const log = ensureUserComposerLog(u);
+            if (log[slotId]) {
+                log[slotId].splice(idx, 1);
+                saveState();
+                renderComposerView();
+            }
+        }
+
+        function resetComposerDay() {
+            if (!confirm('Azzerare tutti gli alimenti inseriti oggi nel Compositore?')) return;
+            const u = currentUser();
+            const dayKey = (u.weekData && u.weekData[currentDayIndex]) ? u.weekData[currentDayIndex].id : 'today';
+            if (!u.customDailyLogs) u.customDailyLogs = {};
+            u.customDailyLogs[dayKey] = { colazione: [], spuntino: [], pranzo: [], merenda: [], cena: [] };
+            saveState();
+            renderComposerView();
+        }
+
+        function renderComposerView() {
+            initComposerSelectors();
+            const u = currentUser();
+            const targets = getComposerTargets(u);
+            const log = ensureUserComposerLog(u);
+
+            let totKcal = 0, totC = 0, totP = 0, totG = 0;
+            composerMealSlots.forEach(s => {
+                (log[s.id] || []).forEach(item => {
+                    totKcal += item.kcal; totC += item.c; totP += item.p; totG += item.g;
+                });
+            });
+
+            document.getElementById('comp-kcal-target').textContent = targets.kcal;
+            document.getElementById('comp-c-target').textContent = targets.c;
+            document.getElementById('comp-p-target').textContent = targets.p;
+            document.getElementById('comp-g-target').textContent = targets.g;
+
+            document.getElementById('comp-kcal-eaten').textContent = totKcal;
+            document.getElementById('comp-c-eaten').textContent = totC;
+            document.getElementById('comp-p-eaten').textContent = totP;
+            document.getElementById('comp-g-eaten').textContent = totG;
+
+            const remKcal = targets.kcal - totKcal;
+            const remEl = document.getElementById('comp-kcal-rem');
+            remEl.textContent = remKcal >= 0 ? `Restano: ${remKcal} kcal` : `Extra: +${Math.abs(remKcal)} kcal`;
+            remEl.className = remKcal >= 0
+                ? 'ml-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-extrabold'
+                : 'ml-1.5 text-xs px-2.5 py-1 rounded-lg bg-red-50 text-red-700 border border-red-200 font-extrabold';
+
+            document.getElementById('comp-c-rem').textContent = (targets.c - totC) >= 0 ? `-${targets.c - totC}g` : `+${Math.abs(targets.c - totC)}g`;
+            document.getElementById('comp-p-rem').textContent = (targets.p - totP) >= 0 ? `-${targets.p - totP}g` : `+${Math.abs(targets.p - totP)}g`;
+            document.getElementById('comp-g-rem').textContent = (targets.g - totG) >= 0 ? `-${targets.g - totG}g` : `+${Math.abs(targets.g - totG)}g`;
+
+            document.getElementById('comp-bar-kcal').style.width = `${Math.min(100, Math.round((totKcal / targets.kcal) * 100))}%`;
+            document.getElementById('comp-bar-c').style.width = `${Math.min(100, Math.round((totC / targets.c) * 100))}%`;
+            document.getElementById('comp-bar-p').style.width = `${Math.min(100, Math.round((totP / targets.p) * 100))}%`;
+            document.getElementById('comp-bar-g').style.width = `${Math.min(100, Math.round((totG / targets.g) * 100))}%`;
+
+            const container = document.getElementById('comp-meals-log-container');
+            container.innerHTML = composerMealSlots.map(s => {
+                const items = log[s.id] || [];
+                const slotKcal = items.reduce((acc, x) => acc + x.kcal, 0);
+                const slotC = items.reduce((acc, x) => acc + x.c, 0);
+                const slotP = items.reduce((acc, x) => acc + x.p, 0);
+                const slotG = items.reduce((acc, x) => acc + x.g, 0);
+
+                const itemsHtml = items.length === 0
+                    ? `<p class="text-xs text-zinc-500 font-medium">Nessun alimento registrato in questo pasto.</p>`
+                    : items.map((item, idx) => `
+                        <div class="flex justify-between items-center bg-zinc-50 px-3.5 py-2.5 rounded-xl border border-zinc-200">
+                            <div class="min-w-0 pr-2">
+                                <div class="text-sm font-bold text-zinc-950 truncate">${item.name}</div>
+                                <div class="text-xs font-semibold text-zinc-500">${item.kcal} kcal • ${item.c}g C • ${item.p}g P • ${item.g}g G</div>
+                            </div>
+                            <button type="button" onclick="removeComposerEntry('${s.id}', ${idx})" class="w-8 h-8 rounded-lg bg-white border border-zinc-300 text-zinc-600 hover:text-red-600 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                    `).join('');
+
+                return `
+                    <div class="pro-card rounded-2xl p-4 space-y-2.5">
+                        <div class="flex justify-between items-center border-b border-zinc-100 pb-2">
+                            <button type="button" onclick="selectComposerSlot('${s.id}')" class="text-left">
+                                <span class="text-base font-black text-zinc-950">${s.label}</span>
+                            </button>
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-zinc-100 text-zinc-800">
+                                ${slotKcal} kcal (${slotC}C • ${slotP}P • ${slotG}G)
+                            </span>
+                        </div>
+                        <div class="space-y-2">${itemsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function switchTab(tab) {
-            ['plan', 'pantry', 'guide', 'weight'].forEach(t => {
-                document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tab);
+            ['plan', 'composer', 'pantry', 'guide', 'weight'].forEach(t => {
+                const viewEl = document.getElementById(`view-${t}`);
+                if (viewEl) viewEl.classList.toggle('hidden', t !== tab);
                 const btn = document.getElementById(`tab-${t}`);
-                btn.className = t === tab 
-                    ? 'flex flex-col items-center space-y-1 text-zinc-950 py-1.5 rounded-xl transition relative'
-                    : 'flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition relative';
+                if (btn) {
+                    btn.className = t === tab 
+                        ? 'flex flex-col items-center space-y-1 text-zinc-950 py-1.5 rounded-xl transition relative'
+                        : 'flex flex-col items-center space-y-1 text-zinc-400 py-1.5 rounded-xl transition relative';
+                }
             });
             if (tab === 'plan') renderPlan();
+            if (tab === 'composer') renderComposerView();
             if (tab === 'pantry') renderPantry();
             if (tab === 'guide') renderPrepChecklist();
             if (tab === 'weight') renderWeights();
