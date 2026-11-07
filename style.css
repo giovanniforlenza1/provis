@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap');
+
+:root {
+    --safe-top: env(safe-area-inset-top, 16px);
+    --safe-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+html, body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #F8F8F9;
+    color: #09090B;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.015em;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Previene lo zoom automatico su iPhone quando si tocca un campo di input */
+input, select, textarea {
+    font-size: 16px !important;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: calc(var(--safe-top) + 14px);
+    padding-bottom: calc(var(--safe-bottom) + 150px);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.glass-bar {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid #E4E4E7;
+    padding-bottom: var(--safe-bottom);
+}
+
+.pro-card {
+    background: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.workout-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    width: 100%;
+}
+
+.workout-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
