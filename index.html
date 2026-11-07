@@ -771,67 +771,69 @@
         </main>
 
         <!-- VISTA 5: COMPOSITORE PASTI & CALCOLATORE MACRO GIORNALIERO -->
+        <!-- VISTA 5: COMPOSITORE PASTI & MAXI LIBRERIA MOBILE -->
         <main id="view-composer" class="px-4 sm:px-6 space-y-4 hidden">
-            <div class="pro-card rounded-2xl p-5 space-y-4">
-                <div class="flex justify-between items-start gap-2">
+            <!-- CRUSCOTTO CALORIE E MACRO -->
+            <div class="pro-card rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center gap-2">
                     <div>
-                        <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg">Target del Nutrizionista</span>
-                        <h2 class="text-xl font-black text-zinc-950 mt-2">Compositore Giornaliero</h2>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg">Dieta Flessibile</span>
+                        <h2 class="text-2xl font-black text-zinc-950 mt-2">Compositore Giornaliero</h2>
                     </div>
-                    <button type="button" onclick="resetComposerDay()" class="h-10 px-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-extrabold transition">
+                    <button type="button" onclick="resetComposerDay()" class="h-11 px-3.5 rounded-xl bg-zinc-100 text-zinc-800 text-xs font-extrabold">
                         <i class="fa-solid fa-rotate-left mr-1"></i>Azzera
                     </button>
                 </div>
 
-                <!-- CONTATORE CALORIE PRINCIPALE -->
-                <div class="bg-zinc-50 rounded-xl p-4 border border-zinc-200">
-                    <div class="flex flex-wrap justify-between items-baseline gap-2 mb-2">
-                        <span class="text-xs font-extrabold text-zinc-500 uppercase">Bilancio Calorico</span>
-                        <div class="text-sm font-extrabold text-zinc-950">
-                            <span id="comp-kcal-eaten" class="text-2xl font-black text-emerald-700">0</span> / <span id="comp-kcal-target">1950</span> kcal
-                            <span id="comp-kcal-rem" class="ml-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">Restano: 1950 kcal</span>
+                <div class="bg-zinc-50 rounded-2xl p-4 border border-zinc-200">
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                        <div>
+                            <span class="text-xs font-extrabold text-zinc-500 uppercase block">Calorie Assunte</span>
+                            <div class="text-2xl font-black text-zinc-950 mt-0.5">
+                                <span id="comp-kcal-eaten" class="text-emerald-700">0</span> <span class="text-base font-bold text-zinc-500">/ <span id="comp-kcal-target">1950</span> kcal</span>
+                            </div>
                         </div>
+                        <span id="comp-kcal-rem" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-extrabold">Restano: 1950 kcal</span>
                     </div>
-                    <div class="w-full h-3 bg-zinc-200 rounded-full overflow-hidden">
+                    <div class="w-full h-3.5 bg-zinc-200 rounded-full overflow-hidden">
                         <div id="comp-bar-kcal" class="h-full bg-emerald-600 transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <!-- BARRE MACRONUTRIENTI -->
                 <div class="grid grid-cols-3 gap-2.5">
-                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200">
-                        <div class="flex justify-between text-[11px] font-extrabold text-zinc-500">
+                    <div class="bg-zinc-50 p-3.5 rounded-2xl border border-zinc-200">
+                        <div class="flex justify-between text-xs font-extrabold text-zinc-500">
                             <span>CARBO</span>
                             <span id="comp-c-rem" class="text-zinc-900">-200g</span>
                         </div>
-                        <div class="text-base font-black text-zinc-950 my-1">
-                            <span id="comp-c-eaten">0</span><span class="text-xs font-semibold text-zinc-500"> / <span id="comp-c-target">200</span>g</span>
+                        <div class="text-lg font-black text-zinc-950 my-1">
+                            <span id="comp-c-eaten">0</span><span class="text-xs font-bold text-zinc-500">/<span id="comp-c-target">200</span>g</span>
                         </div>
                         <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
                             <div id="comp-bar-c" class="h-full bg-amber-500 transition-all duration-300" style="width: 0%"></div>
                         </div>
                     </div>
 
-                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200">
-                        <div class="flex justify-between text-[11px] font-extrabold text-zinc-500">
-                            <span>PROTEINE</span>
+                    <div class="bg-zinc-50 p-3.5 rounded-2xl border border-zinc-200">
+                        <div class="flex justify-between text-xs font-extrabold text-zinc-500">
+                            <span>PROT</span>
                             <span id="comp-p-rem" class="text-emerald-700">-160g</span>
                         </div>
-                        <div class="text-base font-black text-zinc-950 my-1">
-                            <span id="comp-p-eaten">0</span><span class="text-xs font-semibold text-zinc-500"> / <span id="comp-p-target">160</span>g</span>
+                        <div class="text-lg font-black text-zinc-950 my-1">
+                            <span id="comp-p-eaten">0</span><span class="text-xs font-bold text-zinc-500">/<span id="comp-p-target">160</span>g</span>
                         </div>
                         <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
                             <div id="comp-bar-p" class="h-full bg-emerald-600 transition-all duration-300" style="width: 0%"></div>
                         </div>
                     </div>
 
-                    <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200">
-                        <div class="flex justify-between text-[11px] font-extrabold text-zinc-500">
+                    <div class="bg-zinc-50 p-3.5 rounded-2xl border border-zinc-200">
+                        <div class="flex justify-between text-xs font-extrabold text-zinc-500">
                             <span>GRASSI</span>
                             <span id="comp-g-rem" class="text-zinc-900">-57g</span>
                         </div>
-                        <div class="text-base font-black text-zinc-950 my-1">
-                            <span id="comp-g-eaten">0</span><span class="text-xs font-semibold text-zinc-500"> / <span id="comp-g-target">57</span>g</span>
+                        <div class="text-lg font-black text-zinc-950 my-1">
+                            <span id="comp-g-eaten">0</span><span class="text-xs font-bold text-zinc-500">/<span id="comp-g-target">57</span>g</span>
                         </div>
                         <div class="w-full h-2 bg-zinc-200 rounded-full overflow-hidden">
                             <div id="comp-bar-g" class="h-full bg-orange-500 transition-all duration-300" style="width: 0%"></div>
@@ -840,55 +842,70 @@
                 </div>
             </div>
 
-            <!-- SELETTORE PASTO E LIBRERIA PIATTI / INGREDIENTI -->
-            <div class="pro-card rounded-2xl p-5 space-y-4">
-                <h3 class="text-sm font-extrabold uppercase tracking-wider text-zinc-500">1. Scegli Pasto e Aggiungi Alimento</h3>
+            <!-- LIBRERIA INTERATTIVA MOBILE-FIRST -->
+            <div class="pro-card rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider text-zinc-500">Seleziona Pasto</h3>
+                    <span id="comp-active-slot-badge" class="text-xs font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">Aggiungi a: Colazione</span>
+                </div>
 
                 <div class="grid grid-cols-5 gap-1.5" id="comp-slot-selector">
-                    <button type="button" onclick="selectComposerSlot('colazione')" id="slot-btn-colazione" class="py-2.5 px-1 rounded-xl text-xs font-extrabold bg-zinc-950 text-white">Colaz.</button>
-                    <button type="button" onclick="selectComposerSlot('spuntino')" id="slot-btn-spuntino" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Spunt.</button>
-                    <button type="button" onclick="selectComposerSlot('pranzo')" id="slot-btn-pranzo" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Pranzo</button>
-                    <button type="button" onclick="selectComposerSlot('merenda')" id="slot-btn-merenda" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Meren.</button>
-                    <button type="button" onclick="selectComposerSlot('cena')" id="slot-btn-cena" class="py-2.5 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Cena</button>
+                    <button type="button" onclick="selectComposerSlot('colazione')" id="slot-btn-colazione" class="py-3 px-1 rounded-xl text-xs font-extrabold bg-zinc-950 text-white shadow-sm">Colaz.</button>
+                    <button type="button" onclick="selectComposerSlot('spuntino')" id="slot-btn-spuntino" class="py-3 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Spunt.</button>
+                    <button type="button" onclick="selectComposerSlot('pranzo')" id="slot-btn-pranzo" class="py-3 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Pranzo</button>
+                    <button type="button" onclick="selectComposerSlot('merenda')" id="slot-btn-merenda" class="py-3 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Meren.</button>
+                    <button type="button" onclick="selectComposerSlot('cena')" id="slot-btn-cena" class="py-3 px-1 rounded-xl text-xs font-bold bg-zinc-100 text-zinc-700">Cena</button>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2 bg-zinc-100 p-1.5 rounded-xl">
-                    <button type="button" onclick="switchComposerMode('dishes')" id="comp-mode-dishes" class="py-2.5 rounded-lg font-extrabold text-xs bg-white text-zinc-950 shadow-sm transition">
-                        Piatti Pronti
+                    <button type="button" onclick="switchComposerMode('dishes')" id="comp-mode-dishes" class="py-3 rounded-lg font-extrabold text-sm bg-white text-zinc-950 shadow-sm transition">
+                        Libreria Piatti (72)
                     </button>
-                    <button type="button" onclick="switchComposerMode('ingredients')" id="comp-mode-ingredients" class="py-2.5 rounded-lg font-semibold text-xs text-zinc-600 transition">
+                    <button type="button" onclick="switchComposerMode('ingredients')" id="comp-mode-ingredients" class="py-3 rounded-lg font-semibold text-sm text-zinc-600 transition">
                         Ingredienti Sfusi (g)
                     </button>
                 </div>
 
-                <!-- MODALITÀ A: PIATTI PRONTI -->
+                <!-- MODALITÀ A: LIBRERIA PIATTI CON RICERCA E CATEGORIE TOUCH -->
                 <div id="comp-box-dishes" class="space-y-3">
-                    <select id="comp-dish-select" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-sm font-bold text-zinc-950"></select>
-                    <button type="button" onclick="addSelectedDishToLog()" class="w-full h-12 rounded-xl bg-zinc-950 text-white font-extrabold text-sm shadow-sm active:scale-98 transition">
-                        + Aggiungi Piatto al Pasto
-                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-zinc-400"></i>
+                        <input type="text" id="comp-dish-search" oninput="renderDishLibraryList()" placeholder="Cerca piatto (es. pasta, pollo, piadina, sushi)..." class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl pl-11 pr-4 text-base font-semibold text-zinc-950 focus:outline-none focus:border-zinc-950">
+                    </div>
+
+                    <div class="flex space-x-2 overflow-x-auto no-scrollbar py-1">
+                        <button type="button" onclick="setDishCategoryFilter('Tutti')" id="cat-pill-Tutti" class="px-3.5 py-2 rounded-xl text-sm font-extrabold bg-zinc-950 text-white shrink-0 shadow-sm">Tutti</button>
+                        <button type="button" onclick="setDishCategoryFilter('Colazione')" id="cat-pill-Colazione" class="px-3.5 py-2 rounded-xl text-sm font-bold bg-zinc-100 text-zinc-700 shrink-0">Colazione</button>
+                        <button type="button" onclick="setDishCategoryFilter('Spuntini')" id="cat-pill-Spuntini" class="px-3.5 py-2 rounded-xl text-sm font-bold bg-zinc-100 text-zinc-700 shrink-0">Spuntini</button>
+                        <button type="button" onclick="setDishCategoryFilter('Primi')" id="cat-pill-Primi" class="px-3.5 py-2 rounded-xl text-sm font-bold bg-zinc-100 text-zinc-700 shrink-0">Primi</button>
+                        <button type="button" onclick="setDishCategoryFilter('Secondi')" id="cat-pill-Secondi" class="px-3.5 py-2 rounded-xl text-sm font-bold bg-zinc-100 text-zinc-700 shrink-0">Secondi</button>
+                        <button type="button" onclick="setDishCategoryFilter('Panini & Sfizi')" id="cat-pill-Panini & Sfizi" class="px-3.5 py-2 rounded-xl text-sm font-bold bg-zinc-100 text-zinc-700 shrink-0">Panini & Sfizi</button>
+                        <button type="button" onclick="setDishCategoryFilter('Veloci & Fuori')" id="cat-pill-Veloci & Fuori" class="px-3.5 py-2 rounded-xl text-sm font-bold bg-zinc-100 text-zinc-700 shrink-0">Veloci & Fuori</button>
+                    </div>
+
+                    <div id="comp-dishes-cards-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
                 </div>
 
                 <!-- MODALITÀ B: INGREDIENTI AL GRAMMO -->
                 <div id="comp-box-ingredients" class="space-y-3 hidden">
-                    <select id="comp-ing-select" onchange="updateIngredientPreview()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-sm font-bold text-zinc-950"></select>
+                    <select id="comp-ing-select" onchange="updateIngredientPreview()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-base font-bold text-zinc-950"></select>
                     <div class="grid grid-cols-2 gap-3 items-center">
                         <div>
-                            <label class="block text-xs font-bold text-zinc-500 mb-1">Quantità (g / ml / pz)</label>
-                            <input type="number" id="comp-ing-qty" value="100" oninput="updateIngredientPreview()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-base font-black text-zinc-950">
+                            <label class="block text-xs font-bold text-zinc-500 mb-1">Peso / Quantità (g / ml / pz)</label>
+                            <input type="number" id="comp-ing-qty" value="100" oninput="updateIngredientPreview()" class="w-full h-12 bg-zinc-50 border border-zinc-300 rounded-xl px-3.5 text-lg font-black text-zinc-950">
                         </div>
                         <div class="bg-zinc-50 p-3 rounded-xl border border-zinc-200 text-xs">
-                            <div class="font-black text-sm text-zinc-950" id="comp-ing-preview-kcal">0 kcal</div>
+                            <div class="font-black text-base text-zinc-950" id="comp-ing-preview-kcal">0 kcal</div>
                             <div class="text-zinc-600 font-bold mt-0.5" id="comp-ing-preview-macros">0g C • 0g P • 0g G</div>
                         </div>
                     </div>
-                    <button type="button" onclick="addSelectedIngredientToLog()" class="w-full h-12 rounded-xl bg-zinc-950 text-white font-extrabold text-sm shadow-sm active:scale-98 transition">
+                    <button type="button" onclick="addSelectedIngredientToLog()" class="w-full h-12 rounded-xl bg-zinc-950 text-white font-extrabold text-base shadow-sm active:scale-98 transition">
                         + Aggiungi Ingrediente al Pasto
                     </button>
                 </div>
             </div>
 
-            <!-- RIEPILOGO PASTI DI OGGI -->
+            <!-- DIARIO PASTI DEL GIORNO -->
             <div id="comp-meals-log-container" class="space-y-3"></div>
         </main>
 
